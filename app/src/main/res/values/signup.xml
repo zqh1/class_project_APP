@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accountLabel">Create your account</string>
+    <string name="emailLabel">Dal Email</string>
+    <string name="passwordLabel">Password</string>
+    <string name="vPasswordLabel">Verify Password</string>
+    <string name="fNameLabel">First Name</string>
+    <string name="lNameLabel">Last Name</string>
+    <string name="phoneLabel">Phone Number</string>
+    <string name="userTypeLabel">User Type</string>
+    <string name="signUpLabel">Sign up</string>
+    <string name="signInLabel">Sign In</string>
+    <string name="registeredLabel">Already registered?</string>
+    <string-array name="userType">
+        <item>Employee</item>
+        <item>Employer</item>
+    </string-array>
+</resources>
