@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.usermanagement;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
@@ -58,6 +59,7 @@ public class SignupActivity extends AppCompatActivity {
     private void setButtonsActions() {
 
         signUpBtn.setOnClickListener(view -> signUpBtnAction());
+        signInBtn.setOnClickListener(view -> signInBtnAction());
     }
 
     private void signUpBtnAction() {
@@ -73,8 +75,18 @@ public class SignupActivity extends AppCompatActivity {
             new UserDAO().add(user);
 
             Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
+
+            //Redirect to sign in screen
+            signInBtnAction();
         }
     }
+
+    private void signInBtnAction() {
+
+        final Intent changeSignIn = new Intent(this, LoginActivity.class);
+        startActivity(changeSignIn);
+    }
+
 
     private void readUserData() {
 
