@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -65,7 +66,13 @@ public class SignupActivity extends AppCompatActivity {
 
         if (verifyUserData()) {
 
+            //Encrypt User passwords
             encryptUserPassword();
+
+            //Add user data to database
+            new UserDAO().add(user);
+
+            Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -148,7 +155,6 @@ public class SignupActivity extends AppCompatActivity {
     protected boolean verifyEmail(String email) {
 
         //Check that the email provided has the correct format
-
         //Regex expression obtained from FreeFormatter.com
         //URL: https://www.freeformatter.com/java-regex-tester.html
         //Date accessed: February 4 - 2022
