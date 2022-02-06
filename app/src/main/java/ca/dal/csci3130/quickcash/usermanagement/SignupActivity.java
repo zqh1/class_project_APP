@@ -6,6 +6,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
 
 import ca.dal.csci3130.quickcash.R;
 
@@ -59,7 +63,10 @@ public class SignupActivity extends AppCompatActivity {
 
         readUserData();
 
-        verifyUserData();
+        if (verifyUserData()) {
+
+            encryptUserPassword();
+        }
     }
 
     private void readUserData() {
@@ -73,6 +80,15 @@ public class SignupActivity extends AppCompatActivity {
         user.setPhone(phoneField.getText().toString().trim());
         if (userTypeSpinner.getSelectedItem().toString().equals("Employee")) user.setIsEmployee("y");
         else user.setIsEmployee("n");
+    }
+
+    private void encryptUserPassword() {
+        try {
+            user.setPassword(get_SHA_256_SecurePassword(user.getPassword(), getSalt()));
+            user.setConfirmPassword(get_SHA_256_SecurePassword(user.getConfirmPassword(), getSalt()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean verifyUserData() {
@@ -154,4 +170,37 @@ public class SignupActivity extends AppCompatActivity {
 
         return phone.matches("^[0-9]{10}$");
     }
+
+    /*
+    SHA-256 hash code obtained from HowToDoInJava website
+    URL: https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+    Author: Lokesh Gupta
+    Date accessed: February 2, 2022
+    */
+    private static String get_SHA_256_SecurePassword(String passwordToHash, String salt) {
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt.getBytes());
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte aByte : bytes) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+    }
+
+    private static String getSalt() throws NoSuchAlgorithmException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return Arrays.toString(salt);
+    }
+    /*
+    End cited code
+    */
 }
