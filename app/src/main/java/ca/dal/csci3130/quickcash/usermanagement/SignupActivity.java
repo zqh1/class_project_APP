@@ -7,11 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
 
@@ -28,6 +34,8 @@ public class SignupActivity extends AppCompatActivity {
     private Spinner userTypeSpinner;
 
     private UserInterface user;
+
+    private boolean dataVerified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +72,28 @@ public class SignupActivity extends AppCompatActivity {
 
     private void signUpBtnAction() {
 
+        //Disable button so user wait until verification is completed
+        signUpBtn.setEnabled(false);
+
         readUserData();
 
         if (verifyUserData()) {
 
             //Encrypt User passwords
             encryptUserPassword();
-
-            //Add user data to database
-            new UserDAO().add(user);
-
-            Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
-
-            //Redirect to sign in screen
-            signInBtnAction();
         }
+        else signUpBtn.setEnabled(true);
+    }
+
+    private void userRegisterComplete() {
+
+        if (!dataVerified) return;
+
+        new UserDAO().add(user);
+
+        Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
+
+        signInBtnAction();
     }
 
     private void signInBtnAction() {
@@ -86,7 +101,6 @@ public class SignupActivity extends AppCompatActivity {
         final Intent changeSignIn = new Intent(this, LoginActivity.class);
         startActivity(changeSignIn);
     }
-
 
     private void readUserData() {
 
@@ -132,7 +146,12 @@ public class SignupActivity extends AppCompatActivity {
 
             allDataCorrect = false;
         }
-        else emailField.setTextColor(Color.GRAY);
+        else {
+            emailField.setTextColor(Color.GRAY);
+
+            //Verify that the email is not being used
+            verifyUniqueEmail(user.getEmail());
+        }
 
         if (!verifyPassword(user.getPassword())) {
             passwordField.setTextColor(Color.RED);
@@ -155,6 +174,8 @@ public class SignupActivity extends AppCompatActivity {
         }
         else phoneField.setTextColor(Color.GRAY);
 
+        dataVerified = allDataCorrect;
+
         return allDataCorrect;
     }
 
@@ -171,6 +192,37 @@ public class SignupActivity extends AppCompatActivity {
         //URL: https://www.freeformatter.com/java-regex-tester.html
         //Date accessed: February 4 - 2022
         return email.toLowerCase().matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$");
+    }
+
+    private void verifyUniqueEmail(String email) {
+
+        //TODO: FIX THIS ASYNCHRONOUS SHIT
+
+        //Check if email already on database
+        DatabaseReference db = new UserDAO().getDatabaseReference();
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot data: snapshot.getChildren()) {
+                    if (Objects.equals(data.child("email").getValue(), email)) {
+
+                        Toast.makeText(SignupActivity.this, "Email already in use", Toast.LENGTH_LONG).show();
+                        emailField.setTextColor(Color.RED);
+                        signUpBtn.setEnabled(true);
+                        return;
+                    }
+                }
+
+                //If email unique, save user and redirect to login
+                userRegisterComplete();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(SignupActivity.this, "Unable to verify email", Toast.LENGTH_LONG).show();
+                signUpBtn.setEnabled(true);
+            }
+        });
     }
 
     protected boolean verifyPassword(String password) {
