@@ -1,7 +1,6 @@
 package ca.dal.csci3130.quickcash.usermanagement;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -117,8 +116,8 @@ public class SignupActivity extends AppCompatActivity {
 
     private void encryptUserPassword() {
         try {
-            user.setPassword(get_SHA_256_SecurePassword(user.getPassword(), getSalt()));
-            user.setConfirmPassword(get_SHA_256_SecurePassword(user.getConfirmPassword(), getSalt()));
+            user.setPassword(getSHA256SecurePassword(user.getPassword(), getSalt()));
+            user.setConfirmPassword(getSHA256SecurePassword(user.getConfirmPassword(), getSalt()));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -129,50 +128,50 @@ public class SignupActivity extends AppCompatActivity {
         boolean allDataCorrect = true;
 
         if (!verifyName(user.getFirstName())) {
-            firstNameField.setTextColor(Color.RED);
+            firstNameField.setTextColor(getResources().getColor(R.color.red, null));
             allDataCorrect = false;
         }
-        else firstNameField.setTextColor(Color.GRAY);
+        else firstNameField.setTextColor(getResources().getColor(R.color.grey, null));
 
         if (!verifyName(user.getLastName())) {
-            lastNameField.setTextColor(Color.RED);
+            lastNameField.setTextColor(getResources().getColor(R.color.red, null));
 
             allDataCorrect = false;
         }
-        else lastNameField.setTextColor(Color.GRAY);
+        else lastNameField.setTextColor(getResources().getColor(R.color.grey, null));
 
         if (!verifyEmail(user.getEmail())) {
-            emailField.setTextColor(Color.RED);
+            emailField.setTextColor(getResources().getColor(R.color.red, null));
 
             allDataCorrect = false;
         }
         else {
-            emailField.setTextColor(Color.GRAY);
+            emailField.setTextColor(getResources().getColor(R.color.grey, null));
 
             //Verify that the email is not being used
             verifyUniqueEmail(user.getEmail());
         }
 
         if (!verifyPassword(user.getPassword())) {
-            passwordField.setTextColor(Color.RED);
+            passwordField.setTextColor(getResources().getColor(R.color.red, null));
 
             allDataCorrect = false;
         }
-        else passwordField.setTextColor(Color.GRAY);
+        else passwordField.setTextColor(getResources().getColor(R.color.grey, null));
 
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            confirmPasswordField.setTextColor(Color.RED);
+            confirmPasswordField.setTextColor(getResources().getColor(R.color.red, null));
 
             allDataCorrect = false;
         }
-        else confirmPasswordField.setTextColor(Color.GRAY);
+        else confirmPasswordField.setTextColor(getResources().getColor(R.color.grey, null));
 
         if (!verifyPhone(user.getPhone())) {
-            phoneField.setTextColor(Color.RED);
+            phoneField.setTextColor(getResources().getColor(R.color.red, null));
 
             allDataCorrect = false;
         }
-        else phoneField.setTextColor(Color.GRAY);
+        else phoneField.setTextColor(getResources().getColor(R.color.grey, null));
 
         dataVerified = allDataCorrect;
 
@@ -191,12 +190,10 @@ public class SignupActivity extends AppCompatActivity {
         //Regex expression obtained from FreeFormatter.com
         //URL: https://www.freeformatter.com/java-regex-tester.html
         //Date accessed: February 4 - 2022
-        return email.toLowerCase().matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$");
+        return email.toLowerCase().matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$");
     }
 
     private void verifyUniqueEmail(String email) {
-
-        //TODO: FIX THIS ASYNCHRONOUS SHIT
 
         //Check if email already on database
         DatabaseReference db = new UserDAO().getDatabaseReference();
@@ -207,7 +204,7 @@ public class SignupActivity extends AppCompatActivity {
                     if (Objects.equals(data.child("email").getValue(), email)) {
 
                         Toast.makeText(SignupActivity.this, "Email already in use", Toast.LENGTH_LONG).show();
-                        emailField.setTextColor(Color.RED);
+                        emailField.setTextColor(getResources().getColor(R.color.red, null));
                         signUpBtn.setEnabled(true);
                         return;
                     }
@@ -247,7 +244,7 @@ public class SignupActivity extends AppCompatActivity {
     Author: Lokesh Gupta
     Date accessed: February 2, 2022
     */
-    private static String get_SHA_256_SecurePassword(String passwordToHash, String salt) {
+    private static String getSHA256SecurePassword(String passwordToHash, String salt) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
