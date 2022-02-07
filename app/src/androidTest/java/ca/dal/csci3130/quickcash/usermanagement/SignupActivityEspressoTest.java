@@ -160,4 +160,27 @@ public class SignupActivityEspressoTest {
         intended(hasComponent(LoginActivity.class.getName()));
     }
 
+    @Test
+    public void checkIfDuplicatedAccount() {
+
+        //NOTE: Test depends on the account was already created, if deleted by mistake, just run
+        //      this test twice (first run will create the account and fail as expected)
+
+        onView(withId(R.id.firstNameInput)).perform(typeText("Test"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.lastNameInput)).perform(typeText("User"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.emailInput)).perform(typeText("test1@dal.ca"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.passwordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.phoneInput)).perform(typeText("0123456789"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.signUpBtn)).perform(click());
+
+        //Add 5 second wait to allow firebase to respond with email query
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.emailInput)).check(matches(hasTextColor(R.color.red)));
+    }
 }
