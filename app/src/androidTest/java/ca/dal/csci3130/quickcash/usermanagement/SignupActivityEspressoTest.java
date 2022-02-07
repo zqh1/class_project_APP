@@ -4,6 +4,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -132,4 +134,30 @@ public class SignupActivityEspressoTest {
         onView(withId(R.id.signUpBtn)).perform(click());
         onView(withId(R.id.phoneInput)).check(matches(hasTextColor(R.color.grey)));
     }
+
+    @Test
+    public void checkIfValidInformationUserCreate() {
+
+        //NOTE: DELETE TEST USER "test2@dal.ca" FROM FIREBASE FOR THIS TEST TO WORK,
+        //      OR DUPLICATED ACCOUNT WILL FAIL THE TEST!
+
+        onView(withId(R.id.firstNameInput)).perform(typeText("Test"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.lastNameInput)).perform(typeText("User"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.emailInput)).perform(typeText("test2@dal.ca"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.passwordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.phoneInput)).perform(typeText("0123456789"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.signUpBtn)).perform(click());
+
+        //Add 5 second wait to allow firebase to respond with email query
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Check that screen change to login screen (only happens if account is created successfully)
+        intended(hasComponent(LoginActivity.class.getName()));
+    }
+
 }
