@@ -17,17 +17,11 @@ import androidx.test.runner.AndroidJUnit4;
 
 public class SignupActivityJUnitTest {
 
-    //NOTE: JUnits are broken due to android studio Looper error. NO test will run for the moment
-
-    @Rule
-    public TestRule rule = new InstantTaskExecutorRule();
-
-    static SignupActivity signupActivity;
+    private static Signup signupActivity;
 
     @BeforeClass
     public static void setup() {
-
-        signupActivity = new SignupActivity();
+        signupActivity = new Signup();
     }
 
     @Test
@@ -69,8 +63,8 @@ public class SignupActivityJUnitTest {
     public void checkIfPasswordIsStrong() {
 
         assertTrue(signupActivity.verifyPassword("Ab345&78"));
-        assertTrue(signupActivity.verifyPassword("abC123___ww"));
-        assertTrue(signupActivity.verifyPassword("789456123aabbCC#"));
+        assertTrue(signupActivity.verifyPassword("abC123#__ww"));
+        assertTrue(signupActivity.verifyPassword("7896123bCC#"));
     }
 
     @Test
