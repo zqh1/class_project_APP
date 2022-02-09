@@ -139,11 +139,11 @@ public class Signup {
     Author: Lokesh Gupta
     Date accessed: February 2, 2022
     */
-    protected static String getSHA256SecurePassword(String passwordToHash) {
+    protected static String getSHA256SecurePassword(String passwordToHash, String salt) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(getSalt().getBytes());
+            md.update(salt.getBytes());
             byte[] bytes = md.digest(passwordToHash.getBytes());
             StringBuilder sb = new StringBuilder();
             for (byte aByte : bytes) {
@@ -156,10 +156,15 @@ public class Signup {
         return generatedPassword;
     }
 
-    private static String getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+    private static String getSalt() {
+
         byte[] salt = new byte[16];
-        sr.nextBytes(salt);
+        try {
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            sr.nextBytes(salt);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         return Arrays.toString(salt);
     }
     /*
@@ -185,7 +190,8 @@ public class Signup {
     }
 
     protected void encryptUserPasswords() {
-        user.setPassword(getSHA256SecurePassword(user.getPassword()));
-        user.setConfirmPassword(getSHA256SecurePassword(user.getConfirmPassword()));
+        String salt = getSalt();
+        user.setPassword(getSHA256SecurePassword(user.getPassword(), salt));
+        user.setConfirmPassword(salt);
     }
 }

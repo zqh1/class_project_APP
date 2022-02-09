@@ -141,8 +141,8 @@ public class SignupActivityEspressoTest {
         //NOTE: DELETE TEST USER "test2@dal.ca" FROM FIREBASE FOR THIS TEST TO WORK,
         //      OR DUPLICATED ACCOUNT WILL FAIL THE TEST!
 
-        onView(withId(R.id.firstNameInput)).perform(typeText("Test"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.lastNameInput)).perform(typeText("User"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.firstNameInput)).perform(typeText("DELETE"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.lastNameInput)).perform(typeText("THIS"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.emailInput)).perform(typeText("test2@dal.ca"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.passwordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.confirmPasswordInput)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
