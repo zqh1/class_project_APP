@@ -6,17 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
 
@@ -32,16 +22,15 @@ public class SignupActivity extends AppCompatActivity {
     private Button signInBtn;
     private Spinner userTypeSpinner;
 
-    private UserInterface user;
-
-    private boolean dataVerified;
+    private Signup signup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Add logic for signup
+        //Instantiate signup class that contains implementation
+        signup = new Signup(this);
 
         //Link screen items
         linkScreenItems();
@@ -71,39 +60,68 @@ public class SignupActivity extends AppCompatActivity {
 
     private void signUpBtnAction() {
 
-        //Disable button so user wait until verification is completed
-        signUpBtn.setEnabled(false);
-
-        readUserData();
-
-        if (verifyUserData()) {
-
-            //Encrypt User passwords
-            encryptUserPassword();
-        }
-        else signUpBtn.setEnabled(true);
-    }
-
-    private void userRegisterComplete() {
-
-        if (!dataVerified) return;
-
-        new UserDAO().add(user);
-
-        Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
-
-        signInBtnAction();
+        disableSignUpButton();
+        signup.setUser(createUserFromData());
+        verifyDataFields();
     }
 
     private void signInBtnAction() {
+        changeScreenToLogin();
+    }
 
+    public void disableSignUpButton() {
+        signUpBtn.setEnabled(false);
+    }
+
+    public void enableSignUpButton() {
+        signUpBtn.setEnabled(true);
+    }
+
+    public void changeScreenToLogin() {
         final Intent changeSignIn = new Intent(this, LoginActivity.class);
         startActivity(changeSignIn);
     }
 
-    private void readUserData() {
+    private void verifyDataFields() {
+        boolean[] fieldsStatus = signup.verifyUserData();
 
-        user = new User();
+        if (fieldsStatus[0]) firstNameField.setTextColor(getResources().getColor(R.color.grey, null));
+        else firstNameField.setTextColor(getResources().getColor(R.color.red, null));
+
+        if (fieldsStatus[1]) lastNameField.setTextColor(getResources().getColor(R.color.grey, null));
+        else lastNameField.setTextColor(getResources().getColor(R.color.red, null));
+
+        if (fieldsStatus[2]) emailField.setTextColor(getResources().getColor(R.color.grey, null));
+        else emailField.setTextColor(getResources().getColor(R.color.red, null));
+
+        if (fieldsStatus[3]) passwordField.setTextColor(getResources().getColor(R.color.grey, null));
+        else passwordField.setTextColor(getResources().getColor(R.color.red, null));
+
+        if (fieldsStatus[4]) confirmPasswordField.setTextColor(getResources().getColor(R.color.grey, null));
+        else confirmPasswordField.setTextColor(getResources().getColor(R.color.red, null));
+
+        if (fieldsStatus[5]) phoneField.setTextColor(getResources().getColor(R.color.grey, null));
+        else phoneField.setTextColor(getResources().getColor(R.color.red, null));
+    }
+
+    public void errorVerifyEmail() {
+        Toast.makeText(SignupActivity.this, "Unable to verify email", Toast.LENGTH_LONG).show();
+        enableSignUpButton();
+    }
+
+    public void emailUsedSetScreen() {
+        emailField.setTextColor(getResources().getColor(R.color.red, null));
+        Toast.makeText(SignupActivity.this, "Email already in use", Toast.LENGTH_LONG).show();
+        enableSignUpButton();
+    }
+
+    public void throwUserCreatedToast() {
+        Toast.makeText(this, "User successfully created", Toast.LENGTH_LONG).show();
+    }
+
+    private UserInterface createUserFromData() {
+
+        User user = new User();
         user.setFirstName(firstNameField.getText().toString().trim());
         user.setLastName(lastNameField.getText().toString().trim());
         user.setEmail(emailField.getText().toString().trim());
@@ -112,162 +130,7 @@ public class SignupActivity extends AppCompatActivity {
         user.setPhone(phoneField.getText().toString().trim());
         if (userTypeSpinner.getSelectedItem().toString().equals("Employee")) user.setIsEmployee("y");
         else user.setIsEmployee("n");
+
+        return user;
     }
-
-    private void encryptUserPassword() {
-        try {
-            user.setPassword(getSHA256SecurePassword(user.getPassword(), getSalt()));
-            user.setConfirmPassword(getSHA256SecurePassword(user.getConfirmPassword(), getSalt()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean verifyUserData() {
-
-        boolean allDataCorrect = true;
-
-        if (!verifyName(user.getFirstName())) {
-            firstNameField.setTextColor(getResources().getColor(R.color.red, null));
-            allDataCorrect = false;
-        }
-        else firstNameField.setTextColor(getResources().getColor(R.color.grey, null));
-
-        if (!verifyName(user.getLastName())) {
-            lastNameField.setTextColor(getResources().getColor(R.color.red, null));
-
-            allDataCorrect = false;
-        }
-        else lastNameField.setTextColor(getResources().getColor(R.color.grey, null));
-
-        if (!verifyEmail(user.getEmail())) {
-            emailField.setTextColor(getResources().getColor(R.color.red, null));
-
-            allDataCorrect = false;
-        }
-        else {
-            emailField.setTextColor(getResources().getColor(R.color.grey, null));
-
-            //Verify that the email is not being used
-            verifyUniqueEmail(user.getEmail());
-        }
-
-        if (!verifyPassword(user.getPassword())) {
-            passwordField.setTextColor(getResources().getColor(R.color.red, null));
-
-            allDataCorrect = false;
-        }
-        else passwordField.setTextColor(getResources().getColor(R.color.grey, null));
-
-        if (!user.getPassword().equals(user.getConfirmPassword())) {
-            confirmPasswordField.setTextColor(getResources().getColor(R.color.red, null));
-
-            allDataCorrect = false;
-        }
-        else confirmPasswordField.setTextColor(getResources().getColor(R.color.grey, null));
-
-        if (!verifyPhone(user.getPhone())) {
-            phoneField.setTextColor(getResources().getColor(R.color.red, null));
-
-            allDataCorrect = false;
-        }
-        else phoneField.setTextColor(getResources().getColor(R.color.grey, null));
-
-        dataVerified = allDataCorrect;
-
-        return allDataCorrect;
-    }
-
-    public boolean verifyName(String name) {
-
-        //Only allow letters on the name
-        return name.matches("^[A-Za-z]+$");
-    }
-
-    protected boolean verifyEmail(String email) {
-
-        //Check that the email provided has the correct format
-        //Regex expression obtained from FreeFormatter.com
-        //URL: https://www.freeformatter.com/java-regex-tester.html
-        //Date accessed: February 4 - 2022
-        return email.toLowerCase().matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$");
-    }
-
-    private void verifyUniqueEmail(String email) {
-
-        //Check if email already on database
-        DatabaseReference db = new UserDAO().getDatabaseReference();
-        db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot data: snapshot.getChildren()) {
-                    if (Objects.equals(data.child("email").getValue(), email)) {
-
-                        Toast.makeText(SignupActivity.this, "Email already in use", Toast.LENGTH_LONG).show();
-                        emailField.setTextColor(getResources().getColor(R.color.red, null));
-                        signUpBtn.setEnabled(true);
-                        return;
-                    }
-                }
-
-                //If email unique, save user and redirect to login
-                userRegisterComplete();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SignupActivity.this, "Unable to verify email", Toast.LENGTH_LONG).show();
-                signUpBtn.setEnabled(true);
-            }
-        });
-    }
-
-    protected boolean verifyPassword(String password) {
-
-        //Check that the password provided has the correct format
-        //Password must contains minimum 8 chars, 1 Uppercase, 1 Lowercase, 1 Digit, and 1 Special character
-
-        //Regex expression obtained from Mkyong.com
-        //URL: https://mkyong.com/regular-expressions/how-to-validate-password-with-regular-expression/
-        //Date accessed: February 4 - 2022
-        return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$");
-    }
-
-    protected boolean verifyPhone(String phone) {
-
-        return phone.matches("^[0-9]{10}$");
-    }
-
-    /*
-    SHA-256 hash code obtained from HowToDoInJava website
-    URL: https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
-    Author: Lokesh Gupta
-    Date accessed: February 2, 2022
-    */
-    private static String getSHA256SecurePassword(String passwordToHash, String salt) {
-        String generatedPassword = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt.getBytes());
-            byte[] bytes = md.digest(passwordToHash.getBytes());
-            StringBuilder sb = new StringBuilder();
-            for (byte aByte : bytes) {
-                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-            }
-            generatedPassword = sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return generatedPassword;
-    }
-
-    private static String getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return Arrays.toString(salt);
-    }
-    /*
-    End cited code
-    */
 }

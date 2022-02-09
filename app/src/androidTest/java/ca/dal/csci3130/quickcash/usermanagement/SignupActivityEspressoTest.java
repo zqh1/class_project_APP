@@ -151,7 +151,7 @@ public class SignupActivityEspressoTest {
 
         //Add 5 second wait to allow firebase to respond with email query
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -176,7 +176,7 @@ public class SignupActivityEspressoTest {
 
         //Add 5 second wait to allow firebase to respond with email query
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
