@@ -94,9 +94,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             isEmployee = Objects.requireNonNull(data.child("isEmployee").getValue()).toString().equals("y");
 
-                            new SessionManager(LoginActivity.this).createLoginSession(data.getKey());
-
-                            redirectScreen();
+                            SessionManagerInterface session = new SessionManager(LoginActivity.this);
+                            session.createLoginSession(data.getKey());
 
                             return;
                         }
@@ -111,10 +110,5 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.setEnabled(true);
             }
         });
-    }
-
-    protected void redirectScreen(){
-        if(isEmployee) startActivity(new Intent(this, EmployeeHomeActivity.class));
-        else startActivity(new Intent(this, EmployerHomeActivity.class));
     }
 }

@@ -40,6 +40,8 @@ public class SessionManager implements SessionManagerInterface {
     public void createLoginSession(String userID) {
         editor.putString(Constants.USER_KEY, userID);
         editor.apply();
+
+        this.getUserInformation(userID);
     }
 
     @Override
@@ -52,6 +54,7 @@ public class SessionManager implements SessionManagerInterface {
     public void logoutUser() {
         editor.clear();
         editor.apply();
+        user = null;
     }
 
     @Override
