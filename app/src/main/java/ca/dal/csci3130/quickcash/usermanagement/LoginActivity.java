@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void isCorrectInformation(String email){
 
         DatabaseReference db = new UserDAO().getDatabaseReference();    //link to database
-        db.addValueEventListener(new ValueEventListener() {
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data: snapshot.getChildren()) {
@@ -92,20 +92,18 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
 
-                            String lastName = Objects.requireNonNull(data.child("lastName").getValue()).toString();
-
                             isEmployee = Objects.requireNonNull(data.child("isEmployee").getValue()).toString().equals("y");
 
-                            new SessionManager(LoginActivity.this).createLoginSession(extractedEmail, hashPassword, lastName);
+                            new SessionManager(LoginActivity.this).createLoginSession(data.getKey());
 
                             redirectScreen();
 
                             return;
                         }
                     }
-                    Toast.makeText(LoginActivity.this, "Incorrect Email/Password", Toast.LENGTH_SHORT).show();
-                    loginButton.setEnabled(true);
                 }
+                Toast.makeText(LoginActivity.this, "Incorrect Email/Password", Toast.LENGTH_SHORT).show();
+                loginButton.setEnabled(true);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

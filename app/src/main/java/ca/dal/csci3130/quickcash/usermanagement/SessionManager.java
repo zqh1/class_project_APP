@@ -3,14 +3,28 @@ package ca.dal.csci3130.quickcash.usermanagement;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.common.Constants;
+import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
+import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 
 public class SessionManager implements SessionManagerInterface {
 
-    Context context;
-    SharedPreferences sharePref;
-    SharedPreferences.Editor editor;
+    private final Context context;
+    private final SharedPreferences sharePref;
+    private final SharedPreferences.Editor editor;
+
+    private static UserInterface user;
 
     public SessionManager(Context context) {
         this.context = context;
@@ -18,19 +32,20 @@ public class SessionManager implements SessionManagerInterface {
         this.editor = sharePref.edit();
     }
 
+    public static UserInterface getUser() {
+        return user;
+    }
+
     @Override
-    public void createLoginSession(String email, String password, String name) {
-        editor.putString(Constants.EMAIL_KEY, email);
-        editor.putString(Constants.PASSWORD_KEY, password);
-        editor.putString(Constants.NAME_KEY, name);
+    public void createLoginSession(String userID) {
+        editor.putString(Constants.USER_KEY, userID);
         editor.apply();
     }
 
     @Override
     public void checkLogin() {
         if (!isLoggedIn()) context.startActivity(new Intent(context, LoginActivity.class));
-
-        //TODO: USER ALREADY LOGIN, SENT TO HOME SCREEN
+        else getUserInformation(getUserID());
     }
 
     @Override
@@ -41,17 +56,39 @@ public class SessionManager implements SessionManagerInterface {
 
     @Override
     public boolean isLoggedIn() {
-        return sharePref.contains(Constants.EMAIL_KEY) && sharePref.contains(Constants.NAME_KEY) &&
-                sharePref.contains(Constants.PASSWORD_KEY);
+        return sharePref.contains(Constants.USER_KEY);
     }
 
-    @Override
-    public String getKeyName() {
-        return sharePref.getString(Constants.NAME_KEY,null);
+    private String getUserID() {
+        return sharePref.getString(Constants.USER_KEY, null);
     }
 
-    @Override
-    public String getKeyEmail() {
-        return sharePref.getString(Constants.EMAIL_KEY, null);
+    private void goHomeScreen() {
+        if (user.getIsEmployee().equals("y")) context.startActivity(new Intent(context, EmployeeHomeActivity.class));
+        else context.startActivity(new Intent(context, EmployerHomeActivity.class));
+    }
+
+    private void getUserInformation(String userID) {
+        DatabaseReference db = new UserDAO().getDatabaseReference();    //link to database
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                DataSnapshot data = snapshot.child(userID);
+
+                user = new User();
+                user.setFirstName(Objects.requireNonNull(data.child("firstName").getValue()).toString());
+                user.setLastName(Objects.requireNonNull(data.child("lastName").getValue()).toString());
+                user.setEmail(Objects.requireNonNull(data.child("email").getValue()).toString());
+                user.setIsEmployee(Objects.requireNonNull(data.child("isEmployee").getValue()).toString());
+                user.setPhone(Objects.requireNonNull(data.child("phone").getValue()).toString());
+
+                goHomeScreen();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "Database connection error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

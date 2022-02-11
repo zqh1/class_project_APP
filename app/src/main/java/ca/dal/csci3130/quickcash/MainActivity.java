@@ -1,11 +1,8 @@
 package ca.dal.csci3130.quickcash;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,13 +12,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //new SessionManager(this).logoutUser();
+
         new SessionManager(this).checkLogin();
 
-        findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
+        //findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
     }
 
+    /*
     private void logoutUser() {
         new SessionManager(this).logoutUser();
         startActivity(new Intent(this, LoginActivity.class));
     }
+    */
 }
