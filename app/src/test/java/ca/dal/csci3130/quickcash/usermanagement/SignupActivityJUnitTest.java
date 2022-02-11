@@ -1,19 +1,9 @@
 package ca.dal.csci3130.quickcash.usermanagement;
 
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import android.os.Looper;
-
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.test.runner.AndroidJUnit4;
 
 public class SignupActivityJUnitTest {
 
@@ -45,36 +35,36 @@ public class SignupActivityJUnitTest {
     @Test
     public void checkIfEmailIsCorrect() {
 
-        assertTrue(signupActivity.verifyEmail("Luis.Cabarique@dal.ca"));
-        assertTrue(signupActivity.verifyEmail("Luis@gmail.com"));
-        assertTrue(signupActivity.verifyEmail("Luis_C@hotmail.com"));
+        assertTrue(Signup.verifyEmail("Luis.Cabarique@dal.ca"));
+        assertTrue(Signup.verifyEmail("Luis@gmail.com"));
+        assertTrue(Signup.verifyEmail("Luis_C@hotmail.com"));
     }
 
     @Test
     public void checkIfEmailIsIncorrect() {
 
-        assertFalse(signupActivity.verifyEmail("Luis Cabarique@dal.ca"));
-        assertFalse(signupActivity.verifyEmail("Luis@gmail"));
-        assertFalse(signupActivity.verifyEmail("Luis_C*hotmail.com"));
-        assertFalse(signupActivity.verifyEmail("Luis_C*hotmail.456"));
+        assertFalse(Signup.verifyEmail("Luis Cabarique@dal.ca"));
+        assertFalse(Signup.verifyEmail("Luis@gmail"));
+        assertFalse(Signup.verifyEmail("Luis_C*hotmail.com"));
+        assertFalse(Signup.verifyEmail("Luis_C*hotmail.456"));
     }
 
     @Test
     public void checkIfPasswordIsStrong() {
 
-        assertTrue(signupActivity.verifyPassword("Ab345&78"));
-        assertTrue(signupActivity.verifyPassword("abC123#__ww"));
-        assertTrue(signupActivity.verifyPassword("7896123bCC#"));
+        assertTrue(Signup.verifyPassword("Ab345&78"));
+        assertTrue(Signup.verifyPassword("abC123#__ww"));
+        assertTrue(Signup.verifyPassword("7896123bCC#"));
     }
 
     @Test
     public void checkIfPasswordIsWeak() {
 
-        assertFalse(signupActivity.verifyPassword("abc"));
-        assertFalse(signupActivity.verifyPassword("789456123aabbCC"));
-        assertFalse(signupActivity.verifyPassword("123456789"));
-        assertFalse(signupActivity.verifyPassword("AAAAAAAAAAA"));
-        assertFalse(signupActivity.verifyPassword("aB1#"));
+        assertFalse(Signup.verifyPassword("abc"));
+        assertFalse(Signup.verifyPassword("789456123aabbCC"));
+        assertFalse(Signup.verifyPassword("123456789"));
+        assertFalse(Signup.verifyPassword("AAAAAAAAAAA"));
+        assertFalse(Signup.verifyPassword("aB1#"));
     }
 
     @Test

@@ -27,7 +27,7 @@ import ca.dal.csci3130.quickcash.R;
 public class SignupActivityEspressoTest {
 
     @Rule
-    public ActivityScenarioRule<MainActivity> myRule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule<SignupActivity> myRule = new ActivityScenarioRule<>(SignupActivity.class);
 
     @BeforeClass
     public static void setup() {
