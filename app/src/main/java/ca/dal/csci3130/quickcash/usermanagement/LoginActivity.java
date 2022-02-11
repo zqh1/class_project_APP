@@ -99,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                             new SessionManager(LoginActivity.this).createLoginSession(extractedEmail, hashPassword, lastName);
 
                             redirectScreen();
+
+                            return;
                         }
                     }
                     Toast.makeText(LoginActivity.this, "Incorrect Email/Password", Toast.LENGTH_SHORT).show();

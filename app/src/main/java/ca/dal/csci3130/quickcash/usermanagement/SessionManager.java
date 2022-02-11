@@ -29,6 +29,8 @@ public class SessionManager implements SessionManagerInterface {
     @Override
     public void checkLogin() {
         if (!isLoggedIn()) context.startActivity(new Intent(context, LoginActivity.class));
+
+        //TODO: USER ALREADY LOGIN, SENT TO HOME SCREEN
     }
 
     @Override
