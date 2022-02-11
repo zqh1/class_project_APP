@@ -12,17 +12,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //new SessionManager(this).logoutUser();
-
         new SessionManager(this).checkLogin();
-
-        //findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
     }
-
-    /*
-    private void logoutUser() {
-        new SessionManager(this).logoutUser();
-        startActivity(new Intent(this, LoginActivity.class));
-    }
-    */
 }
