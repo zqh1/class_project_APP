@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">QuickCash</string>
     <string name="welcome_title">Welcome to Quick Cash</string>
+    <string name="loading_title">Loading.....</string>
+
+    <string name="logout_label">LOGOUT</string>
+    <string name="employer_label">WELCOME EMPLOYER</string>
+    <string name="employee_label">WELCOME EMPLOYEE</string>
 </resources>

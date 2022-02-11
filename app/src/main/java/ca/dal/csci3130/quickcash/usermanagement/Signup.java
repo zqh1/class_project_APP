@@ -84,7 +84,7 @@ public class Signup {
         return name.matches("^[A-Za-z]+$");
     }
 
-    protected boolean verifyEmail(String email) {
+    public static boolean verifyEmail(String email) {
 
         //Check that the email provided has the correct format
         //Regex expression obtained from FreeFormatter.com
@@ -93,7 +93,7 @@ public class Signup {
         return email.toLowerCase().matches("^[-a-z0-9~!$%^&*_=+}{\\'?]+(\\.[-a-z0-9~!$%^&*_=+}{\\'?]+)*@([a-z0-9_][-a-z0-9_]*(\\.[-a-z0-9_]+)*\\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}))(:[0-9]{1,5})?$");
     }
 
-    protected boolean verifyPassword(String password) {
+    public static boolean verifyPassword(String password) {
 
         //Check that the password provided has the correct format
         //Password must contains minimum 8 chars, 1 Uppercase, 1 Lowercase, 1 Digit, and 1 Special character
