@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
         android:layout_marginTop="50dp"
-        android:text="Login"
+        android:text="@string/loginLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
@@ -24,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="12"
-        android:hint="Enter your account"
+        android:hint="@string/accountLogin"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textColorHint="@android:color/white"
@@ -40,13 +40,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="12"
-        android:hint="Enter you password"
+        android:hint="@string/passwordLogin2"
         android:inputType="textPassword"
         android:textColorHint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textView3"
@@ -54,7 +55,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="41dp"
-        android:text="Account "
+        android:text="@string/emailLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -65,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="47dp"
-        android:text="Password"
+        android:text="@string/passwordLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -75,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="81dp"
         android:layout_marginTop="16dp"
-        android:text="Do not have an account?"
+        android:text="@string/signupLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginBtn"
         />

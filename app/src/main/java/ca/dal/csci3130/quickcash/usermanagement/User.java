@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.usermanagement;
 
+/**
+ *
+ */
 public class User implements UserInterface {
 
     private String firstName;
@@ -24,11 +27,17 @@ public class User implements UserInterface {
     public User() {
     }
 
+    /**
+     * @return
+     */
     @Override
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * @param firstName
+     */
     @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;

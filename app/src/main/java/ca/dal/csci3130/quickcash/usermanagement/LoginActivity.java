@@ -12,8 +12,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
-import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -24,8 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signUpButton;
 
-    private boolean isEmployee;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +29,11 @@ public class LoginActivity extends AppCompatActivity {
 
         getButtonReferences();
         setButtonClickListeners();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "[Back Button] is disable", Toast.LENGTH_SHORT).show();
     }
 
     private void getButtonReferences() {
@@ -91,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                         String hashPassword = Signup.getSHA256SecurePassword(extractedPassword, salt);
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
-
-                            isEmployee = Objects.requireNonNull(data.child("isEmployee").getValue()).toString().equals("y");
 
                             SessionManagerInterface session = new SessionManager(LoginActivity.this);
                             session.createLoginSession(data.getKey());
