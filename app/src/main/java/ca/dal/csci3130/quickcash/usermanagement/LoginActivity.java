@@ -14,6 +14,10 @@ import com.google.firebase.database.ValueEventListener;
 import ca.dal.csci3130.quickcash.R;
 import java.util.Objects;
 
+/**
+ * LoginActivity, this class implement login logic by check if user entered email and password
+ * exist and match in database or not.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private String extractedEmail;
@@ -22,6 +26,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signUpButton;
 
+    /**
+     * OnCreate method, Initialize activity call getButtonReference, and set button behavior
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,26 +39,46 @@ public class LoginActivity extends AppCompatActivity {
         setButtonClickListeners();
     }
 
+    /**
+     * OnBackPressed method, This method will block user from pressing back button, trying to access homepage(When user logout)
+     */
     @Override
     public void onBackPressed() {
         Toast.makeText(this, "[Back Button] is disable", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * GetButtonReferences method, will assign 2 buttons from interface to global private
+     * variable called loginButton and signUpButton
+     */
     private void getButtonReferences() {
         loginButton = findViewById(R.id.loginBtn);
         signUpButton = findViewById(R.id.signupBtn);
     }
 
+    /**
+     * setButtonClickListeners method, set behavior of behavior to once the button is clicked
+     * Then do
+     * If login is pressed - Call checkInfo() method
+     * If sign up pressed - Will call changeScreenToSignup() method
+     */
     private void setButtonClickListeners() {
         loginButton.setOnClickListener(view -> checkInfo());
         signUpButton.setOnClickListener(view -> changeScreenToSignup());
     }
 
+    /**
+     * changeScreenToSignup method, will change the current activity to signup activity.
+     */
     private void changeScreenToSignup() {
         startActivity(new Intent(LoginActivity.this, SignupActivity.class));
     }
 
-    //check if either account or password are missing
+    /**
+     * checkInfo method, will disable loginButton once called. retrieved inputted information
+     * by calling getAccount() and getPassword().  Then check if entered information is valid.
+     * Then pass to isCorrectInformation to check. if information not valid tell user by using toast
+     */
     protected void checkInfo(){
         loginButton.setEnabled(false);
 
@@ -66,19 +94,34 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //get user account
+    /**
+     * getAccount method, this method will received input email from Login_Layout
+     * and return as String
+     * @return String from editText email
+     */
     protected String getAccount() {
         EditText email = findViewById(R.id.name);
         return email.getText().toString().trim();
     }
 
-    //get user password
+    /**
+     * getPassword method, this method will received input from password from Login_Layout
+     * and return as String.
+     * @return String from editText password
+     */
     protected String getPassword() {
         EditText password = findViewById(R.id.password);
         return password.getText().toString().trim();
     }
 
-    //check if account and password are correct
+    /**
+     * isCorrectInformation method, this method will called once after input from users are verified.
+     * This method will check user input with Firebase database to see if email exist,
+     * and the password match with child of key.
+     * -If email exist,, password's matched. Create new session and createLoginSession
+     * -Else tell user that email/password is incorrect
+     * @param email: String email will be received to check if the email enter exist in database
+     */
     protected void isCorrectInformation(String email){
 
         DatabaseReference db = new UserDAO().getDatabaseReference();    //link to database

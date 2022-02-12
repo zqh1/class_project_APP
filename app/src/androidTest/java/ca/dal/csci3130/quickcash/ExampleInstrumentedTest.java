@@ -44,5 +44,4 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("ca.dal.csci3130.quickcash", appContext.getPackageName());
     }
-
 }
