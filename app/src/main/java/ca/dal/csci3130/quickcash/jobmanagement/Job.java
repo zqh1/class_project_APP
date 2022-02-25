@@ -18,22 +18,6 @@ public class Job implements JobInterface{
 
     private LatLng location;
 
-    public Job() {
-
-    }
-
-    public Job(String employerID, String title, String description, String tags, Calendar date, int duration, int salary, boolean urgent, LatLng location) {
-        this.employerID = employerID;
-        this.title = title;
-        this.description = description;
-        this.tags = tags;
-        this.date = date;
-        this.duration = duration;
-        this.salary = salary;
-        this.urgent = urgent;
-        this.location = location;
-    }
-
     public void addTag(String tag) {
         this.tags += ", " + tag;
     }

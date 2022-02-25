@@ -4,16 +4,6 @@ public class JobVerification {
 
     private JobInterface job;
 
-    private JobActivity activity;
-
-    public JobVerification() {
-        activity = null;
-    }
-
-    public JobVerification(JobActivity activity) {
-        this.activity = activity;
-    }
-
     public void setJob(JobInterface job) {
         this.job = job;
     }
