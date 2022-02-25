@@ -44,6 +44,8 @@
     <string name="Tags_Instructions_Label">Separate tags using (,) - CS,Manual,Heavy Lifting, …</string>
     <string name="cancelBtn">Cancel</string>
     <string name="post_offering_Btn_Label">Post Offering</string>
+    <string name="locationLabel">Location:</string>
+    <string name="refresh_map_Btn">Refresh Map</string>
 
 
 </resources>
