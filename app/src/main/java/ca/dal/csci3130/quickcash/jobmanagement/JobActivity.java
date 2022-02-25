@@ -72,7 +72,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
         calendar = Calendar.getInstance();
         userCalendar = Calendar.getInstance();
-        verification = new JobVerification(this);
+        verification = new JobVerification();
     }
 
     private void linkScreenItems() {

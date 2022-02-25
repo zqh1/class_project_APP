@@ -25,22 +25,18 @@ public class JobVerificationJUnitTest {
     @Test
     public void checkIfTitleIncorrect() {
         assertFalse(jobVer.validTitle(""));
-        assertFalse(jobVer.validTitle("12345678"));
-        assertFalse(jobVer.validTitle("     "));
     }
 
     @Test
-    public void checkIfDateCorrect() {
-        assertTrue(jobVer.validDate(2022, 4, 5, 22, 30));
-        assertTrue(jobVer.validDate(2022, 3, 1, 0, 0));
-        assertTrue(jobVer.validDate(2022, 2, 28, 23, 59));
+    public void checkIfDescriptionCorrect() {
+        assertTrue(jobVer.validDescription("Clean a pc and change a hard drive"));
+        assertTrue(jobVer.validDescription("Cook supper on weekends"));
+        assertTrue(jobVer.validDescription("Help to transport som heavy furniture"));
     }
 
     @Test
-    public void checkIfDateIncorrect() {
-        assertFalse(jobVer.validDate(9999, 4, 5, 22, 30));
-        assertFalse(jobVer.validDate(2000, 4, 5, 22, 30));
-        assertFalse(jobVer.validDate(2020, 2, 31, 0, 30));
+    public void checkIfDescriptionIncorrect() {
+        assertFalse(jobVer.validDescription(""));
     }
 
     @Test
@@ -68,6 +64,7 @@ public class JobVerificationJUnitTest {
     public void checkISalaryIncorrect() {
         assertFalse(jobVer.validSalary(0));
         assertFalse(jobVer.validSalary(-1));
+        assertFalse(jobVer.validSalary(9999999));
     }
 
 }
