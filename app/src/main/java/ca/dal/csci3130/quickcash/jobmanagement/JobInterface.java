@@ -1,14 +1,12 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import java.util.ArrayList;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Calendar;
 
 public interface JobInterface {
 
-    enum JOB_TAGS {MANUAL, FULL_TIME, HALF_TIME, TEMPORAL, URGENT, CS}
-
-    void setDate(int year, int month, int day, int hour, int minute);
-
-    void addTag(JobInterface.JOB_TAGS tag);
+    void addTag(String tag);
 
     String getEmployerID();
 
@@ -18,25 +16,13 @@ public interface JobInterface {
 
     void setTitle(String title);
 
-    int getYear();
+    String getDescription();
 
-    void setYear(int year);
+    void setDescription(String description);
 
-    int getMonth();
+    String getTags();
 
-    void setMonth(int month);
-
-    int getDay();
-
-    void setDay(int day);
-
-    int getHour();
-
-    void setHour(int hour);
-
-    int getMinute();
-
-    void setMinute(int minute);
+    void setTags(String tags);
 
     int getDuration();
 
@@ -50,7 +36,11 @@ public interface JobInterface {
 
     void setUrgent(boolean urgent);
 
-    ArrayList<JobInterface.JOB_TAGS> getTags();
+    Calendar getDate();
 
-    void setTags(ArrayList<JobInterface.JOB_TAGS> tags);
+    void setDate(Calendar date);
+
+    LatLng getLocation();
+
+    void setLocation(LatLng location);
 }

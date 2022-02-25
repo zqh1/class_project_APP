@@ -1,50 +1,41 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import java.util.ArrayList;
+import com.google.android.gms.maps.model.LatLng;
 
-public class Job {
+import java.util.Calendar;
+
+public class Job implements JobInterface{
 
     private String employerID;
     private String title;
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
+    private String description;
+    private String tags;
     private int duration;
     private int salary;
     private boolean urgent;
-    private ArrayList<JobInterface.JOB_TAGS> tags;
+
+    private Calendar date;
+
+    private LatLng location;
 
     public Job() {
-        this.tags = new ArrayList<>();
+
     }
 
-    public Job(String employerID, String title, int year, int month, int day, int hour, int minute,
-               int duration, int salary, boolean urgent, ArrayList<JobInterface.JOB_TAGS> tags) {
+    public Job(String employerID, String title, String description, String tags, Calendar date, int duration, int salary, boolean urgent, LatLng location) {
         this.employerID = employerID;
         this.title = title;
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.hour = hour;
-        this.minute = minute;
+        this.description = description;
+        this.tags = tags;
+        this.date = date;
         this.duration = duration;
         this.salary = salary;
         this.urgent = urgent;
-        this.tags = tags;
+        this.location = location;
     }
 
-    public void setDate(int year, int month, int day, int hour, int minute) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.hour = hour;
-        this.minute = minute;
-    }
-
-    public void addTag(JobInterface.JOB_TAGS tag) {
-        this.tags.add(tag);
+    public void addTag(String tag) {
+        this.tags += ", " + tag;
     }
 
     public String getEmployerID() {
@@ -63,44 +54,20 @@ public class Job {
         this.title = title;
     }
 
-    public int getYear() {
-        return year;
+    public String getDescription() {
+        return description;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public int getMonth() {
-        return month;
+    public String getTags() {
+        return tags;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-    public int getMinute() {
-        return minute;
-    }
-
-    public void setMinute(int minute) {
-        this.minute = minute;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public int getDuration() {
@@ -127,11 +94,19 @@ public class Job {
         this.urgent = urgent;
     }
 
-    public ArrayList<JobInterface.JOB_TAGS> getTags() {
-        return tags;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setTags(ArrayList<JobInterface.JOB_TAGS> tags) {
-        this.tags = tags;
+    public void setDate(Calendar date) {
+        this.date = date;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 }
