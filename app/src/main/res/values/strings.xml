@@ -30,5 +30,22 @@
     <string name="employer_label">WELCOME EMPLOYER</string>
     <string name="employee_label">WELCOME EMPLOYEE</string>
 
+    <string name="job_label">Job\'s Details:</string>
+    <string name="titleHint">Title</string>
+    <string name="job_description_Hint">Job Description</string>
+    <string name="pick_date_Hint">Pick Date</string>
+    <string name="dateBtnLabel">DATE</string>
+    <string name="pick_time_Hint">Pick Time</string>
+    <string name="timeBtnLabel">TIME</string>
+    <string name="hours_required_Hint">Hours Required</string>
+    <string name="salaryHint">Salary</string>
+    <string name="urgentLabel">URGENT</string>
+    <string name="tagsHint">Tags</string>
+    <string name="Tags_Instructions_Label">Separate tags using (,) - CS,Manual,Heavy Lifting, …</string>
+    <string name="cancelBtn">Cancel</string>
+    <string name="post_offering_Btn_Label">Post Offering</string>
+    <string name="locationLabel">Location:</string>
+    <string name="refresh_map_Btn">Refresh Map</string>
+
 
 </resources>
