@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesFillerActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
@@ -33,7 +34,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.NameLabel)).setText(nameOfUser);
 
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
-
+        findViewById(R.id.preferenceButton).setOnClickListener(view -> gotoSetPreferencePage());
     }
 
     /**
@@ -51,5 +52,9 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     private void logoutUser() {
         new SessionManager(this).logoutUser();
         startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void gotoSetPreferencePage(){
+        startActivity(new Intent(this, PreferencesFillerActivity.class));
     }
 }
