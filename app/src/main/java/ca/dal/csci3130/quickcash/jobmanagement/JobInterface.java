@@ -1,9 +1,5 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Calendar;
-
 public interface JobInterface {
 
     void addTag(String tag);
@@ -36,11 +32,31 @@ public interface JobInterface {
 
     void setUrgent(boolean urgent);
 
-    Calendar getDate();
+    public int getYear();
 
-    void setDate(Calendar date);
+    void setYear(int year);
 
-    LatLng getLocation();
+    int getMonth();
 
-    void setLocation(LatLng location);
+    void setMonth(int month);
+
+    int getDay();
+
+    void setDay(int day);
+
+    int getHour();
+
+    void setHour(int hour);
+
+    int getMinute();
+
+    void setMinute(int minute);
+
+    double getLatitude();
+
+    void setLatitude(double latitude);
+
+    double getLongitude();
+
+    void setLongitude(double longitude);
 }

@@ -228,8 +228,13 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         job.setEmployerID(new SessionManager(this).getUserID());
         job.setTitle(jobTitle.getText().toString().trim());
         job.setDescription(jobDescription.getText().toString().trim());
-        job.setDate(userCalendar);
-        job.setLocation(latlng);
+        job.setYear(userCalendar.get(Calendar.YEAR));
+        job.setMonth(userCalendar.get(Calendar.MONTH));
+        job.setDay(userCalendar.get(Calendar.DAY_OF_MONTH));
+        job.setHour(userCalendar.get(Calendar.HOUR_OF_DAY));
+        job.setMinute(userCalendar.get(Calendar.MINUTE));
+        job.setLatitude(latlng.latitude);
+        job.setLongitude(latlng.longitude);
         job.setUrgent(urgentSwitch.isChecked());
         job.setTags(jobTags.getText().toString().trim());
 
