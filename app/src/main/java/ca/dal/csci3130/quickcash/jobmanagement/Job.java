@@ -18,6 +18,10 @@ public class Job implements JobInterface{
 
     private LatLng location;
 
+
+    //for firebase UI
+    public Job(){}
+
     public void addTag(String tag) {
         this.tags += ", " + tag;
     }

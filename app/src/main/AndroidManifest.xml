@@ -33,6 +33,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".search.ViewJobActivity"
+            android:exported="false" />
+        <activity
             android:name=".jobmanagement.JobActivity"
             android:exported="false" />
         <activity
