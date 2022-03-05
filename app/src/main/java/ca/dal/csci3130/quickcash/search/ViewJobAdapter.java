@@ -40,25 +40,21 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
     @Override
     protected void onBindViewHolder(@NonNull JobViewHolder holder, int position, @NonNull Job job) {
 
-
         holder.jobTitleTV.setText(job.getTitle());
-        /*holder.descriptionTV.setText("");
-        holder.durationTV.setText("");
-        holder.salaryTV.setText("");
-        holder.locationTV.setText("");
-        holder.dateTV.setText("");
-        holder.tagsTV.setText("");
+        holder.descriptionTV.setText(job.getDescription());
+        holder.durationTV.setText("Duration: " + job.getDuration() + " hours");
+        holder.salaryTV.setText("Salary: $" + job.getSalary() + "/hour");
+        holder.dateTV.setText("Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear());
 
         if (job.isUrgent()){
             holder.urgentTV.setText("Urgent!");
         }else{
             holder.urgentTV.setText("");
-        }*/
+        }
 
-
+        //TODO apply button
         /*holder.applyBtn.setOnClickListener(view -> {
             Context context = getApplicationContext();
-            Toast.makeText(holder.context, "please", Toast.LENGTH_SHORT).show();
         });*/
 
     }
@@ -66,15 +62,11 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
     public class JobViewHolder extends RecyclerView.ViewHolder {
         private final TextView jobTitleTV;
         private final Context context;
-
-        /*private final TextView descriptionTV;
+        private final TextView descriptionTV;
         private final TextView durationTV;
         private final TextView salaryTV;
         private final TextView urgentTV;
-        private final TextView locationTV;
         private final TextView dateTV;
-        private final TextView tagsTV;*/
-        //private final Button applyBtn;
 
 
         public JobViewHolder(@NonNull View itemView) {
@@ -82,14 +74,12 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             jobTitleTV = itemView.findViewById(R.id.jobTitleTV);
             context = itemView.getContext();
 
-            /*descriptionTV = itemView.findViewById(R.id.descriptionTV);
+            descriptionTV = itemView.findViewById(R.id.descriptionTV);
             durationTV = itemView.findViewById(R.id.durationTV);
             salaryTV = itemView.findViewById(R.id.salaryTV);
             urgentTV = itemView.findViewById(R.id.urgentTV);
-            locationTV = itemView.findViewById(R.id.locationTV);
-            tagsTV = itemView.findViewById(R.id.tagsTV);
-            dateTV = itemView.findViewById(R.id.dateTV);*/
-            //applyBtn = itemView.findViewById(R.id.applyBtn);
+            dateTV = itemView.findViewById(R.id.dateTV);
+
 
         }
     }

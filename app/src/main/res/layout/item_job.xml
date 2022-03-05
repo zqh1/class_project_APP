@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/purple_200"
+    android:background="@color/purple_700"
     android:orientation="vertical">
 
     <TextView
@@ -17,7 +17,7 @@
         android:textStyle="bold"
         tools:text="Job Title" />
 
-    <!--<TextView
+    <TextView
         android:id="@+id/descriptionTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         android:textStyle="bold"
         tools:text="Salary" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/locationTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         android:textStyle="bold"
-        tools:text="Location" />
+        tools:text="Location" />-->
 
     <TextView
         android:id="@+id/dateTV"
@@ -68,16 +68,6 @@
         tools:text="Date" />
 
     <TextView
-        android:id="@+id/tagsTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        tools:text="Tags" />
-
-    <TextView
         android:id="@+id/urgentTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,7 +75,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         android:textStyle="bold"
-        tools:text="Urgency" />-->
+        tools:text="Urgency" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,14 +84,14 @@
         android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
-      <!--  <Button
+        <Button
             android:id="@+id/applyBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@android:color/background_light"
             android:text="apply"
-            android:textColor="@color/black" />-->
+            android:textColor="@color/black" />
 
 
     </LinearLayout>
