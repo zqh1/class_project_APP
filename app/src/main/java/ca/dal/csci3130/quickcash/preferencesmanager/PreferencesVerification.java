@@ -19,29 +19,30 @@ public class PreferencesVerification {
             allFieldCorrect = false;
         }
         if(!validStartingTime(preferences.getStartingTime())){
-            fieldStatus[1] = false;
+            fieldStatus[2] = false;
             allFieldCorrect = false;
         }
         if(!validMaxDistance(preferences.getMaxDistance())){
-            fieldStatus[1] = false;
+            fieldStatus[3] = false;
             allFieldCorrect = false;
         }
         if(!validDuration(preferences.getDuration())){
-            fieldStatus[1] = false;
+            fieldStatus[4] = false;
             allFieldCorrect = false;
         }
+
         if(allFieldCorrect) pushPreferencesToFirebase();
 
         return fieldStatus;
     }
 
-    public boolean validJob(String title) {
-        return !title.isEmpty() && title.length() <= 250;
+    public boolean validJob(String job) {
+        return !job.isEmpty() && job.length() <= 250;
     }
 
     public boolean validSalary(int salary) {
         //Minimum NS wage 13.35$ per hour
-        return salary > 13.35 && salary <= 10000;
+        return salary >= 13.35 && salary <= 10000;
     }
 
     public boolean validStartingTime(String time) {

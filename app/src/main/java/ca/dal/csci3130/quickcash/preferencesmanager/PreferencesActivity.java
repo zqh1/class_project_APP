@@ -120,11 +120,10 @@ public class PreferencesActivity extends AppCompatActivity{
         for (boolean status : fieldsStatus) {
             if (!status) {
                 proceedButton.setEnabled(true);
-                Toast.makeText(this, "Incomplete information", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Incorrect Information", Toast.LENGTH_LONG).show();
                 return;
             }
         }
-
         changeScreenToHome();
     }
 

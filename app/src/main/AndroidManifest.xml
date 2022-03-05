@@ -22,6 +22,9 @@
             android:name=".usermanagement.SignupActivity"
             android:exported="false" />
         <activity
+            android:name=".preferencesmanager.PreferencesActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
