@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesFillerActivity;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
@@ -55,6 +55,6 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     }
 
     private void gotoSetPreferencePage(){
-        startActivity(new Intent(this, PreferencesFillerActivity.class));
+        startActivity(new Intent(this, PreferencesActivity.class));
     }
 }

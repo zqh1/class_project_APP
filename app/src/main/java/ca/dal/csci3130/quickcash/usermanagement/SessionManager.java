@@ -97,7 +97,7 @@ public class SessionManager implements SessionManagerInterface {
     }
 
     //Private method that return the user ID stored on shared preferences
-    private String getUserID() {
+    public String getUserID() {
         return sharePref.getString(Constants.USER_KEY, null);
     }
 
