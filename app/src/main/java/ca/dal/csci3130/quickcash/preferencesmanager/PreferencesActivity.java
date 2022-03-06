@@ -21,6 +21,7 @@ public class PreferencesActivity extends AppCompatActivity{
     private EditText extractedMaxDistance;
     private EditText extractedDuration;
 
+
     private PreferencesVerification verification;
 
     private Button cancelButton;
@@ -73,25 +74,40 @@ public class PreferencesActivity extends AppCompatActivity{
         PreferencesInterface preferences = new Preferences();
 
         preferences.setEmployeeID(new SessionManager(this).getUserID());
-        preferences.setJob(extractedJob.toString().trim());
-        preferences.setStartingTime(extractedStartingTime.toString().trim());
+        preferences.setJob(getJob());
+        String startingTimeString = getStartingTime();
+        String[] extractStartingTimeArray = startingTimeString.split(":");
 
         try{
-            preferences.setSalary(Integer.parseInt(extractedSalary.toString().trim()));
+            preferences.setStartingHour(Integer.parseInt(extractStartingTimeArray[0]));
+        }
+        catch (NumberFormatException e){
+            preferences.setStartingHour(0);
+        }
+
+        try{
+            preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[1]));
+        }
+        catch (NumberFormatException e){
+            preferences.setStartingMinute(0);
+        }
+
+        try{
+            preferences.setSalary(Integer.parseInt(getSalary()));
         }
         catch (NumberFormatException e){
             preferences.setSalary(0);
         }
 
         try{
-            preferences.setDuration(Integer.parseInt(extractedDuration.toString().trim()));
+            preferences.setDuration(Integer.parseInt(getDuration()));
         }
         catch (NumberFormatException e){
             preferences.setDuration(168);
         }
 
         try{
-            preferences.setMaxDistance(Integer.parseInt(extractedMaxDistance.toString().trim()));
+            preferences.setMaxDistance(Integer.parseInt(getMaxDistance()));
         }
         catch (NumberFormatException e){
             preferences.setMaxDistance(1000);
@@ -124,31 +140,27 @@ public class PreferencesActivity extends AppCompatActivity{
                 return;
             }
         }
+        Toast.makeText(this, "Preferences has been added to database", Toast.LENGTH_LONG).show();
         changeScreenToHome();
     }
 
     protected String getJob() {
-        EditText job = findViewById(R.id.preferencesFilling);
-        return job.getText().toString().trim();
+        return extractedJob.getText().toString().trim();
     }
 
     protected String getSalary(){
-        EditText salary = findViewById(R.id.salaryMinimal);
-        return salary.getText().toString().trim();
+        return extractedSalary.getText().toString().trim();
     }
 
     protected String getStartingTime(){
-        EditText time = findViewById(R.id.startingHour);
-        return time.getText().toString().trim();
+        return extractedStartingTime.getText().toString().trim();
     }
 
     protected String getMaxDistance(){
-        EditText distance = findViewById(R.id.maxDistanceFill);
-        return distance.getText().toString().trim();
+        return extractedMaxDistance.getText().toString().trim();
     }
 
     protected String getDuration(){
-        EditText length = findViewById(R.id.durationFill);
-        return length.getText().toString().trim();
+        return extractedDuration.getText().toString().trim();
     }
 }

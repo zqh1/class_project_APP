@@ -14,10 +14,6 @@ public interface PreferencesInterface {
 
     int getSalary();
 
-    void setStartingTime(String startingTime);
-
-    String getStartingTime();
-
     void setMaxDistance(int distance);
 
     int getMaxDistance();
@@ -25,4 +21,15 @@ public interface PreferencesInterface {
     void setDuration(int duration);
 
     int getDuration();
+
+    void setStartingHour(int hour);
+
+    int getStartingHour();
+
+    void setStartingMinute(int minute);
+
+    int getStartingMinute();
+
+    String getStartingTime();
+
 }

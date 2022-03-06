@@ -5,10 +5,10 @@ public class Preferences implements PreferencesInterface{
     private String employeeID;
     private String job;
     private int salary;
-    private String startingTime;
+    private int startingHour;
+    private int startingMinute;
     private int maxDistance;
     private int duration;
-
 
     public void setEmployeeID(String employeeID){
         this.employeeID = employeeID;
@@ -34,14 +34,6 @@ public class Preferences implements PreferencesInterface{
         return salary;
     }
 
-    public void setStartingTime(String startingTime){
-        this.startingTime = startingTime;
-    }
-
-    public String getStartingTime(){
-        return startingTime;
-    }
-
     public void setMaxDistance(int distance){
         this.maxDistance = distance;
     }
@@ -57,4 +49,20 @@ public class Preferences implements PreferencesInterface{
     public int getDuration(){
         return this.duration;
     }
+
+    public void setStartingHour(int hour){ this.startingHour = hour; }
+
+    public int getStartingHour(){
+        return this.startingHour;
+    }
+
+    public void setStartingMinute(int minute){
+        this.startingMinute = minute;
+    }
+
+    public int getStartingMinute(){
+        return this.startingMinute;
+    }
+
+    public String getStartingTime(){ return startingHour + ":" + startingMinute; }
 }
