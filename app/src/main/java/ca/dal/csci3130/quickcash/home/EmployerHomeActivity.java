@@ -43,7 +43,7 @@ public class EmployerHomeActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "[Back Button] is disable", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "[Back Button] is disabled", Toast.LENGTH_SHORT).show();
     }
 
     /**

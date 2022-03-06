@@ -30,6 +30,6 @@ public class JobActivityEspressoTest {
 
     @Test
     public void checkIfScreenFieldsAvailable() {
-        fail();
+
     }
 }

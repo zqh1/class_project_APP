@@ -14,9 +14,17 @@ public class Job implements JobInterface{
     private int salary;
     private boolean urgent;
 
-    private Calendar date;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int minute;
 
-    private LatLng location;
+    private double latitude, longitude;
+
+
+    //for firebase UI
+    public Job(){}
 
     public void addTag(String tag) {
         this.tags += ", " + tag;
@@ -78,19 +86,61 @@ public class Job implements JobInterface{
         this.urgent = urgent;
     }
 
-    public Calendar getDate() {
-        return date;
+    public int getYear() {
+        return year;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setYear(int year) {
+        this.year = year;
     }
 
-    public LatLng getLocation() {
-        return location;
+    public int getMonth() {
+        return month;
     }
 
-    public void setLocation(LatLng location) {
-        this.location = location;
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    @Override
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    @Override
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

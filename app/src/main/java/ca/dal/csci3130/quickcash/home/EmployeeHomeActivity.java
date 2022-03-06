@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.jobmanagement.JobActivity;
+import ca.dal.csci3130.quickcash.search.ViewJobActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
@@ -16,7 +18,6 @@ import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
  * EmployeeHomeActivity, this class will launch activity once Employee user Log In .
  */
 public class EmployeeHomeActivity extends AppCompatActivity {
-
     /**
      * OnCreate method, Initialize activity get userInterface from sessionManager.
      * Then set textView to user first name and last name to show on screen.
@@ -34,6 +35,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
 
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
 
+        findViewById(R.id.viewJobsBtn).setOnClickListener(view -> redirectViewJobs());
     }
 
     /**
@@ -41,7 +43,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "[Back Button] is disable", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "[Back Button] is disabled", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -51,5 +53,9 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     private void logoutUser() {
         new SessionManager(this).logoutUser();
         startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void redirectViewJobs(){
+        startActivity(new Intent(this, ViewJobActivity.class));
     }
 }
