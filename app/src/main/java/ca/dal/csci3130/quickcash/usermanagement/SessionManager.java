@@ -30,6 +30,7 @@ public class SessionManager implements SessionManagerInterface {
     private final SharedPreferences.Editor editor;
 
     private static UserInterface user;
+    private static String userID;
 
     /**
      * Session Manager constructor, it will set the context (screen that initialize manager)
@@ -73,7 +74,7 @@ public class SessionManager implements SessionManagerInterface {
     @Override
     public void checkLogin() {
         if (!isLoggedIn()) context.startActivity(new Intent(context, LoginActivity.class));
-        else getUserInformation(getUserID());
+        else getUserInformation(sharePref.getString(Constants.USER_KEY, null));
     }
 
     /**
@@ -100,8 +101,8 @@ public class SessionManager implements SessionManagerInterface {
      * Method that return user ID
      * @return String: user ID on firebase
      */
-    public String getUserID() {
-        return sharePref.getString(Constants.USER_KEY, null);
+    public static String getUserID() {
+        return userID;
     }
 
     //Private method used by manager to logout user and change screen to login
@@ -120,6 +121,8 @@ public class SessionManager implements SessionManagerInterface {
 
                 //Get user from all database
                 DataSnapshot data = snapshot.child(userID);
+
+                SessionManager.userID = userID;
 
                 //Retrieve user data
                 user = new User();
