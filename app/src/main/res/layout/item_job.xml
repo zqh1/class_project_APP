@@ -47,16 +47,6 @@
         android:textStyle="bold"
         tools:text="Salary" />
 
-    <!--<TextView
-        android:id="@+id/locationTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        tools:text="Location" />-->
-
     <TextView
         android:id="@+id/dateTV"
         android:layout_width="match_parent"
@@ -82,15 +72,33 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/applyBtn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@android:color/background_light"
-            android:text="apply"
+            android:text="@string/applyLabel"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/applicantBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/view_applicant_Label"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/delete_job_application_Label"
             android:textColor="@color/black" />
 
 

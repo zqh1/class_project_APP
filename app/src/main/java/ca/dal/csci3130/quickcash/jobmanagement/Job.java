@@ -1,9 +1,5 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Calendar;
-
 public class Job implements JobInterface{
 
     private String employerID;
@@ -20,10 +16,13 @@ public class Job implements JobInterface{
     private int hour;
     private int minute;
 
-    private double latitude, longitude;
+    private double latitude;
+    private double longitude;
 
+    private String applicantsID = "";
+    private String acceptedID = "";
 
-    //for firebase UI
+    //Constructor for firebase UI
     public Job(){}
 
     public void addTag(String tag) {
@@ -126,7 +125,6 @@ public class Job implements JobInterface{
         this.minute = minute;
     }
 
-    @Override
     public double getLatitude() {
         return latitude;
     }
@@ -135,12 +133,28 @@ public class Job implements JobInterface{
         this.latitude = latitude;
     }
 
-    @Override
     public double getLongitude() {
         return longitude;
     }
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String getApplicantsID() {
+        return applicantsID;
+    }
+
+    public void setApplicantsID(String applicantsID) {
+        this.applicantsID = applicantsID;
+    }
+
+    public String getAcceptedID() {
+        return acceptedID;
+    }
+
+    public void setAcceptedID(String acceptedID) {
+        this.acceptedID = acceptedID;
     }
 }

@@ -1,13 +1,11 @@
-package ca.dal.csci3130.quickcash.search;
+package ca.dal.csci3130.quickcash.common;
 
 import android.content.Context;
 import android.util.Log;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WrapLinearLayoutManager extends LinearLayoutManager {
-
 
     public WrapLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);

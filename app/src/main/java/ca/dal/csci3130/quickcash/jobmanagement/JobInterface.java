@@ -1,5 +1,7 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+import java.util.List;
+
 public interface JobInterface {
 
     void addTag(String tag);
@@ -32,7 +34,7 @@ public interface JobInterface {
 
     void setUrgent(boolean urgent);
 
-    public int getYear();
+    int getYear();
 
     void setYear(int year);
 
@@ -59,4 +61,12 @@ public interface JobInterface {
     double getLongitude();
 
     void setLongitude(double longitude);
+
+    String getApplicantsID();
+
+    void setApplicantsID(String applicantsID);
+
+    String getAcceptedID();
+
+    void setAcceptedID(String acceptedID);
 }
