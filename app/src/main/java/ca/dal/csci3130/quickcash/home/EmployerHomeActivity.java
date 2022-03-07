@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.jobmanagement.JobActivity;
+import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
@@ -36,6 +37,8 @@ public class EmployerHomeActivity extends AppCompatActivity {
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
 
         findViewById(R.id.createJobBtn).setOnClickListener(view -> redirectJobCreation());
+
+        findViewById(R.id.postingsBtn).setOnClickListener(view -> viewApplicants());
     }
 
     /**
@@ -57,5 +60,9 @@ public class EmployerHomeActivity extends AppCompatActivity {
 
     private void redirectJobCreation() {
         startActivity(new Intent(this, JobActivity.class));
+    }
+
+    private void viewApplicants() {
+        startActivity(new Intent(this, ViewJobActivity.class));
     }
 }
