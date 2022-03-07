@@ -96,7 +96,10 @@ public class SessionManager implements SessionManagerInterface {
         return sharePref.contains(Constants.USER_KEY);
     }
 
-    //Private method that return the user ID stored on shared preferences
+    /**
+     * Method that return user ID
+     * @return String: user ID on firebase
+     */
     public String getUserID() {
         return sharePref.getString(Constants.USER_KEY, null);
     }
