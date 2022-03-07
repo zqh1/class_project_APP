@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.JobActivity;
 import ca.dal.csci3130.quickcash.search.ViewJobActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
@@ -34,7 +35,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.NameLabel)).setText(nameOfUser);
 
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
-
+        findViewById(R.id.preferenceButton).setOnClickListener(view -> gotoSetPreferencePage());
         findViewById(R.id.viewJobsBtn).setOnClickListener(view -> redirectViewJobs());
     }
 
@@ -55,7 +56,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    private void redirectViewJobs(){
-        startActivity(new Intent(this, ViewJobActivity.class));
-    }
+    private void redirectViewJobs(){ startActivity(new Intent(this, ViewJobActivity.class)); }
+
+    private void gotoSetPreferencePage() { startActivity(new Intent(this, PreferencesActivity.class)); }
 }
