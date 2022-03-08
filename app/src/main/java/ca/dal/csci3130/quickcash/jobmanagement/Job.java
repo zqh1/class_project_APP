@@ -2,10 +2,10 @@ package ca.dal.csci3130.quickcash.jobmanagement;
 
 public class Job implements JobInterface{
 
-    private String employerID;
-    private String title;
-    private String description;
-    private String tags;
+    private String employerID = "";
+    private String title = "";
+    private String description = "";
+    private String tags = "";
     private int duration;
     private int salary;
     private boolean urgent;
@@ -23,7 +23,7 @@ public class Job implements JobInterface{
     private String acceptedID = "";
 
     //Constructor for firebase UI
-    public Job(){}
+    public Job(){ /*Empty required by firebase*/}
 
     public void addTag(String tag) {
         this.tags += ", " + tag;

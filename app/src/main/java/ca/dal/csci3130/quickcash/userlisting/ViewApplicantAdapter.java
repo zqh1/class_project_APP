@@ -41,7 +41,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
     @SuppressLint("SetTextI18n")
     public void onBindViewHolder(@NonNull ApplicantViewHolder holder, int position) {
 
-        int jobPosition = position;
+        int jobPosition = holder.getBindingAdapterPosition();
 
         DatabaseReference userDatabase = new UserDAO().getDatabaseReference();
         userDatabase.child(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {

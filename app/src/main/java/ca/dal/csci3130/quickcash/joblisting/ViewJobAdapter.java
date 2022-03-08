@@ -21,6 +21,7 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
@@ -47,11 +48,10 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.durationTV.setText("Duration: " + job.getDuration() + " hours");
         holder.salaryTV.setText("Salary: $" + job.getSalary() + "/hour");
         holder.dateTV.setText("Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear());
+        holder.urgentTV.setText("Urgent!");
 
-        if (job.isUrgent()){
-            holder.urgentTV.setText("Urgent!");
-        }else{
-            holder.urgentTV.setText("");
+        if (!job.isUrgent()){
+            holder.urgentTV.setVisibility(View.GONE);
         }
 
         //Check if user is employee or employer and disable buttons not related
@@ -72,8 +72,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
             //Set Apply listener
             holder.applyBtn.setOnClickListener(view ->
-                    FirebaseDatabase.getInstance(Constants.FIREBASE_URL)
-                    .getReference().child("Job")
+                    new JobDAO().getDatabaseReference()
                     .child(Objects.requireNonNull(getRef(position).getKey()))
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -141,17 +140,17 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
     public static class JobViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView jobTitleTV;
-        private final Context context;
-        private final TextView descriptionTV;
-        private final TextView durationTV;
-        private final TextView salaryTV;
-        private final TextView urgentTV;
-        private final TextView dateTV;
-        private final TextView statusTV;
-        private final Button deleteBtn;
-        private final Button applicantBtn;
-        private final Button applyBtn;
+        public final TextView jobTitleTV;
+        public final Context context;
+        public final TextView descriptionTV;
+        public final TextView durationTV;
+        public final TextView salaryTV;
+        public final TextView urgentTV;
+        public final TextView dateTV;
+        public final TextView statusTV;
+        public final Button deleteBtn;
+        public final Button applicantBtn;
+        public final Button applyBtn;
 
         public JobViewHolder(@NonNull View itemView) {
 

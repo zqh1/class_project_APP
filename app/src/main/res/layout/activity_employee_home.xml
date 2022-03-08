@@ -51,8 +51,18 @@
         android:id="@+id/preferenceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Preference"
+        android:text="@string/preferences_label"
         app:layout_constraintBottom_toTopOf="@+id/logoutBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />
+
+    <Button
+        android:id="@+id/applicationsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/view_applications_label"
+        app:layout_constraintBottom_toTopOf="@+id/preferenceButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />
