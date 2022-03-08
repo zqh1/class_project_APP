@@ -23,6 +23,7 @@ import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
 
 public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.JobViewHolder> {
 
@@ -55,6 +56,17 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         //Check if user is employee or employer and disable buttons not related
         if (SessionManager.getUser().getIsEmployee().equals("y")) {
+
+            if (job.getAcceptedID().isEmpty()) {
+                holder.statusTV.setText("Status: Open position");
+            }
+            else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
+                holder.statusTV.setText("Status: Accepted");
+            }
+            else {
+                holder.statusTV.setText("Status: Rejected");
+            }
+
             holder.deleteBtn.setVisibility(View.GONE);
             holder.applicantBtn.setVisibility(View.GONE);
 
@@ -89,6 +101,27 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             );
         }
         else {
+
+            if (job.getAcceptedID().isEmpty()) {
+                holder.statusTV.setText("Status: Open position");
+            }
+            else {
+                new UserDAO().getDatabaseReference().child(job.getAcceptedID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
+                        String lastName = Objects.requireNonNull(snapshot.child("lastName").getValue()).toString();
+
+                        holder.statusTV.setText("Status: " + firstName + " " + lastName + " accepted");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(holder.context, "Error while retrieving employee names", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
             holder.applyBtn.setVisibility(View.GONE);
 
             //Set delete and applicants buttons listeners
@@ -115,6 +148,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         private final TextView salaryTV;
         private final TextView urgentTV;
         private final TextView dateTV;
+        private final TextView statusTV;
         private final Button deleteBtn;
         private final Button applicantBtn;
         private final Button applyBtn;
@@ -130,6 +164,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             salaryTV = itemView.findViewById(R.id.salaryTV);
             urgentTV = itemView.findViewById(R.id.urgentTV);
             dateTV = itemView.findViewById(R.id.dateTV);
+            statusTV = itemView.findViewById(R.id.statusTV);
 
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             applicantBtn = itemView.findViewById(R.id.applicantBtn);
