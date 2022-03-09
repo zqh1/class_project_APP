@@ -8,9 +8,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.applicationslisting.ViewApplicationActivity;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
-import ca.dal.csci3130.quickcash.jobmanagement.JobActivity;
-import ca.dal.csci3130.quickcash.search.ViewJobActivity;
+import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserInterface;
@@ -37,6 +37,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
         findViewById(R.id.preferenceButton).setOnClickListener(view -> gotoSetPreferencePage());
         findViewById(R.id.viewJobsBtn).setOnClickListener(view -> redirectViewJobs());
+        findViewById(R.id.applicationsBtn).setOnClickListener(view -> viewJobApplications());
     }
 
     /**
@@ -56,7 +57,15 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    private void redirectViewJobs(){ startActivity(new Intent(this, ViewJobActivity.class)); }
+    private void redirectViewJobs(){
+        startActivity(new Intent(this, ViewJobActivity.class));
+    }
 
-    private void gotoSetPreferencePage() { startActivity(new Intent(this, PreferencesActivity.class)); }
+    private void gotoSetPreferencePage() {
+        startActivity(new Intent(this, PreferencesActivity.class));
+    }
+
+    private void viewJobApplications() {
+        startActivity(new Intent(this, ViewApplicationActivity.class));
+    }
 }

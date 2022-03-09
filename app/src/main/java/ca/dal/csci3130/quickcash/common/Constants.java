@@ -8,8 +8,7 @@ public class Constants {
     /**
      * Constants private constructor, avoid initialization of class
      */
-    private Constants() {
-    }
+    private Constants() {}
 
     //Firebase URL
     public static final String FIREBASE_URL = "https://csci3130-group-17-default-rtdb.firebaseio.com/";

@@ -32,7 +32,7 @@ public interface JobInterface {
 
     void setUrgent(boolean urgent);
 
-    public int getYear();
+    int getYear();
 
     void setYear(int year);
 
@@ -59,4 +59,12 @@ public interface JobInterface {
     double getLongitude();
 
     void setLongitude(double longitude);
+
+    String getApplicantsID();
+
+    void setApplicantsID(String applicantsID);
+
+    String getAcceptedID();
+
+    void setAcceptedID(String acceptedID);
 }

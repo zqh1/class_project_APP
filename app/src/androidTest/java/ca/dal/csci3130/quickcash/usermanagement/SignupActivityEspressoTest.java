@@ -11,20 +11,26 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import androidx.annotation.NonNull;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.testConstants;
 
-@RunWith(AndroidJUnit4.class)
 public class SignupActivityEspressoTest {
 
     @Rule
@@ -73,7 +79,7 @@ public class SignupActivityEspressoTest {
 
     @Test
     public void checkCorrectLastName() {
-        onView(withId(R.id.lastNameInput)).perform(typeText("Cabarique"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.lastNameInput)).perform(typeText("Gus"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.signUpBtn)).perform(click());
         onView(withId(R.id.lastNameInput)).check(matches(hasTextColor(R.color.grey)));
     }
@@ -139,8 +145,20 @@ public class SignupActivityEspressoTest {
     @Test
     public void checkIfValidInformationUserCreate() {
 
-        //NOTE: DELETE TEST USER "test2@dal.ca" FROM FIREBASE FOR THIS TEST TO WORK,
-        //      OR DUPLICATED ACCOUNT WILL FAIL THE TEST!
+        //Delete user if exits on database
+        DAO.getUserReference().orderByChild("email").equalTo("test2@dal.ca").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.exists() && snapshot.hasChildren())
+                    DAO.getUserReference().child(Objects.requireNonNull(snapshot.getValue()).toString().substring(1, 21)).removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         onView(withId(R.id.firstNameInput)).perform(typeText("DELETE"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.lastNameInput)).perform(typeText("THIS"), ViewActions.closeSoftKeyboard());
@@ -150,15 +168,12 @@ public class SignupActivityEspressoTest {
         onView(withId(R.id.phoneInput)).perform(typeText("0123456789"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.signUpBtn)).perform(click());
 
-        //Add 5 second wait to allow firebase to respond with email query
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         //Check that screen change to login screen (only happens if account is created successfully)
         intended(hasComponent(LoginActivity.class.getName()));
+
+        onView(withId(R.id.loginBtn)).check(matches(withText("LOGIN")));
     }
 
     @Test
@@ -175,12 +190,7 @@ public class SignupActivityEspressoTest {
         onView(withId(R.id.phoneInput)).perform(typeText("0123456789"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.signUpBtn)).perform(click());
 
-        //Add 5 second wait to allow firebase to respond with email query
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         onView(withId(R.id.emailInput)).check(matches(hasTextColor(R.color.red)));
     }

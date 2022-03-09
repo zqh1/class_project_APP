@@ -8,16 +8,20 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
+import ca.dal.csci3130.quickcash.testConstants;
 
 public class LoginActivityEspressoTest {
 
@@ -37,142 +41,98 @@ public class LoginActivityEspressoTest {
     }
 
     @Test
-    public void checkCorrectInfoEmployee(){
+    public void checkCorrectInfoEmployee() {
 
-        onView(withId(R.id.name)).perform(typeText("Employee@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
+        testConstants.employeeLogin();
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
+
         onView(withId(R.id.employeeLabel)).check(matches(withText("WELCOME EMPLOYEE")));
     }
 
     @Test
-    public void checkIncorrectInfoEmployee(){
+    public void checkIncorrectInfoEmployee() {
 
         onView(withId(R.id.name)).perform(typeText("Employee@hotmail.com"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("incorrectPass"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.loginBtn)).perform(click());
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
-        onView(withId(R.id.loginBtn));
-
+        onView(withId(R.id.loginBtn)).check(matches(withText("LOGIN")));
     }
 
     @Test
-    public void checkCorrectInfoEmployeeRedirect(){
+    public void checkCorrectInfoEmployeeRedirect() {
 
-        onView(withId(R.id.name)).perform(typeText("Employee@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
+        testConstants.employeeLogin();
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         intended(hasComponent(EmployeeHomeActivity.class.getName()));
+
+        onView(withId(R.id.logoutBtn)).check(matches(withText("LOGOUT")));
     }
 
     @Test
-    public void checkCorrectInfoEmployer(){
+    public void checkCorrectInfoEmployer() {
 
+        testConstants.employerLogin();
 
-
-        onView(withId(R.id.name)).perform(typeText("Employer@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         onView(withId(R.id.employerLabel)).check(matches(withText("WELCOME EMPLOYER")));
-
     }
 
     @Test
-    public void checkIncorrectInfoEmployer(){
+    public void checkIncorrectInfoEmployer() {
 
-        onView(withId(R.id.name)).perform(typeText("Employer@hotmail.com"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.name)).perform(typeText("employer@dal.ca"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("incorrectPass"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.loginBtn)).perform(click());
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.loginBtn));
+        testConstants.waitFirebase();
 
-
+        onView(withId(R.id.loginBtn)).check(matches(withText("LOGIN")));
     }
 
     @Test
-    public void checkCorrectInfoEmployerRedirect(){
+    public void checkCorrectInfoEmployerRedirect() {
 
-        onView(withId(R.id.name)).perform(typeText("Employer@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
+        testConstants.employerLogin();
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         intended(hasComponent(EmployerHomeActivity.class.getName()));
 
+        onView(withId(R.id.logoutBtn)).check(matches(withText("LOGOUT")));
     }
 
     @Test
-    public void checkLogoutEmployeeRedirect(){
+    public void checkLogoutEmployeeRedirect() {
 
-        onView(withId(R.id.name)).perform(typeText("Employee@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
-
+        testConstants.employeeLogin();
 
         onView(withId(R.id.logoutBtn)).perform(click());
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         intended(hasComponent(LoginActivity.class.getName()));
 
-
-
+        onView(withId(R.id.name)).check(matches(withText("")));
     }
 
     @Test
-    public void checkLogoutEmployerRedirect(){
-        onView(withId(R.id.name)).perform(typeText("Employer@hotmail.com"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"), ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.loginBtn)).perform(click());
+    public void checkLogoutEmployerRedirect() {
+
+        testConstants.employerLogin();
+
+        testConstants.waitFirebase();
+
         onView(withId(R.id.logoutBtn)).perform(click());
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         intended(hasComponent(LoginActivity.class.getName()));
-    }
 
+        onView(withId(R.id.name)).check(matches(withText("")));
+    }
 }

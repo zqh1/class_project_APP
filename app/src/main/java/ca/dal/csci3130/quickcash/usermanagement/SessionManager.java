@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.common.Constants;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 
@@ -30,6 +30,7 @@ public class SessionManager implements SessionManagerInterface {
     private final SharedPreferences.Editor editor;
 
     private static UserInterface user;
+    private static String userID;
 
     /**
      * Session Manager constructor, it will set the context (screen that initialize manager)
@@ -43,6 +44,10 @@ public class SessionManager implements SessionManagerInterface {
         this.editor = sharePref.edit();
     }
 
+    private static void setUser(UserInterface user) {
+        SessionManager.user = user;
+    }
+
     /**
      * Method return reference to user
      *
@@ -50,6 +55,10 @@ public class SessionManager implements SessionManagerInterface {
      */
     public static UserInterface getUser() {
         return user;
+    }
+
+    private static void setUserID(String id) {
+        userID = id;
     }
 
     /**
@@ -73,7 +82,7 @@ public class SessionManager implements SessionManagerInterface {
     @Override
     public void checkLogin() {
         if (!isLoggedIn()) context.startActivity(new Intent(context, LoginActivity.class));
-        else getUserInformation(getUserID());
+        else getUserInformation(sharePref.getString(Constants.USER_KEY, null));
     }
 
     /**
@@ -83,7 +92,7 @@ public class SessionManager implements SessionManagerInterface {
     public void logoutUser() {
         editor.clear();
         editor.apply();
-        user = null;
+        SessionManager.setUser(null);
     }
 
     /**
@@ -100,8 +109,8 @@ public class SessionManager implements SessionManagerInterface {
      * Method that return user ID
      * @return String: user ID on firebase
      */
-    public String getUserID() {
-        return sharePref.getString(Constants.USER_KEY, null);
+    public static String getUserID() {
+        return userID;
     }
 
     //Private method used by manager to logout user and change screen to login
@@ -113,8 +122,7 @@ public class SessionManager implements SessionManagerInterface {
 
     //Private method used by manager to query user data from database
     private void getUserInformation(String userID) {
-        DatabaseReference db = new UserDAO().getDatabaseReference();    //link to database
-        db.addValueEventListener(new ValueEventListener() {
+        DAO.getUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -122,12 +130,15 @@ public class SessionManager implements SessionManagerInterface {
                 DataSnapshot data = snapshot.child(userID);
 
                 //Retrieve user data
-                user = new User();
-                user.setFirstName(Objects.requireNonNull(data.child("firstName").getValue()).toString());
-                user.setLastName(Objects.requireNonNull(data.child("lastName").getValue()).toString());
-                user.setEmail(Objects.requireNonNull(data.child("email").getValue()).toString());
-                user.setIsEmployee(Objects.requireNonNull(data.child("isEmployee").getValue()).toString());
-                user.setPhone(Objects.requireNonNull(data.child("phone").getValue()).toString());
+                UserInterface newUser = new User();
+                newUser.setFirstName(Objects.requireNonNull(data.child("firstName").getValue()).toString());
+                newUser.setLastName(Objects.requireNonNull(data.child("lastName").getValue()).toString());
+                newUser.setEmail(Objects.requireNonNull(data.child("email").getValue()).toString());
+                newUser.setIsEmployee(Objects.requireNonNull(data.child("isEmployee").getValue()).toString());
+                newUser.setPhone(Objects.requireNonNull(data.child("phone").getValue()).toString());
+
+                SessionManager.setUserID(userID);
+                SessionManager.setUser(newUser);
 
                 //Change screen to user home screen
                 goHomeScreen();

@@ -9,9 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
+
 import java.util.Objects;
 
 /**
@@ -19,9 +20,6 @@ import java.util.Objects;
  * exist and match in database or not.
  */
 public class LoginActivity extends AppCompatActivity {
-
-    private String extractedEmail;
-    private String extractedPassword;
 
     private Button loginButton;
     private Button signUpButton;
@@ -82,11 +80,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void checkInfo(){
         loginButton.setEnabled(false);
 
-        extractedEmail = getAccount();
-        extractedPassword = getPassword();
+        String extractedEmail = getAccount();
+        String extractedPassword = getPassword();
 
         if (Signup.verifyEmail(extractedEmail) && Signup.verifyPassword(extractedPassword)) {
-            isCorrectInformation(extractedEmail);
+            isCorrectInformation(extractedEmail, extractedPassword);
         }
         else {
             Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
@@ -121,18 +119,19 @@ public class LoginActivity extends AppCompatActivity {
      * -If email exist,, password's matched. Create new session and createLoginSession
      * -Else tell user that email/password is incorrect
      * @param email: String email will be received to check if the email enter exist in database
+     * @param password: String password that required to be checked
      */
-    protected void isCorrectInformation(String email){
+    protected void isCorrectInformation(String email, String password){
 
-        DatabaseReference db = new UserDAO().getDatabaseReference();    //link to database
-        db.addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getUserReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot data: snapshot.getChildren()) {
-                    if (Objects.equals(data.child("email").getValue(), email)) {           //find the corresponding user email account
 
+                if (snapshot.exists() && snapshot.hasChildren()) {
+
+                    for (DataSnapshot data : snapshot.getChildren()) {
                         String salt = Objects.requireNonNull(data.child("confirmPassword").getValue()).toString();
-                        String hashPassword = Signup.getSHA256SecurePassword(extractedPassword, salt);
+                        String hashPassword = Signup.getSHA256SecurePassword(password, salt);
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
 

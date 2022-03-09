@@ -12,6 +12,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import ca.dal.csci3130.quickcash.common.DAO;
+
 public class PreferencesVerification {
     private PreferencesInterface preferences;
 
@@ -70,7 +72,7 @@ public class PreferencesVerification {
     }
 
     private void updateOrCreatePreferences(){
-        DatabaseReference db = new PreferencesDAO().getDatabaseReference();
+        DatabaseReference db = DAO.getPreferenceReference();
         db.orderByChild("employeeID").equalTo(preferences.getEmployeeID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -92,7 +94,7 @@ public class PreferencesVerification {
 
     //Private method that push job into job manager to being push onto the database
     private void pushPreferencesToFirebase() {
-        new PreferencesDAO().add(preferences);
+        DAO.add(preferences);
     }
 
 }
