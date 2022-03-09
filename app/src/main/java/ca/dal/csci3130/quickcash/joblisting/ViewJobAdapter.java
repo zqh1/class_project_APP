@@ -105,6 +105,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                 holder.statusTV.setText("Status: Open position");
             }
             else {
+
+                holder.applicantBtn.setVisibility(View.GONE);
+
                 new UserDAO().getDatabaseReference().child(job.getAcceptedID()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -133,8 +136,25 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                     .addOnFailureListener(e -> Toast.makeText(holder.context, "Application delete failed", Toast.LENGTH_SHORT).show()));
 
             holder.applicantBtn.setOnClickListener(view ->
-                    holder.context.startActivity(new Intent(holder.context, ViewApplicantActivity.class).putExtra("JOB_KEY", getRef(position).getKey())));
+                    new JobDAO().getDatabaseReference().child(Objects.requireNonNull(getRef(position).getKey()))
+                            .child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                            if (!Objects.requireNonNull(snapshot.getValue()).toString().isEmpty()) {
+                                holder.context.startActivity(new Intent(holder.context, ViewApplicantActivity.class).putExtra("JOB_KEY", getRef(position).getKey()));
+                            }
+                            else {
+                                Toast.makeText(holder.context, "No applicants yet", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(holder.context, "Error reading applicants", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+            );
         }
     }
 
