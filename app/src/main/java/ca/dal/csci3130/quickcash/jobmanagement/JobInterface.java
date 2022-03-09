@@ -1,7 +1,5 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import java.util.List;
-
 public interface JobInterface {
 
     void addTag(String tag);

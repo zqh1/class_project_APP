@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
@@ -73,7 +72,7 @@ public class PreferencesActivity extends AppCompatActivity{
     private PreferencesInterface readRetrievedData(){
         PreferencesInterface preferences = new Preferences();
 
-        preferences.setEmployeeID(new SessionManager(this).getUserID());
+        preferences.setEmployeeID(SessionManager.getUserID());
         preferences.setJob(getJob());
         String startingTimeString = getStartingTime();
         String[] extractStartingTimeArray = startingTimeString.split(":");

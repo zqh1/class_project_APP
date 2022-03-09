@@ -16,8 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
-import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
+import ca.dal.csci3130.quickcash.common.DAO;
 
 public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdapter.ApplicantViewHolder> {
 
@@ -43,8 +42,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
 
         int jobPosition = holder.getBindingAdapterPosition();
 
-        DatabaseReference userDatabase = new UserDAO().getDatabaseReference();
-        userDatabase.child(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getUserReference().child(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -61,7 +59,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
         });
 
 
-        DatabaseReference jobDatabase = new JobDAO().getDatabaseReference().child(jobKey);
+        DatabaseReference jobDatabase = DAO.getJobReference().child(jobKey);
 
         holder.accept.setOnClickListener(view ->
             jobDatabase.child("acceptedID").addListenerForSingleValueEvent(new ValueEventListener() {

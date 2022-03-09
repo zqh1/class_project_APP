@@ -1,5 +1,7 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+import ca.dal.csci3130.quickcash.common.DAO;
+
 public class JobVerification {
 
     private JobInterface job;
@@ -68,6 +70,6 @@ public class JobVerification {
 
     //Private method that push job into job manager to being push onto the database
     private void pushJobToFirebase() {
-        new JobDAO().add(job);
+        DAO.add(job);
     }
 }

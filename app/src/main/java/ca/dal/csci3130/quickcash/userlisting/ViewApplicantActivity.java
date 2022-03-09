@@ -11,8 +11,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
-import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
 
 public class ViewApplicantActivity extends AppCompatActivity {
 
@@ -40,7 +40,7 @@ public class ViewApplicantActivity extends AppCompatActivity {
 
     private void connectToFBDB() {
 
-        new JobDAO().getDatabaseReference().child(jobKey).child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getJobReference().child(jobKey).child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String[] applicantsID = Objects.requireNonNull(snapshot.getValue()).toString().split(",");

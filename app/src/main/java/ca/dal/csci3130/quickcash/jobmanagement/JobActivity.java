@@ -225,7 +225,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
         JobInterface job = new Job();
 
-        job.setEmployerID(new SessionManager(this).getUserID());
+        job.setEmployerID(SessionManager.getUserID());
         job.setTitle(jobTitle.getText().toString().trim());
         job.setDescription(jobDescription.getText().toString().trim());
         job.setYear(userCalendar.get(Calendar.YEAR));

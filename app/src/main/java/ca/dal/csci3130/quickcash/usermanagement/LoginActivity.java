@@ -11,6 +11,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
+
 import java.util.Objects;
 
 /**
@@ -121,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     protected void isCorrectInformation(String email, String password){
 
-        new UserDAO().getDatabaseReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getUserReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

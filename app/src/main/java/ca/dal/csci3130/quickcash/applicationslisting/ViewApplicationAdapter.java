@@ -13,9 +13,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
-import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -45,7 +45,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         holder.applicantBtn.setVisibility(View.GONE);
 
         //Query job details
-        new JobDAO().getDatabaseReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getJobReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -81,7 +81,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         });
 
         holder.deleteBtn.setOnClickListener(view ->
-                new JobDAO().getDatabaseReference().child(jobList.get(jobPosition)).child("applicantsID")
+                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -90,7 +90,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
                 String newApplicants = applicants.replace(SessionManager.getUserID() + ",","");
 
-                new JobDAO().getDatabaseReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(newApplicants);
+                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(newApplicants);
 
                 Toast.makeText(holder.context, "Application removed, exit to refresh", Toast.LENGTH_SHORT).show();
 

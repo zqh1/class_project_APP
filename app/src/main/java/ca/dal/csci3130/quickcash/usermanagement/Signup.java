@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
@@ -12,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Objects;
+
+import ca.dal.csci3130.quickcash.common.DAO;
 
 /**
  * Signup class, this class contains implementation of signup activity
@@ -157,8 +158,7 @@ public class Signup {
     private void verifyUniqueEmail(String email) {
 
         //Check if email already on database
-        DatabaseReference db = new UserDAO().getDatabaseReference();
-        db.addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO.getUserReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
@@ -245,7 +245,7 @@ public class Signup {
 
     //Private method that push user into user manager to being push onto the database
     private void pushUserToFirebase() {
-        new UserDAO().add(user);
+        DAO.add(user);
     }
 
     //Private method that will encrypt current user password and save the salt used
