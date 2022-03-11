@@ -20,9 +20,8 @@
         android:id="@+id/viewJobsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="136dp"
         android:text="@string/view_jobs_label"
-        app:layout_constraintBottom_toTopOf="@+id/logoutBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/employeeLabel" />
@@ -51,18 +50,31 @@
         android:id="@+id/preferenceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="134dp"
         android:text="@string/preferences_label"
         app:layout_constraintBottom_toTopOf="@+id/logoutBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/applicationsBtn" />
 
     <Button
         android:id="@+id/applicationsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/view_applications_label"
-        app:layout_constraintBottom_toTopOf="@+id/preferenceButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchJobButton" />
+
+    <Button
+        android:id="@+id/searchJobButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/search_job_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />

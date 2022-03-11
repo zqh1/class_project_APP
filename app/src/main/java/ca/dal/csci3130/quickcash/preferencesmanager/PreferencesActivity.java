@@ -51,7 +51,7 @@ public class PreferencesActivity extends AppCompatActivity{
         extractedDuration = findViewById(R.id.durationFill);
 
         proceedButton = findViewById(R.id.proceedPreferBtn);
-        cancelButton = findViewById(R.id.canclePreferBtn);
+        cancelButton = findViewById(R.id.cancelPreferBtn);
     }
 
     private void setButtonClickListeners() {

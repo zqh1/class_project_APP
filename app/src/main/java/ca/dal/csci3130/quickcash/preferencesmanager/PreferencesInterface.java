@@ -10,9 +10,9 @@ public interface PreferencesInterface {
 
     String getJob();
 
-    void setSalary(int salary);
+    void setSalary(double salary);
 
-    int getSalary();
+    double getSalary();
 
     void setMaxDistance(int distance);
 

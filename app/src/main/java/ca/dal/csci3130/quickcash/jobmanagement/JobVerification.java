@@ -59,7 +59,7 @@ public class JobVerification {
         return duration > 0 && duration <= 99;
     }
 
-    public boolean validSalary(int salary) {
+    public boolean validSalary(double salary) {
         //Minimum NS wage 13.35$ per hour
         return salary > 13.35 && salary <= 10000;
     }
