@@ -22,9 +22,11 @@ import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.JobViewHolder> {
 
     private final List<String> jobList;
+    private final boolean isEmployee;
 
-    public ViewApplicationAdapter (List<String> jobList) {
+    public ViewApplicationAdapter (List<String> jobList, boolean isEmployee) {
         this.jobList = jobList;
+        this.isEmployee = isEmployee;
     }
 
     @NonNull
