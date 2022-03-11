@@ -2,8 +2,8 @@ package ca.dal.csci3130.quickcash.preferencesmanager;
 
 public class Preferences implements PreferencesInterface{
 
-    private String employeeID;
-    private String job;
+    private String employeeID = "";
+    private String job = "";
     private double salary;
     private int startingHour;
     private int startingMinute;

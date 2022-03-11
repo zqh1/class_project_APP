@@ -41,7 +41,7 @@
         android:autofillHints="0"
         android:ems="10"
         android:hint="@string/minimal_salary_label"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.355"
         app:layout_constraintStart_toStartOf="parent"

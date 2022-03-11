@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.joblisting;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
@@ -36,6 +38,11 @@ public class ViewJobActivity extends AppCompatActivity {
     private void connectToFBDB() {
 
         final FirebaseRecyclerOptions<Job> options;
+
+        if (SessionManager.getUser() == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            return;
+        }
 
         if (SessionManager.getUser().getIsEmployee().equals("y")) {
             options = new FirebaseRecyclerOptions.Builder<Job>()

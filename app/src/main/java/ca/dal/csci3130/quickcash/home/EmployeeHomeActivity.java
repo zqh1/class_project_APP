@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.applicationslisting.ViewApplicationActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobSearchWithPreferences;
@@ -32,6 +33,11 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee_home);
 
         UserInterface user = SessionManager.getUser();
+        if (user == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            return;
+        }
+
         String nameOfUser = user.getFirstName() + " " + user.getLastName();
         ((TextView)findViewById(R.id.NameLabel)).setText(nameOfUser);
 
@@ -72,6 +78,6 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     }
 
     private void searchJobApplications(){
-        startActivity(new Intent(this, ViewJobSearchWithPreferences.class));
+        startActivity(new Intent(this, PreferencesActivity.class).putExtra("SEARCH", true));
     }
 }

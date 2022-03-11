@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.jobmanagement.JobActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
@@ -31,6 +32,11 @@ public class EmployerHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employer_home);
 
         UserInterface user = SessionManager.getUser();
+        if (user == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            return;
+        }
+
         String nameOfUser = user.getFirstName() + " " + user.getLastName();
         ((TextView)findViewById(R.id.NameLabel)).setText(nameOfUser);
 

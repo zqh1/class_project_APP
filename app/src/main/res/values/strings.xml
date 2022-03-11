@@ -56,7 +56,7 @@
     <string name="view_postings_label">View Postings</string>
     <string name="view_applications_label">VIEW APPLICATIONS</string>
     <string name="preferences_label">Preferences</string>
-    <string name="preferable_filling_label">Preferable Filling</string>
+    <string name="preferable_filling_label">Preferences parameters</string>
     <string name="prefer_job_label">Prefer job</string>
     <string name="minimal_salary_label">Minimal Salary</string>
     <string name="starting_hour_label">Starting Hour(eg: 18:00)</string>
