@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,7 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
@@ -75,6 +75,7 @@ public class PreferencesActivity extends AppCompatActivity{
             getCurrentLocation();
             String title = "Search Parameters";
             ((TextView)findViewById(R.id.preferencesFillingTitle)).setText(title);
+            findViewById(R.id.distanceDefaultLabel).setVisibility(View.VISIBLE);
         }
     }
 
@@ -202,7 +203,7 @@ public class PreferencesActivity extends AppCompatActivity{
             preferences.setMaxDistance(Integer.parseInt(getMaxDistance()));
         }
         catch (NumberFormatException e){
-            preferences.setMaxDistance(1000);
+            preferences.setMaxDistance(15);
         }
 
         return preferences;

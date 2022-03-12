@@ -61,9 +61,10 @@
     <string name="minimal_salary_label">Minimal Salary</string>
     <string name="starting_hour_label">Starting Hour(eg: 18:00)</string>
     <string name="prefer_duration_hr_label">Prefer duration (Hr)</string>
-    <string name="cancel_label">cancel</string>
+    <string name="cancel_label">Cancel</string>
     <string name="proceed_label">proceed</string>
     <string name="maximum_distance_km_label">Maximum Distance (KM)</string>
     <string name="load_preference_label">Load Preference</string>
     <string name="search_job_label">search job</string>
+    <string name="default_distance_label">Default distance - 15 KM</string>
 </resources>
