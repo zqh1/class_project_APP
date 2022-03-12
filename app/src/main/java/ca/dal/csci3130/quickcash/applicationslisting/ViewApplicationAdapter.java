@@ -66,22 +66,24 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                 holder.salaryTV.setText(salary);
                 holder.dateTV.setText(date);
 
-                if (job.getAcceptedID().isEmpty()) {
-                    String label;
-                    if (!search) label = "Status: Waiting for employer answer";
-                    else label = "Status: Open position";
+                String statusLabel;
 
-                    holder.statusTV.setText(label);
+                if (job.getAcceptedID().isEmpty()) {
+
+                    if (job.getApplicantsID().contains(SessionManager.getUserID())) {
+                        statusLabel = "Status: Waiting for employer answer";
+                    }
+                    else statusLabel = "Status: Open position";
                 }
                 else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
-                    String statusLabel = "Status: Accepted";
-                    holder.statusTV.setText(statusLabel);
+                    statusLabel = "Status: Accepted";
                     holder.deleteBtn.setVisibility(View.GONE);
                 }
                 else {
-                    String statusLabel = "Status: Rejected";
-                    holder.statusTV.setText(statusLabel);
+                    statusLabel = "Status: Rejected";
                 }
+
+                holder.statusTV.setText(statusLabel);
             }
 
             @Override
