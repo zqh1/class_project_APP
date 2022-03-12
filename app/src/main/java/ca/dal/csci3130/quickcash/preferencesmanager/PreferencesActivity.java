@@ -325,7 +325,10 @@ public class PreferencesActivity extends AppCompatActivity{
 
         String preferHourToCheck = startHourPrefer + ":" + startMinutePrefer;
 
-        boolean validPreferHourAndMinute = startHourPrefer <= jobStartHour && startMinutePrefer <= jobStartMinute;
+        boolean validPreferHourAndMinute;
+
+        if(startHourPrefer < jobStartHour) validPreferHourAndMinute = true;
+        else validPreferHourAndMinute = (startHourPrefer == jobStartHour && startMinutePrefer <= jobStartMinute);
 
         return validStartingTime(preferHourToCheck) && validPreferHourAndMinute;
     }
