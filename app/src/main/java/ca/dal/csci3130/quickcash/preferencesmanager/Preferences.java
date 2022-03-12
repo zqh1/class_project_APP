@@ -2,9 +2,9 @@ package ca.dal.csci3130.quickcash.preferencesmanager;
 
 public class Preferences implements PreferencesInterface{
 
-    private String employeeID;
-    private String job;
-    private int salary;
+    private String employeeID = "";
+    private String job = "";
+    private double salary;
     private int startingHour;
     private int startingMinute;
     private int maxDistance;
@@ -26,11 +26,11 @@ public class Preferences implements PreferencesInterface{
         return job;
     }
 
-    public void setSalary(int salary){
+    public void setSalary(double salary){
         this.salary = salary;
     }
 
-    public int getSalary(){
+    public double getSalary(){
         return salary;
     }
 

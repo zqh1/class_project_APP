@@ -7,7 +7,7 @@ public class Job implements JobInterface{
     private String description = "";
     private String tags = "";
     private int duration;
-    private int salary;
+    private double salary;
     private boolean urgent;
 
     private int year;
@@ -69,11 +69,11 @@ public class Job implements JobInterface{
         this.duration = duration;
     }
 
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 

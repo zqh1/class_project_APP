@@ -51,7 +51,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
                     }
                 }
 
-                viewApplicationAdapter = new ViewApplicationAdapter(jobList);
+                viewApplicationAdapter = new ViewApplicationAdapter(jobList, false);
                 recyclerView.setAdapter(viewApplicationAdapter);
             }
 

@@ -1,6 +1,5 @@
 package ca.dal.csci3130.quickcash.applicationslisting;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,11 @@ import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.JobViewHolder> {
 
     private final List<String> jobList;
+    private final boolean search;
 
-    public ViewApplicationAdapter (List<String> jobList) {
+    public ViewApplicationAdapter (List<String> jobList, boolean search) {
         this.jobList = jobList;
+        this.search = search;
     }
 
     @NonNull
@@ -35,13 +36,12 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
     }
 
     @Override
-    @SuppressLint("SetTextI18n")
     public void onBindViewHolder(@NonNull ViewJobAdapter.JobViewHolder holder, int position) {
 
         int jobPosition = holder.getBindingAdapterPosition();
 
         //Disable buttons not related to employee
-        holder.applyBtn.setVisibility(View.GONE);
+        if (!search) holder.applyBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
 
         //Query job details
@@ -56,21 +56,31 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     return;
                 }
 
+                String duration = "Duration: " + job.getDuration() + " hours";
+                String salary = "Salary: $" + job.getSalary() + "/hour";
+                String date = "Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear();
+
                 holder.jobTitleTV.setText(job.getTitle());
                 holder.descriptionTV.setText(job.getDescription());
-                holder.durationTV.setText("Duration: " + job.getDuration() + " hours");
-                holder.salaryTV.setText("Salary: $" + job.getSalary() + "/hour");
-                holder.dateTV.setText("Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear());
+                holder.durationTV.setText(duration);
+                holder.salaryTV.setText(salary);
+                holder.dateTV.setText(date);
 
                 if (job.getAcceptedID().isEmpty()) {
-                    holder.statusTV.setText("Status: Waiting for employer answer");
+                    String label;
+                    if (!search) label = "Status: Waiting for employer answer";
+                    else label = "Status: Open position";
+
+                    holder.statusTV.setText(label);
                 }
                 else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
-                    holder.statusTV.setText("Status: Accepted");
+                    String statusLabel = "Status: Accepted";
+                    holder.statusTV.setText(statusLabel);
                     holder.deleteBtn.setVisibility(View.GONE);
                 }
                 else {
-                    holder.statusTV.setText("Status: Rejected");
+                    String statusLabel = "Status: Rejected";
+                    holder.statusTV.setText(statusLabel);
                 }
             }
 

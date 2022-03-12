@@ -7,8 +7,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.applicationslisting.ViewApplicationActivity;
+import ca.dal.csci3130.quickcash.joblisting.ViewJobSearchWithPreferences;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
 import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
@@ -31,6 +33,11 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee_home);
 
         UserInterface user = SessionManager.getUser();
+        if (user == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            return;
+        }
+
         String nameOfUser = user.getFirstName() + " " + user.getLastName();
         ((TextView)findViewById(R.id.NameLabel)).setText(nameOfUser);
 
@@ -38,6 +45,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         findViewById(R.id.preferenceButton).setOnClickListener(view -> gotoSetPreferencePage());
         findViewById(R.id.viewJobsBtn).setOnClickListener(view -> redirectViewJobs());
         findViewById(R.id.applicationsBtn).setOnClickListener(view -> viewJobApplications());
+        findViewById(R.id.searchJobButton).setOnClickListener(view -> searchJobApplications());
     }
 
     /**
@@ -67,5 +75,9 @@ public class EmployeeHomeActivity extends AppCompatActivity {
 
     private void viewJobApplications() {
         startActivity(new Intent(this, ViewApplicationActivity.class));
+    }
+
+    private void searchJobApplications(){
+        startActivity(new Intent(this, PreferencesActivity.class).putExtra("SEARCH", true));
     }
 }

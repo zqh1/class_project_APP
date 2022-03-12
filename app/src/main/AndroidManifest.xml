@@ -60,6 +60,9 @@
             android:name=".preferencesmanager.PreferencesActivity"
             android:exported="false" />
         <activity
+            android:name=".joblisting.ViewJobSearchWithPreferences"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

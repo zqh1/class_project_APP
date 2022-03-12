@@ -24,9 +24,9 @@ public interface JobInterface {
 
     void setDuration(int duration);
 
-    int getSalary();
+    double getSalary();
 
-    void setSalary(int salary);
+    void setSalary(double salary);
 
     boolean isUrgent();
 

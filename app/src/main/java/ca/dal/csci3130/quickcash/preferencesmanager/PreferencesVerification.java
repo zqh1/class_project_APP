@@ -54,9 +54,9 @@ public class PreferencesVerification {
         return !job.isEmpty() && job.length() <= 250;
     }
 
-    public boolean validSalary(int salary) {
+    public boolean validSalary(double salary) {
         //Minimum NS wage 13.35$ per hour
-        return salary >= 13.35 && salary <= 10000;
+        return salary >= 13.35 && salary <= 10000.0;
     }
 
     public boolean validStartingTime(String time) {
