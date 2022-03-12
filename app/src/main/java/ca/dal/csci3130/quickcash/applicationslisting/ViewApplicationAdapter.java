@@ -4,13 +4,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 import java.util.Objects;
+
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
@@ -18,16 +22,32 @@ import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
+/**
+ * Adapter that create and populate Jobs in applications list
+ */
 public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.JobViewHolder> {
 
     private final List<String> jobList;
     private final boolean search;
 
-    public ViewApplicationAdapter (List<String> jobList, boolean search) {
+    /**
+     * Public constructor on applications adapter. Read job information and populate the recycler
+     *
+     * @param jobList: String arraylist with the jobs IDs
+     * @param search:  Search boolean that separate the preference saving vs search
+     */
+    public ViewApplicationAdapter(List<String> jobList, boolean search) {
         this.jobList = jobList;
         this.search = search;
     }
 
+    /**
+     * onCreateViewHolder of recycler, links layout in screen with jobs item and return the view
+     *
+     * @param parent:   Parent view of the screen
+     * @param viewType: Type of view selected to the screen
+     * @return JobViewHolder: Return view adapter with view inflater linked
+     */
     @NonNull
     @Override
     public ViewJobAdapter.JobViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,12 +55,18 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         return new ViewJobAdapter.JobViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder of recycler, read and fill each job information to each element on screen
+     *
+     * @param holder:   Pass the job item with screen objects linked
+     * @param position: Pass the location of the job in the list
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewJobAdapter.JobViewHolder holder, int position) {
 
         int jobPosition = holder.getBindingAdapterPosition();
 
-        //Disable buttons not related to employee
+        //Disable buttons not related to employee or search
         if (!search) holder.applyBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
 
@@ -50,39 +76,42 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                //Retrieve job from database
                 JobInterface job = snapshot.getValue(Job.class);
+
+                //If job failed to load, display error and return to prevent crash
                 if (job == null) {
                     Toast.makeText(holder.context, "Error reading job details", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                //Read and create screen labels
                 String duration = "Duration: " + job.getDuration() + " hours";
                 String salary = "Salary: $" + job.getSalary() + "/hour";
                 String date = "Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear();
-
-                holder.jobTitleTV.setText(job.getTitle());
-                holder.descriptionTV.setText(job.getDescription());
-                holder.durationTV.setText(duration);
-                holder.salaryTV.setText(salary);
-                holder.dateTV.setText(date);
-
                 String statusLabel;
 
                 if (job.getAcceptedID().isEmpty()) {
 
                     if (job.getApplicantsID().contains(SessionManager.getUserID())) {
                         statusLabel = "Status: Waiting for employer answer";
-                    }
-                    else statusLabel = "Status: Open position";
-                }
-                else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
+                    } else statusLabel = "Status: Open position";
+
+                } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
+
                     statusLabel = "Status: Accepted";
                     holder.deleteBtn.setVisibility(View.GONE);
-                }
-                else {
+
+                } else {
                     statusLabel = "Status: Rejected";
                 }
 
+                //Set screen labels
+                holder.jobTitleTV.setText(job.getTitle());
+                holder.descriptionTV.setText(job.getDescription());
+                holder.durationTV.setText(duration);
+                holder.salaryTV.setText(salary);
+                holder.dateTV.setText(date);
                 holder.statusTV.setText(statusLabel);
             }
 
@@ -92,29 +121,41 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
             }
         });
 
+        //Set delete button listener
         holder.deleteBtn.setOnClickListener(view ->
                 DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                String applicants = Objects.requireNonNull(snapshot.getValue()).toString();
+                                //Read current applicants
+                                String applicants = Objects.requireNonNull(snapshot.getValue()).toString();
 
-                String newApplicants = applicants.replace(SessionManager.getUserID() + ",","");
+                                //Delete user id from list
+                                String newApplicants = applicants.replace(SessionManager.getUserID() + ",", "");
 
-                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(newApplicants);
+                                //Set new applicant list
+                                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(newApplicants);
 
-                Toast.makeText(holder.context, "Application removed, exit to refresh", Toast.LENGTH_SHORT).show();
+                                //Message to user that deletion was successfully
+                                Toast.makeText(holder.context, "Application removed, exit to refresh", Toast.LENGTH_SHORT).show();
 
-            }
+                                //Disable button to avoid user to click again
+                                holder.deleteBtn.setVisibility(View.GONE);
+                            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(holder.context, "Error deleting application", Toast.LENGTH_SHORT).show();
-            }
-        }));
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(holder.context, "Error deleting application", Toast.LENGTH_SHORT).show();
+                            }
+                        }));
     }
 
+    /**
+     * getItemCount for recycler, return number of items the recycler would need to load
+     *
+     * @return int: total jobs to populate on recycler
+     */
     @Override
     public int getItemCount() {
         return jobList.size();

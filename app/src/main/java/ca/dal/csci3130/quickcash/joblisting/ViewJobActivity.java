@@ -17,32 +17,47 @@ import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
+/**
+ * Activity that display all jobs in firebase
+ */
 public class ViewJobActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ViewJobAdapter viewJobAdapter;
 
+    /**
+     * OnCreate method, Initialize activity and recycler. Query the Job table on firebase and
+     * send data to recycler to be populated
+     *
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_job);
+
         init();
         connectToFBDB();
     }
 
+    //Link recycler and set manager
     private void init() {
         recyclerView = findViewById(R.id.jobsRecyclerView);
         recyclerView.setLayoutManager(new WrapLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
+    //Query and pass job table in firebase
     private void connectToFBDB() {
 
-        final FirebaseRecyclerOptions<Job> options;
-
+        //Verify the user is valid, if user not loaded correctly, restart application from main
         if (SessionManager.getUser() == null) {
             startActivity(new Intent(this, MainActivity.class));
             return;
         }
+
+        //Query firebase depending on if user is employee or employer
+        final FirebaseRecyclerOptions<Job> options;
 
         if (SessionManager.getUser().getIsEmployee().equals("y")) {
             options = new FirebaseRecyclerOptions.Builder<Job>()
@@ -55,16 +70,23 @@ public class ViewJobActivity extends AppCompatActivity {
                             .orderByChild("employerID").equalTo(SessionManager.getUserID()), Job.class).build();
         }
 
+        //Link adapter and recycler with query
         viewJobAdapter = new ViewJobAdapter(options);
         recyclerView.setAdapter(viewJobAdapter);
     }
 
+    /**
+     * onStart method listen for firebase util stop is called
+     */
     @Override
     protected void onStart() {
         super.onStart();
         viewJobAdapter.startListening();
     }
 
+    /**
+     * Stop hearing of firebase
+     */
     @Override
     protected void onStop() {
         super.onStop();

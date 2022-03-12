@@ -11,13 +11,20 @@ import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.applicationslisting.ViewApplicationAdapter;
 import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
 
+/**
+ * Activity that manage and contains recycler to view jobs based on search parameters
+ */
 public class ViewJobSearchWithPreferences extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-
     private ArrayList<String> jobList;
 
-
+    /**
+     * OnCreate method, Initialize activity and recycler. Query the Job table on firebase and
+     * send data to recycler to be populated
+     *
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,16 +34,15 @@ public class ViewJobSearchWithPreferences extends AppCompatActivity {
         linkAndLoadRecycle();
     }
 
+    //Link recycler and load job list from intent
     private void init() {
         recyclerView = findViewById(R.id.jobsRecyclerView);
         recyclerView.setLayoutManager(new WrapLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         jobList = getIntent().getExtras().getStringArrayList("JOBLIST");
-
-
-        recyclerView = findViewById(R.id.jobsRecyclerView);
     }
 
+    //Link view adapter with jobList
     private void linkAndLoadRecycle() {
         ViewApplicationAdapter viewApplicationAdapter = new ViewApplicationAdapter(jobList, false);
         recyclerView.setAdapter(viewApplicationAdapter);
