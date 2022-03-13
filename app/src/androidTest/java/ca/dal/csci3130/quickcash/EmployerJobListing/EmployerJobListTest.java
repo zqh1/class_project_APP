@@ -81,19 +81,20 @@ public class EmployerJobListTest {
 
     @Test
     public void selectApplicantsTest(){
-        testConstants.employerLogin();
-        testConstants.waitFirebase();
-        testConstants.employerViewJob();
 
+        testConstants.employerLogin();
+
+        testConstants.waitFirebase();
+
+        testConstants.employerViewJob();
 
         //scroll to the position of the item can click the view applicant button
         onView(withId(R.id.jobsRecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(5, MyViewAction.clickChildViewWithId(R.id.applicantBtn)));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(2, MyViewAction.clickChildViewWithId(R.id.applicantBtn)));
 
-        onView(withId(R.id.applicantRecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, MyViewAction.clickChildViewWithId(R.id.acceptBtn)));
+        testConstants.waitFirebase();
 
-        onView(withText("Status: Employee NumberTwo accepted")).check(matches(isDisplayed()));
+        onView(withId(R.id.acceptBtn)).check(matches(withText("Accept")));
 
     }
 
