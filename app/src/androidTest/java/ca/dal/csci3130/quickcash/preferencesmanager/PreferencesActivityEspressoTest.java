@@ -48,7 +48,10 @@ public class PreferencesActivityEspressoTest {
     public void checkCorrectJob() {
         onView(withId(R.id.preferencesFilling)).perform(typeText("ABCDE"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.proceedPreferBtn)).perform(click());
-        onView(withId(R.id.preferencesFilling)).check(matches(hasTextColor(R.color.grey)));
+
+        testConstants.waitFirebase();
+
+        onView(withId(R.id.employeeLabel)).check(matches(withText("WELCOME EMPLOYEE")));
     }
 
     @Test

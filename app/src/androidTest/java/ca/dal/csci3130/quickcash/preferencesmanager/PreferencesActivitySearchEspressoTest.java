@@ -63,13 +63,14 @@ public class PreferencesActivitySearchEspressoTest {
     public void checkUnsuccessfulSearch(){
         testConstants.employeeLogin();
         testConstants.waitFirebase();
+
         onView(withId(R.id.searchJobButton)).perform(click());
         onView(withId(R.id.preferencesFilling)).perform(typeText("DNE"), ViewActions.closeSoftKeyboard());
         onView(withId(R.id.proceedPreferBtn)).perform(click());
 
-        intended(hasComponent(PreferencesActivity.class.getName()));
+        testConstants.waitFirebase();
 
-        onView(withId(R.id.preferencesFilling)).check(matches(withText("Search Parameters")));
+        onView(withId(R.id.preferencesFillingTitle)).check(matches(withText("Search Parameters")));
     }
 
     @Test

@@ -75,7 +75,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     }
 
     private void gotoSetPreferencePage() {
-        startActivity(new Intent(this, PreferencesActivity.class));
+        startActivity(new Intent(this, PreferencesActivity.class).putExtra("SEARCH", false));
     }
 
     private void viewJobApplications() {
