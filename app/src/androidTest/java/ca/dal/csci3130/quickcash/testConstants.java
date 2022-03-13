@@ -42,4 +42,10 @@ public class testConstants {
             e.printStackTrace();
         }
     }
+
+    public static void employerViewJob() {
+        onView(withId(R.id.postingsBtn)).perform(click());
+    }
+
+
 }

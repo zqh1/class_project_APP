@@ -34,7 +34,7 @@ public class ViewApplicantActivity extends AppCompatActivity {
     }
 
     private void init() {
-        recyclerView = findViewById(R.id.jobsRecyclerView);
+        recyclerView = findViewById(R.id.applicantRecyclerView);
         recyclerView.setLayoutManager(new WrapLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
