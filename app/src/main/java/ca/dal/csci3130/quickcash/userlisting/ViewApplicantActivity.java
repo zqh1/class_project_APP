@@ -21,6 +21,12 @@ public class ViewApplicantActivity extends AppCompatActivity {
 
     private String jobKey;
 
+    /**
+     * OnCreate method, Initialize activity call. Connect this class with activity_view_applicants.
+     * Getting JOB_KEY from intent.extra and call methods: init() and connectToFBDB()
+     *
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,18 +39,22 @@ public class ViewApplicantActivity extends AppCompatActivity {
         connectToFBDB();
     }
 
+    //Link recycler and set manager
     private void init() {
         recyclerView = findViewById(R.id.jobsRecyclerView);
         recyclerView.setLayoutManager(new WrapLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
+    //Query and pass job table in firebase
     private void connectToFBDB() {
-
+        //get applicantsID from each job
         DAO.getJobReference().child(jobKey).child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //If job has value inside child. turn String into String array
                 String[] applicantsID = Objects.requireNonNull(snapshot.getValue()).toString().split(",");
 
+                //Link adapter and recycler with query
                 viewApplicantAdapter = new ViewApplicantAdapter(applicantsID, jobKey);
                 recyclerView.setAdapter(viewApplicantAdapter);
             }

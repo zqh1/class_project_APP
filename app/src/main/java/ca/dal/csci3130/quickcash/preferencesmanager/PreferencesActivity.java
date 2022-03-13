@@ -54,9 +54,11 @@ public class PreferencesActivity extends AppCompatActivity{
     private PreferencesInterface preference;
 
     /**
-     * OnCreate method, Initialize activity get userInterface from sessionManager.
-     * Then set textView to user first name and last name to show on screen.
-     * Also apply algorithm for logging out user once log out user button pressed.
+     * OnCreate method, Initialize activity call, and determine whether this activity will be use
+     * for search or set preference by using Extra. Also call methods to get and set reference
+     * if search is true will call getCurrentLocation() method, and change title of activity to
+     * search
+     *
      * @param savedInstanceState: Instances status, required to start activity
      */
     @Override
@@ -79,6 +81,7 @@ public class PreferencesActivity extends AppCompatActivity{
         }
     }
 
+    //get References from UI activity, assign them to variable
     private void getScreenReferences() {
         extractedJob = findViewById(R.id.preferencesFilling);
         extractedSalary = findViewById(R.id.salaryMinimal);
@@ -91,16 +94,26 @@ public class PreferencesActivity extends AppCompatActivity{
         loadButton = findViewById(R.id.loadButton);
     }
 
+    //set each method will be assign to each button once pressed
     private void setButtonClickListeners() {
         proceedButton.setOnClickListener(view -> proceedButtonListener());
         cancelButton.setOnClickListener(view -> changeScreenToHome());
         loadButton.setOnClickListener(view -> loadPreferences());
     }
 
+    //Redirect user to mainactity (employee homepage)
     private void changeScreenToHome() {
         startActivity(new Intent(this, MainActivity.class));
     }
 
+    /**
+     * Once the button is pressed, the button will first be disable.
+     * If this activity is not for search,
+     * then all this will do is pass it to check input and verify
+     * Else,
+     * Will ask permission from user, then call getCurrentLocation(), get information from UI, and
+     * lastly call retrieveJobs()
+     */
     private void proceedButtonListener(){
         proceedButton.setEnabled(false);
 
@@ -120,6 +133,12 @@ public class PreferencesActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * This method will be call once the load button is pressed,
+     * It will check if employeeID exist in database,
+     * If ID exist in DB then it will pull information and display on UI activity
+     * Else Toast message will appear.
+     */
     private void loadPreferences(){
 
         DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
@@ -163,6 +182,12 @@ public class PreferencesActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * This method will read data from activity UI, and return as PreferencesInterface object
+     * During reading it will check whether data can be parse to int or double
+     * if not then the application will automatically apply data
+     * @return PreferencesInterface object
+     */
     private PreferencesInterface readRetrievedData(){
         PreferencesInterface preferences = new Preferences();
 
@@ -209,6 +234,11 @@ public class PreferencesActivity extends AppCompatActivity{
         return preferences;
     }
 
+    /**
+     * This method will interact with fields in UI activity, for each false in the array
+     * it will turn information of the text in the field into red color indicate the location
+     * Once verification is done, it will change to homepage
+     */
     private void verify(){
         boolean[] fieldsStatus = verification.verifyFields();
         if (fieldsStatus[0]) extractedJob.setTextColor(getResources().getColor(R.color.grey, null));
@@ -237,28 +267,55 @@ public class PreferencesActivity extends AppCompatActivity{
         changeScreenToHome();
     }
 
+    /**
+     * This method get title from UI activity from local variable and turn it into String
+     * @return title as a String
+     */
     private String getJob() {
         return extractedJob.getText().toString().trim();
     }
 
+    /**
+     * This method get salary from UI activity from local variable and turn it into String
+     * @return salary as a String
+     */
     private String getSalary(){
         return extractedSalary.getText().toString().trim();
     }
 
+    /**
+     * This method get starting time from UI activity from local variable and turn it into String
+     * @return starting time as a String
+     */
     private String getStartingTime(){
         return extractedStartingTime.getText().toString().trim();
     }
 
+    /**
+     * This method get max distance from UI activity from local variable and turn it into String
+     * @return max distance as a String
+     */
     private String getMaxDistance(){
         return extractedMaxDistance.getText().toString().trim();
     }
 
+    /**
+     * This method get max distance from UI activity from local variable and turn it into String
+     * @return max distance as a String
+     */
     private String getDuration(){
         return extractedDuration.getText().toString().trim();
     }
 
+    /**
+     * If user is in search mode, this method will be call.
+     * it will query though DB get all the job and call checkWithPreference(thisJob) to check
+     *  if the job should be show to user depends on the search preferences.
+     *  If it pass it will be add to Arraylist.
+     * If the arraylist is empty(no job to show) then toast message will appear.
+     * Else start new activity to show jobs on the phone
+     */
     private void retrieveJobs() {
-
         DAO.getJobReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -292,6 +349,7 @@ public class PreferencesActivity extends AppCompatActivity{
         });
     }
 
+    //Main method to call each verification method to check with each element of JobInterface
     private boolean checkWithPreference(JobInterface job){
         boolean allField = true;
 
@@ -304,6 +362,15 @@ public class PreferencesActivity extends AppCompatActivity{
         return allField;
     }
 
+    /**
+     * This method will check if the job user enter is in title of job from DB,
+     * and check if is valid.
+     * If the job title from DB contain job that user want and job that user want is valid,
+     *  return true.
+     * Else return false
+     * @param job: JobInterface to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean jobMatchWithPreference(JobInterface job){
         String jobTitle = job.getTitle();
         String jobPrefer = preference.getJob();
@@ -311,6 +378,15 @@ public class PreferencesActivity extends AppCompatActivity{
         return jobTitle.contains(jobPrefer) && validJob(jobPrefer);
     }
 
+    /**
+     * This method will check between salary user want and job's salary from DB,
+     * and check if is valid.
+     * If the job salary from DB equal or higher than salary that user want
+     * and salary that user want is valid, return true.
+     * Else return false
+     * @param job: JobInterface to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean salaryMatchWithPreference(JobInterface job){
         double jobSalary = job.getSalary();
         double salaryPrefer = preference.getSalary();
@@ -318,6 +394,15 @@ public class PreferencesActivity extends AppCompatActivity{
         return jobSalary >= salaryPrefer && validSalary(salaryPrefer);
     }
 
+    /**
+     * This method will check between startingHour user want and job's startingHour from DB,
+     * and check if is valid.
+     * If the job startingHour from DB is after startingHour that user's want and
+     * startingHour that user want is valid, return true.
+     * Else return false
+     * @param job: JobInterface to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean startingHourMatchWithPreferences(JobInterface job){
         int jobStartHour = job.getHour();
         int jobStartMinute = job.getMinute();
@@ -334,6 +419,15 @@ public class PreferencesActivity extends AppCompatActivity{
         return validStartingTime(preferHourToCheck) && validPreferHourAndMinute;
     }
 
+    /**
+     * This method will check between duration user want and job's duration from DB,
+     * and check if is valid.
+     * If the job duration from DB contain lower than what user's want and
+     *  duration that user want is valid, return true.
+     * Else return false
+     * @param job: JobInterface to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean durationMatchWithPreference(JobInterface job){
         int jobDuration = job.getDuration();
         int durationPrefer = preference.getDuration();
@@ -341,6 +435,15 @@ public class PreferencesActivity extends AppCompatActivity{
         return jobDuration <= durationPrefer && validDuration(durationPrefer);
     }
 
+    /**
+     * This method will check between user's location and job's location and compare to max distance
+     * and check if is valid.
+     * If the distance between user and job is lower than what user wants, then return true.
+     * Else return false
+     * NOTE: user enter as KM but the Location.distanceBetween() will return meters.
+     * @param job: JobInterface to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean distanceMatchWithPreference(JobInterface job){
         double jobLatitude = job.getLatitude();
         double jobLongitude = job.getLongitude();
@@ -352,6 +455,10 @@ public class PreferencesActivity extends AppCompatActivity{
         return maxDistancePrefer * 1000 >= distanceToJob[0] && validMaxDistance(maxDistancePrefer);
     }
 
+    /**
+     * This method will ask for permission for location.
+     * once the permission is allowed, it will assign location to latLng latlng variable
+     */
     private void getCurrentLocation(){
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
 
@@ -366,23 +473,49 @@ public class PreferencesActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * If string to check has number of letters lower than 251 return true.
+     * @param job: job title to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean validJob(String job) {
         return job.length() <= 250;
     }
 
+    /**
+     * If the salary passed to check is higher than minimal wage, and lower than $10000
+     * @param salary: salary to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean validSalary(double salary) {
         //Minimum NS wage 13.35$ per hour
         return salary >= 13.35 && salary <= 10000;
     }
 
+    /**
+     * If the Starting time for the job is not empty and is match in form of XX:XX
+     * NOTE: 24:00 does not valid since 24:00 is 00:00 of next day
+     * @param time: time String to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean validStartingTime(String time) {
         return !time.isEmpty() && time.matches("^([0-9]|1[0-9]|2[0-3]):([0-9]|[1-5][0-9])$");
     }
 
+    /**
+     * distance has to be int, and greater than 0 but less than 1001
+     * @param distance: distance to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean validMaxDistance(int distance) {
         return distance > 0 && distance <= 1000;
     }
 
+    /**
+     * duration to be check. Has to be high than 0 but less than 100
+     * @param duration: duration as int to check
+     * @return true if it fits qualification, false otherwise
+     */
     private boolean validDuration(int duration) {
         return duration > 0 && duration <= 99;
     }

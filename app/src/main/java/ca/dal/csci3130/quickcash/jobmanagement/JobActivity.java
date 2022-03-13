@@ -60,6 +60,13 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
     JobVerification verification;
 
+    /**
+     * OnCreate method, Initialize activity call multiple method
+     * and apply instances to local variable
+     * Methods: startMap(), linkScreenItem(), setButtonListeners()
+     * Instance: Calendar, JobVerification()
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +82,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         verification = new JobVerification();
     }
 
+    //Link all of the field from activity_job to local variable of this class
     private void linkScreenItems() {
 
         dateLabel = findViewById(R.id.dateLabel);
@@ -95,6 +103,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         urgentSwitch = findViewById(R.id.urgentInput);
     }
 
+    //Link all of the buttons from activity_job to local variable of this class
     private void setButtonsListeners() {
 
         dateBtn.setOnClickListener(view -> dateButtonListener());
@@ -104,20 +113,25 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         mapBtn.setOnClickListener(view -> mapButtonListener());
     }
 
+    //Listener once the user pressed pick date button, and will call onDateSet()
     private void dateButtonListener() {
-
         new DatePickerDialog(this, this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    //Listener once the user pressed pick time button
     private void timeButtonListener() {
-
         new TimePickerDialog(this, this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
     }
 
+    //Change back to employer homepage
     private void cancelButtonListener() {
         redirectEmployerHome();
     }
 
+    /**
+     * Once post button is pressed it will be disable, then the application will check if
+     * user input correct data and meet requirement. Then will call local method verifyFields()
+     */
     private void postButtonListener() {
 
         postBtn.setEnabled(false);
@@ -125,6 +139,16 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         verifyFields();
     }
 
+    /**
+     * Once the user picked what date the job will be on Calendar, this method will be called
+     * This method will assign date of the job to local variable(DateLabel) once the date picked
+     * by user is valid.
+     * For it to be valid: Can't pick date in past, and can only create a job 3 month forward
+     * @param view: DatePicker
+     * @param year: year of the job
+     * @param month: month of the job
+     * @param day: day of the job
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
@@ -157,6 +181,16 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         dateLabel.setText(date);
     }
 
+    /**
+     * Once the user picked what time the job will be on clock, this method will be called
+     * This method will assign time of the job to local variable(timeLabel) once the time picked
+     * by user is valid.
+     * For it to be valid: Can't pick date in past, time must be at least 1 hour ahead
+     *
+     * @param view: TimePicker
+     * @param hourOfDay: starting hour of the job
+     * @param minute: starting minut of the job
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
@@ -184,6 +218,10 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         timeLabel.setText(time);
     }
 
+    /**
+     * This method will ask permission from user to get location of user.
+     * If agree: call getCurrentLocation, else ask for permission again
+     */
     private void startMap() {
 
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -195,10 +233,14 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         else getCurrentLocation();
     }
 
+    //Listener once the user interact with map
     private void mapButtonListener() {
         getCurrentLocation();
     }
 
+    /**
+     * After permission is allowed, it will show map with marker on current location of the user
+     */
     private void getCurrentLocation() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -221,6 +263,10 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         });
     }
 
+    /**
+     * Will read information from activity and apply to Job variable
+     * @return JobInterface variable that has information from interface
+     */
     private JobInterface readJobInformation() {
 
         JobInterface job = new Job();
@@ -255,6 +301,11 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         return job;
     }
 
+    /**
+     * This method will interact with fields in UI activity, for each false in the array
+     * it will turn information of the text in the field into red color indicate the location
+     * Once verification is done, it will change to homepage
+     */
     private void verifyFields() {
 
         boolean[] fieldsStatus = verification.verifyFields();
@@ -285,6 +336,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         redirectEmployerHome();
     }
 
+    //Return user UI to employer homepage
     private void redirectEmployerHome() {
         startActivity(new Intent(this, EmployerHomeActivity.class));
     }
