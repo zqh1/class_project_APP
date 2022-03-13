@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 
@@ -26,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * OnCreate method, Initialize activity call getButtonReference, and set button behavior
+     *
      * @param savedInstanceState: Instances status, required to start activity
      */
     @Override
@@ -77,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
      * by calling getAccount() and getPassword().  Then check if entered information is valid.
      * Then pass to isCorrectInformation to check. if information not valid tell user by using toast
      */
-    protected void checkInfo(){
+    protected void checkInfo() {
         loginButton.setEnabled(false);
 
         String extractedEmail = getAccount();
@@ -85,8 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (Signup.verifyEmail(extractedEmail) && Signup.verifyPassword(extractedPassword)) {
             isCorrectInformation(extractedEmail, extractedPassword);
-        }
-        else {
+        } else {
             Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
             loginButton.setEnabled(true);
         }
@@ -95,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * getAccount method, this method will received input email from Login_Layout
      * and return as String
+     *
      * @return String from editText email
      */
     protected String getAccount() {
@@ -105,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * getPassword method, this method will received input from password from Login_Layout
      * and return as String.
+     *
      * @return String from editText password
      */
     protected String getPassword() {
@@ -118,10 +123,11 @@ public class LoginActivity extends AppCompatActivity {
      * and the password match with child of key.
      * -If email exist,, password's matched. Create new session and createLoginSession
      * -Else tell user that email/password is incorrect
-     * @param email: String email will be received to check if the email enter exist in database
+     *
+     * @param email:    String email will be received to check if the email enter exist in database
      * @param password: String password that required to be checked
      */
-    protected void isCorrectInformation(String email, String password){
+    protected void isCorrectInformation(String email, String password) {
 
         DAO.getUserReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -145,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Incorrect Email/Password", Toast.LENGTH_SHORT).show();
                 loginButton.setEnabled(true);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(LoginActivity.this, "Database connection error", Toast.LENGTH_LONG).show();

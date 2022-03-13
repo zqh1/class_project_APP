@@ -1,6 +1,6 @@
 package ca.dal.csci3130.quickcash.preferencesmanager;
 
-public class Preferences implements PreferencesInterface{
+public class Preferences implements PreferencesInterface {
 
     private String employeeID = "";
     private String job = "";
@@ -10,59 +10,139 @@ public class Preferences implements PreferencesInterface{
     private int maxDistance;
     private int duration;
 
-    public void setEmployeeID(String employeeID){
+    /**
+     * setEmployeeID will set ID of the user
+     *
+     * @param employeeID: Employee ID of the user
+     */
+    public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
 
-    public String getEmployeeID(){
+    /**
+     * return ID of the employee
+     *
+     * @return ID of the employee
+     */
+    public String getEmployeeID() {
         return employeeID;
     }
 
-    public void setJob(String job){
+    /**
+     * set preferences job according to String entered
+     *
+     * @param job: preferred job
+     */
+    public void setJob(String job) {
         this.job = job;
     }
 
-    public String getJob(){
+    /**
+     * get preferred job from local variable
+     *
+     * @return preferred job
+     */
+    public String getJob() {
         return job;
     }
 
-    public void setSalary(double salary){
+    /**
+     * set minimal salary to local variable
+     *
+     * @param salary: minimal salary
+     */
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 
-    public double getSalary(){
+    /**
+     * get minimal salary from local variable
+     *
+     * @return minimal salary
+     */
+    public double getSalary() {
         return salary;
     }
 
-    public void setMaxDistance(int distance){
+    /**
+     * set max distance to local variable
+     *
+     * @param distance: max distance
+     */
+    public void setMaxDistance(int distance) {
         this.maxDistance = distance;
     }
 
-    public int getMaxDistance(){
+    /**
+     * return max distance from local variable
+     *
+     * @return max distance
+     */
+    public int getMaxDistance() {
         return maxDistance;
     }
 
-    public void setDuration(int duration){
+    /**
+     * set max duration to local variable
+     *
+     * @param duration: max duration
+     */
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public int getDuration(){
+    /**
+     * get max duration from local variable
+     *
+     * @return max duration
+     */
+    public int getDuration() {
         return this.duration;
     }
 
-    public void setStartingHour(int hour){ this.startingHour = hour; }
+    /**
+     * set starting hour to local variable
+     *
+     * @param hour: starting hour
+     */
+    public void setStartingHour(int hour) {
+        this.startingHour = hour;
+    }
 
-    public int getStartingHour(){
+    /**
+     * get starting hour from local variable
+     *
+     * @return starting hour
+     */
+    public int getStartingHour() {
         return this.startingHour;
     }
 
-    public void setStartingMinute(int minute){
+    /**
+     * set starting minute to local variable
+     *
+     * @param minute: starting minute
+     */
+    public void setStartingMinute(int minute) {
         this.startingMinute = minute;
     }
 
-    public int getStartingMinute(){
+    /**
+     * get starting minute from local variable
+     *
+     * @return starting minute
+     */
+    public int getStartingMinute() {
         return this.startingMinute;
     }
 
-    public String getStartingTime(){ return startingHour + ":" + startingMinute; }
+    /**
+     * Combine starting hour and starting minute into a single String
+     * by calling getStartingHour() and getStartingMinute()
+     *
+     * @return a string combined between starting hour and starting minute
+     */
+    public String getStartingTime() {
+        return startingHour + ":" + startingMinute;
+    }
 }

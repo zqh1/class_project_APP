@@ -107,6 +107,7 @@ public class SessionManager implements SessionManagerInterface {
 
     /**
      * Method that return user ID
+     *
      * @return String: user ID on firebase
      */
     public static String getUserID() {
