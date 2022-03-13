@@ -168,7 +168,7 @@
                 android:autofillHints="Total salary"
                 android:ems="10"
                 android:hint="@string/salaryHint"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
