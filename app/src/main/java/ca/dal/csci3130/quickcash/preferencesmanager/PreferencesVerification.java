@@ -68,7 +68,7 @@ public class PreferencesVerification {
     }
 
     public boolean validDuration(int duration) {
-        return duration > 0 && duration <= 168;
+        return duration > 0 && duration <= 99;
     }
 
     private void updateOrCreatePreferences(){
