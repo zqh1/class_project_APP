@@ -66,9 +66,14 @@ public class EmployerJobListTest {
 
         testConstants.employerViewJob();
 
+        testConstants.waitFirebase();
+
         //scroll to the position of the item can click the view applicant button
         onView(withId(R.id.jobsRecyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(2, MyViewAction.clickChildViewWithId(R.id.applicantBtn)));
+
+        testConstants.waitFirebase();
+
         onView(withText("Employee NumberTwo")).check(matches(isDisplayed()));
 
     }
@@ -115,5 +120,7 @@ public class EmployerJobListTest {
         Espresso.pressBack();
 
         intended(hasComponent(EmployerHomeActivity.class.getName()));
+
+        onView(withId(R.id.postingsBtn)).check(matches(withText("View Postings")));
     }
 }

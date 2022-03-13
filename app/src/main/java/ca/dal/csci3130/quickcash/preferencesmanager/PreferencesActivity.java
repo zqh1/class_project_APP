@@ -26,9 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobSearchWithPreferences;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
@@ -103,7 +103,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
     //Redirect user to mainactity (employee homepage)
     private void changeScreenToHome() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, EmployeeHomeActivity.class));
     }
 
     /**
