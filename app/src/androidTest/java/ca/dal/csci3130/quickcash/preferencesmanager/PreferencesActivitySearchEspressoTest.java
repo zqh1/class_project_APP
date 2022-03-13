@@ -68,6 +68,8 @@ public class PreferencesActivitySearchEspressoTest {
         onView(withId(R.id.proceedPreferBtn)).perform(click());
 
         intended(hasComponent(PreferencesActivity.class.getName()));
+
+        onView(withId(R.id.preferencesFilling)).check(matches(withText("Search Parameters")));
     }
 
     @Test
@@ -80,9 +82,5 @@ public class PreferencesActivitySearchEspressoTest {
         onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job1"))));
         onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job2"))));
         onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job 3"))));
-        onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job4"))));
-        onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job 4"))));
-        onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("Sleep"))));
-
     }
 }
