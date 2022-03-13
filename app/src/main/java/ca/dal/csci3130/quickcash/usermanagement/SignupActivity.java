@@ -107,19 +107,23 @@ public class SignupActivity extends AppCompatActivity {
     private void verifyDataFields() {
         boolean[] fieldsStatus = signup.verifyUserData();
 
-        if (fieldsStatus[0]) firstNameField.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[0])
+            firstNameField.setTextColor(getResources().getColor(R.color.grey, null));
         else firstNameField.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[1]) lastNameField.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[1])
+            lastNameField.setTextColor(getResources().getColor(R.color.grey, null));
         else lastNameField.setTextColor(getResources().getColor(R.color.red, null));
 
         if (fieldsStatus[2]) emailField.setTextColor(getResources().getColor(R.color.grey, null));
         else emailField.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[3]) passwordField.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[3])
+            passwordField.setTextColor(getResources().getColor(R.color.grey, null));
         else passwordField.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[4]) confirmPasswordField.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[4])
+            confirmPasswordField.setTextColor(getResources().getColor(R.color.grey, null));
         else confirmPasswordField.setTextColor(getResources().getColor(R.color.red, null));
 
         if (fieldsStatus[5]) phoneField.setTextColor(getResources().getColor(R.color.grey, null));

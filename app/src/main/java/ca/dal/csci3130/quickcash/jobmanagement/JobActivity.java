@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,8 +26,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+
 import java.util.Calendar;
 import java.util.Objects;
+
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
@@ -65,6 +69,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      * and apply instances to local variable
      * Methods: startMap(), linkScreenItem(), setButtonListeners()
      * Instance: Calendar, JobVerification()
+     *
      * @param savedInstanceState: Instances status, required to start activity
      */
     @Override
@@ -144,10 +149,11 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      * This method will assign date of the job to local variable(DateLabel) once the date picked
      * by user is valid.
      * For it to be valid: Can't pick date in past, and can only create a job 3 month forward
-     * @param view: DatePicker
-     * @param year: year of the job
+     *
+     * @param view:  DatePicker
+     * @param year:  year of the job
      * @param month: month of the job
-     * @param day: day of the job
+     * @param day:   day of the job
      */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -166,13 +172,11 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             Toast.makeText(this, "Invalid date", Toast.LENGTH_LONG).show();
 
             userCalendar.set(currentYear, currentMonth, currentDay);
-        }
-        else if (future.before(userDate)) {
+        } else if (future.before(userDate)) {
             Toast.makeText(this, "Limit is 3 months in the future", Toast.LENGTH_LONG).show();
 
             userCalendar.set(currentYear, currentMonth, currentDay);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Date Set", Toast.LENGTH_SHORT).show();
             userCalendar.set(year, month, day);
         }
@@ -187,9 +191,9 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      * by user is valid.
      * For it to be valid: Can't pick date in past, time must be at least 1 hour ahead
      *
-     * @param view: TimePicker
+     * @param view:      TimePicker
      * @param hourOfDay: starting hour of the job
-     * @param minute: starting minut of the job
+     * @param minute:    starting minut of the job
      */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -206,8 +210,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
             userCalendar.set(Calendar.HOUR_OF_DAY, future.get(Calendar.HOUR_OF_DAY));
             userCalendar.set(Calendar.MINUTE, future.get(Calendar.MINUTE));
-        }
-        else {
+        } else {
             Toast.makeText(this, "Time Set", Toast.LENGTH_SHORT).show();
 
             userCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -228,9 +231,8 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         client = LocationServices.getFusedLocationProviderClient(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
-        }
-        else getCurrentLocation();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
+        } else getCurrentLocation();
     }
 
     //Listener once the user interact with map
@@ -251,11 +253,11 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         Task<Location> task = client.getLastLocation();
 
         task.addOnSuccessListener(location -> {
-            if(location != null) {
+            if (location != null) {
                 supportMapFragment.getMapAsync(googleMap -> {
-                    latlng = new LatLng(location.getLatitude(),location.getLongitude());
+                    latlng = new LatLng(location.getLatitude(), location.getLongitude());
                     MarkerOptions markerOptions = new MarkerOptions().position(latlng).title("You are here");
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,14));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14));
                     Objects.requireNonNull(googleMap.addMarker(markerOptions)).showInfoWindow();
                 });
             }
@@ -265,6 +267,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
     /**
      * Will read information from activity and apply to Job variable
+     *
      * @return JobInterface variable that has information from interface
      */
     private JobInterface readJobInformation() {
@@ -286,15 +289,13 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
         try {
             job.setDuration(Integer.parseInt(jobHours.getText().toString()));
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             job.setDuration(0);
         }
 
         try {
             job.setSalary(Integer.parseInt(jobSalary.getText().toString()));
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             job.setSalary(0);
         }
 
@@ -313,7 +314,8 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         if (fieldsStatus[0]) jobTitle.setTextColor(getResources().getColor(R.color.grey, null));
         else jobTitle.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[1]) jobDescription.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[1])
+            jobDescription.setTextColor(getResources().getColor(R.color.grey, null));
         else jobDescription.setTextColor(getResources().getColor(R.color.red, null));
 
         if (fieldsStatus[2]) jobHours.setTextColor(getResources().getColor(R.color.grey, null));

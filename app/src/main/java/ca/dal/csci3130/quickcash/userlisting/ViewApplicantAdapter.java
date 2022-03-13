@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Objects;
+
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 
@@ -24,11 +28,10 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
     private final String jobKey;
 
     /**
-     *
      * Assigning each local variable to each parameter, and jobKey
      *
      * @param applicants: array of applicants who sign for the job
-     * @param jobKey: Key of the job (job id)
+     * @param jobKey:     Key of the job (job id)
      */
     public ViewApplicantAdapter(String[] applicants, String jobKey) {
         this.applicantsID = applicants;
@@ -86,30 +89,28 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
         DatabaseReference jobDatabase = DAO.getJobReference().child(jobKey);
         //Choosing which applicant will be apply to the position
         holder.accept.setOnClickListener(view ->
-            jobDatabase.child("acceptedID").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    //If the acceptedID is empty then first applicant select will be assign for this job
-                    if (Objects.requireNonNull(snapshot.getValue()).toString().isEmpty()) {
-                        jobDatabase.child("acceptedID").setValue(applicantsID[jobPosition]);
+                jobDatabase.child("acceptedID").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        //If the acceptedID is empty then first applicant select will be assign for this job
+                        if (Objects.requireNonNull(snapshot.getValue()).toString().isEmpty()) {
+                            jobDatabase.child("acceptedID").setValue(applicantsID[jobPosition]);
 
-                        Toast.makeText(holder.context, "Applicant accepted", Toast.LENGTH_LONG).show();
+                            Toast.makeText(holder.context, "Applicant accepted", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(holder.context, "An Applicant was already accepted for this job", Toast.LENGTH_LONG).show();
+                        }
                     }
-                    else {
-                        Toast.makeText(holder.context, "An Applicant was already accepted for this job", Toast.LENGTH_LONG).show();
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(holder.context, "Error accepting applicant", Toast.LENGTH_LONG).show();
-                }
-            })
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(holder.context, "Error accepting applicant", Toast.LENGTH_LONG).show();
+                    }
+                })
         );
     }
 
     /**
-     *
      * This method will return how many applicant(s) apply for this job
      *
      * @return int: number of applicants

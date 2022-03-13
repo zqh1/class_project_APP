@@ -34,7 +34,7 @@ import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
-public class PreferencesActivity extends AppCompatActivity{
+public class PreferencesActivity extends AppCompatActivity {
 
     private EditText extractedJob;
     private EditText extractedSalary;
@@ -76,7 +76,7 @@ public class PreferencesActivity extends AppCompatActivity{
         if (search) {
             getCurrentLocation();
             String title = "Search Parameters";
-            ((TextView)findViewById(R.id.preferencesFillingTitle)).setText(title);
+            ((TextView) findViewById(R.id.preferencesFillingTitle)).setText(title);
             findViewById(R.id.distanceDefaultLabel).setVisibility(View.VISIBLE);
         }
     }
@@ -114,18 +114,16 @@ public class PreferencesActivity extends AppCompatActivity{
      * Will ask permission from user, then call getCurrentLocation(), get information from UI, and
      * lastly call retrieveJobs()
      */
-    private void proceedButtonListener(){
+    private void proceedButtonListener() {
         proceedButton.setEnabled(false);
 
         if (!search) {
             verification.setPreferences(readRetrievedData());
             verify();
-        }
-        else {
+        } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
-            }
-            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
+            } else {
                 getCurrentLocation();
                 preference = readRetrievedData();
                 retrieveJobs();
@@ -139,46 +137,45 @@ public class PreferencesActivity extends AppCompatActivity{
      * If ID exist in DB then it will pull information and display on UI activity
      * Else Toast message will appear.
      */
-    private void loadPreferences(){
+    private void loadPreferences() {
 
         DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
-                    for (DataSnapshot data : snapshot.getChildren()) {
+                        if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
+                            for (DataSnapshot data : snapshot.getChildren()) {
 
-                        PreferencesInterface preferences = data.getValue(Preferences.class);
+                                PreferencesInterface preferences = data.getValue(Preferences.class);
 
-                        if (preferences == null) {
-                            Toast.makeText(PreferencesActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
-                            return;
+                                if (preferences == null) {
+                                    Toast.makeText(PreferencesActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                String jobName = preferences.getJob();
+                                String salary = preferences.getSalary() + "";
+                                String time = preferences.getStartingTime();
+                                String distance = preferences.getMaxDistance() + "";
+                                String duration = preferences.getDuration() + "";
+
+                                extractedJob.setText(jobName);
+                                extractedSalary.setText(salary);
+                                extractedStartingTime.setText(time);
+                                extractedMaxDistance.setText(distance);
+                                extractedDuration.setText(duration);
+                            }
+                        } else {
+                            Toast.makeText(PreferencesActivity.this, "No preferences available", Toast.LENGTH_SHORT).show();
                         }
-
-                        String jobName = preferences.getJob();
-                        String salary = preferences.getSalary() + "";
-                        String time = preferences.getStartingTime();
-                        String distance = preferences.getMaxDistance() + "";
-                        String duration = preferences.getDuration() + "";
-
-                        extractedJob.setText(jobName);
-                        extractedSalary.setText(salary);
-                        extractedStartingTime.setText(time);
-                        extractedMaxDistance.setText(distance);
-                        extractedDuration.setText(duration);
                     }
-                }
-                else {
-                    Toast.makeText(PreferencesActivity.this, "No preferences available", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PreferencesActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(PreferencesActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 
@@ -186,9 +183,10 @@ public class PreferencesActivity extends AppCompatActivity{
      * This method will read data from activity UI, and return as PreferencesInterface object
      * During reading it will check whether data can be parse to int or double
      * if not then the application will automatically apply data
+     *
      * @return PreferencesInterface object
      */
-    private PreferencesInterface readRetrievedData(){
+    private PreferencesInterface readRetrievedData() {
         PreferencesInterface preferences = new Preferences();
 
         preferences.setEmployeeID(SessionManager.getUserID());
@@ -196,38 +194,33 @@ public class PreferencesActivity extends AppCompatActivity{
         String startingTimeString = getStartingTime();
         String[] extractStartingTimeArray = startingTimeString.split(":");
 
-        try{
+        try {
             preferences.setStartingHour(Integer.parseInt(extractStartingTimeArray[0]));
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             preferences.setStartingHour(0);
         }
 
-        try{
+        try {
             preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[1]));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             preferences.setStartingMinute(0);
         }
 
-        try{
+        try {
             preferences.setSalary(Double.parseDouble(getSalary()));
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             preferences.setSalary(13.35);
         }
 
-        try{
+        try {
             preferences.setDuration(Integer.parseInt(getDuration()));
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             preferences.setDuration(99);
         }
 
-        try{
+        try {
             preferences.setMaxDistance(Integer.parseInt(getMaxDistance()));
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             preferences.setMaxDistance(15);
         }
 
@@ -239,21 +232,25 @@ public class PreferencesActivity extends AppCompatActivity{
      * it will turn information of the text in the field into red color indicate the location
      * Once verification is done, it will change to homepage
      */
-    private void verify(){
+    private void verify() {
         boolean[] fieldsStatus = verification.verifyFields();
         if (fieldsStatus[0]) extractedJob.setTextColor(getResources().getColor(R.color.grey, null));
         else extractedJob.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[1]) extractedSalary.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[1])
+            extractedSalary.setTextColor(getResources().getColor(R.color.grey, null));
         else extractedSalary.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[2]) extractedStartingTime.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[2])
+            extractedStartingTime.setTextColor(getResources().getColor(R.color.grey, null));
         else extractedStartingTime.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[3]) extractedMaxDistance.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[3])
+            extractedMaxDistance.setTextColor(getResources().getColor(R.color.grey, null));
         else extractedMaxDistance.setTextColor(getResources().getColor(R.color.red, null));
 
-        if (fieldsStatus[4]) extractedDuration.setTextColor(getResources().getColor(R.color.grey, null));
+        if (fieldsStatus[4])
+            extractedDuration.setTextColor(getResources().getColor(R.color.grey, null));
         else extractedDuration.setTextColor(getResources().getColor(R.color.red, null));
 
         for (boolean status : fieldsStatus) {
@@ -269,6 +266,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
     /**
      * This method get title from UI activity from local variable and turn it into String
+     *
      * @return title as a String
      */
     private String getJob() {
@@ -277,41 +275,45 @@ public class PreferencesActivity extends AppCompatActivity{
 
     /**
      * This method get salary from UI activity from local variable and turn it into String
+     *
      * @return salary as a String
      */
-    private String getSalary(){
+    private String getSalary() {
         return extractedSalary.getText().toString().trim();
     }
 
     /**
      * This method get starting time from UI activity from local variable and turn it into String
+     *
      * @return starting time as a String
      */
-    private String getStartingTime(){
+    private String getStartingTime() {
         return extractedStartingTime.getText().toString().trim();
     }
 
     /**
      * This method get max distance from UI activity from local variable and turn it into String
+     *
      * @return max distance as a String
      */
-    private String getMaxDistance(){
+    private String getMaxDistance() {
         return extractedMaxDistance.getText().toString().trim();
     }
 
     /**
      * This method get max distance from UI activity from local variable and turn it into String
+     *
      * @return max distance as a String
      */
-    private String getDuration(){
+    private String getDuration() {
         return extractedDuration.getText().toString().trim();
     }
 
     /**
      * If user is in search mode, this method will be call.
      * it will query though DB get all the job and call checkWithPreference(thisJob) to check
-     *  if the job should be show to user depends on the search preferences.
-     *  If it pass it will be add to Arraylist.
+     * if the job should be show to user depends on the search preferences.
+     * If it pass it will be add to Arraylist.
      * If the arraylist is empty(no job to show) then toast message will appear.
      * Else start new activity to show jobs on the phone
      */
@@ -322,7 +324,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
                 ArrayList<String> jobList = new ArrayList<>();
 
-                for (DataSnapshot job: snapshot.getChildren()) {
+                for (DataSnapshot job : snapshot.getChildren()) {
 
                     JobInterface thisJob = job.getValue(Job.class);
 
@@ -335,8 +337,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
                 if (jobList.isEmpty()) {
                     Toast.makeText(PreferencesActivity.this, "No job fit the search parameters", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     startActivity(new Intent(PreferencesActivity.this, ViewJobSearchWithPreferences.class).putStringArrayListExtra("JOBLIST", jobList));
                 }
             }
@@ -350,14 +351,24 @@ public class PreferencesActivity extends AppCompatActivity{
     }
 
     //Main method to call each verification method to check with each element of JobInterface
-    private boolean checkWithPreference(JobInterface job){
+    private boolean checkWithPreference(JobInterface job) {
         boolean allField = true;
 
-        if(!jobMatchWithPreference(job)){ allField = false; }
-        if(!salaryMatchWithPreference(job)){ allField = false; }
-        if(!startingHourMatchWithPreferences(job)){ allField = false; }
-        if(!durationMatchWithPreference(job)){ allField = false; }
-        if(!distanceMatchWithPreference(job)){ allField = false; }
+        if (!jobMatchWithPreference(job)) {
+            allField = false;
+        }
+        if (!salaryMatchWithPreference(job)) {
+            allField = false;
+        }
+        if (!startingHourMatchWithPreferences(job)) {
+            allField = false;
+        }
+        if (!durationMatchWithPreference(job)) {
+            allField = false;
+        }
+        if (!distanceMatchWithPreference(job)) {
+            allField = false;
+        }
 
         return allField;
     }
@@ -366,12 +377,13 @@ public class PreferencesActivity extends AppCompatActivity{
      * This method will check if the job user enter is in title of job from DB,
      * and check if is valid.
      * If the job title from DB contain job that user want and job that user want is valid,
-     *  return true.
+     * return true.
      * Else return false
+     *
      * @param job: JobInterface to check
      * @return true if it fits qualification, false otherwise
      */
-    private boolean jobMatchWithPreference(JobInterface job){
+    private boolean jobMatchWithPreference(JobInterface job) {
         String jobTitle = job.getTitle();
         String jobPrefer = preference.getJob();
 
@@ -384,10 +396,11 @@ public class PreferencesActivity extends AppCompatActivity{
      * If the job salary from DB equal or higher than salary that user want
      * and salary that user want is valid, return true.
      * Else return false
+     *
      * @param job: JobInterface to check
      * @return true if it fits qualification, false otherwise
      */
-    private boolean salaryMatchWithPreference(JobInterface job){
+    private boolean salaryMatchWithPreference(JobInterface job) {
         double jobSalary = job.getSalary();
         double salaryPrefer = preference.getSalary();
 
@@ -400,10 +413,11 @@ public class PreferencesActivity extends AppCompatActivity{
      * If the job startingHour from DB is after startingHour that user's want and
      * startingHour that user want is valid, return true.
      * Else return false
+     *
      * @param job: JobInterface to check
      * @return true if it fits qualification, false otherwise
      */
-    private boolean startingHourMatchWithPreferences(JobInterface job){
+    private boolean startingHourMatchWithPreferences(JobInterface job) {
         int jobStartHour = job.getHour();
         int jobStartMinute = job.getMinute();
         int startHourPrefer = preference.getStartingHour();
@@ -413,8 +427,9 @@ public class PreferencesActivity extends AppCompatActivity{
 
         boolean validPreferHourAndMinute;
 
-        if(startHourPrefer < jobStartHour) validPreferHourAndMinute = true;
-        else validPreferHourAndMinute = (startHourPrefer == jobStartHour && startMinutePrefer <= jobStartMinute);
+        if (startHourPrefer < jobStartHour) validPreferHourAndMinute = true;
+        else
+            validPreferHourAndMinute = (startHourPrefer == jobStartHour && startMinutePrefer <= jobStartMinute);
 
         return validStartingTime(preferHourToCheck) && validPreferHourAndMinute;
     }
@@ -423,12 +438,13 @@ public class PreferencesActivity extends AppCompatActivity{
      * This method will check between duration user want and job's duration from DB,
      * and check if is valid.
      * If the job duration from DB contain lower than what user's want and
-     *  duration that user want is valid, return true.
+     * duration that user want is valid, return true.
      * Else return false
+     *
      * @param job: JobInterface to check
      * @return true if it fits qualification, false otherwise
      */
-    private boolean durationMatchWithPreference(JobInterface job){
+    private boolean durationMatchWithPreference(JobInterface job) {
         int jobDuration = job.getDuration();
         int durationPrefer = preference.getDuration();
 
@@ -441,10 +457,11 @@ public class PreferencesActivity extends AppCompatActivity{
      * If the distance between user and job is lower than what user wants, then return true.
      * Else return false
      * NOTE: user enter as KM but the Location.distanceBetween() will return meters.
+     *
      * @param job: JobInterface to check
      * @return true if it fits qualification, false otherwise
      */
-    private boolean distanceMatchWithPreference(JobInterface job){
+    private boolean distanceMatchWithPreference(JobInterface job) {
         double jobLatitude = job.getLatitude();
         double jobLongitude = job.getLongitude();
         int maxDistancePrefer = preference.getMaxDistance(); //In meters
@@ -459,22 +476,25 @@ public class PreferencesActivity extends AppCompatActivity{
      * This method will ask for permission for location.
      * once the permission is allowed, it will assign location to latLng latlng variable
      */
-    private void getCurrentLocation(){
+    private void getCurrentLocation() {
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MAP_REQUEST_CODE);
         }
 
         Task<Location> task = client.getLastLocation();
 
         task.addOnSuccessListener(location -> {
-            if(location != null) { latlng = new LatLng(location.getLatitude(),location.getLongitude()); }
+            if (location != null) {
+                latlng = new LatLng(location.getLatitude(), location.getLongitude());
+            }
         });
     }
 
     /**
      * If string to check has number of letters lower than 251 return true.
+     *
      * @param job: job title to check
      * @return true if it fits qualification, false otherwise
      */
@@ -484,6 +504,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
     /**
      * If the salary passed to check is higher than minimal wage, and lower than $10000
+     *
      * @param salary: salary to check
      * @return true if it fits qualification, false otherwise
      */
@@ -495,6 +516,7 @@ public class PreferencesActivity extends AppCompatActivity{
     /**
      * If the Starting time for the job is not empty and is match in form of XX:XX
      * NOTE: 24:00 does not valid since 24:00 is 00:00 of next day
+     *
      * @param time: time String to check
      * @return true if it fits qualification, false otherwise
      */
@@ -504,6 +526,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
     /**
      * distance has to be int, and greater than 0 but less than 1001
+     *
      * @param distance: distance to check
      * @return true if it fits qualification, false otherwise
      */
@@ -513,6 +536,7 @@ public class PreferencesActivity extends AppCompatActivity{
 
     /**
      * duration to be check. Has to be high than 0 but less than 100
+     *
      * @param duration: duration as int to check
      * @return true if it fits qualification, false otherwise
      */

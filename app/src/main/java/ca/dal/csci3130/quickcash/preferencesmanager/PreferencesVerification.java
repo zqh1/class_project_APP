@@ -19,42 +19,44 @@ public class PreferencesVerification {
 
     /**
      * Set param to local variable to check inside this class
+     *
      * @param preferences: PreferencesInterface
      */
-    public void setPreferences(PreferencesInterface preferences){
+    public void setPreferences(PreferencesInterface preferences) {
         this.preferences = preferences;
     }
 
     /**
      * This method will call each valid method to check each element of PreferencesInterface
      * If all index of array or allfield is true, then it will be upload/update to internet
+     *
      * @return boolean array. Each index come from checking each element of PreferencesInterface
      */
-    public boolean[] verifyFields(){
-        boolean[] fieldStatus = new boolean[] {true, true, true, true, true};
+    public boolean[] verifyFields() {
+        boolean[] fieldStatus = new boolean[]{true, true, true, true, true};
         boolean allFieldCorrect = true;
-        if(!validJob(preferences.getJob())){
+        if (!validJob(preferences.getJob())) {
             fieldStatus[0] = false;
             allFieldCorrect = false;
         }
-        if(!validSalary(preferences.getSalary())){
+        if (!validSalary(preferences.getSalary())) {
             fieldStatus[1] = false;
             allFieldCorrect = false;
         }
-        if(!validStartingTime(preferences.getStartingTime())){
+        if (!validStartingTime(preferences.getStartingTime())) {
             fieldStatus[2] = false;
             allFieldCorrect = false;
         }
-        if(!validMaxDistance(preferences.getMaxDistance())){
+        if (!validMaxDistance(preferences.getMaxDistance())) {
             fieldStatus[3] = false;
             allFieldCorrect = false;
         }
-        if(!validDuration(preferences.getDuration())){
+        if (!validDuration(preferences.getDuration())) {
             fieldStatus[4] = false;
             allFieldCorrect = false;
         }
 
-        if(allFieldCorrect) updateOrCreatePreferences();
+        if (allFieldCorrect) updateOrCreatePreferences();
 
         return fieldStatus;
     }
@@ -62,6 +64,7 @@ public class PreferencesVerification {
     /**
      * This method will check if the title of the job is valid
      * For it to return true, the field need to be not empty and number of letters is less than 251
+     *
      * @param job: a String from job.getTitle()
      * @return true if requirement is fulfil, false otherwise.
      */
@@ -72,6 +75,7 @@ public class PreferencesVerification {
     /**
      * This method will check if salary is valid
      * Minimal required salary is 13.35, and max is 10,000
+     *
      * @param salary: a double from job.getSalary()
      * @return true if requirement is fulfil, false otherwise.
      */
@@ -83,6 +87,7 @@ public class PreferencesVerification {
     /**
      * If the Starting time for the job is not empty and is match in form of XX:XX
      * NOTE: 24:00 does not valid since 24:00 is 00:00 of next day
+     *
      * @param time: time String to check
      * @return true if it fits qualification, false otherwise
      */
@@ -92,6 +97,7 @@ public class PreferencesVerification {
 
     /**
      * distance has to be int, and greater than 0 but less than 1001
+     *
      * @param distance: distance to check
      * @return true if it fits qualification, false otherwise
      */
@@ -101,6 +107,7 @@ public class PreferencesVerification {
 
     /**
      * duration to be check. Has to be high than 0 but less than 100
+     *
      * @param duration: duration as int to check
      * @return true if it fits qualification, false otherwise
      */
@@ -114,18 +121,17 @@ public class PreferencesVerification {
      * it will update instead of creating new query
      * if the ID does not exist in DB, it will create new query inside DB.
      */
-    private void updateOrCreatePreferences(){
+    private void updateOrCreatePreferences() {
         DatabaseReference db = DAO.getPreferenceReference();
         db.orderByChild("employeeID").equalTo(preferences.getEmployeeID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() && snapshot.getChildrenCount() == 1){
+                if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
                     //delete existing query
-                    for(DataSnapshot data : snapshot.getChildren()){
+                    for (DataSnapshot data : snapshot.getChildren()) {
                         db.child(Objects.requireNonNull(data.getKey())).getRef().setValue(preferences);
                     }
-                }
-                else pushPreferencesToFirebase();
+                } else pushPreferencesToFirebase();
             }
 
             @Override
