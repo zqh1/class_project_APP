@@ -70,34 +70,23 @@ public class EmployerHomeActivityEspressoTest {
 
     @Test
     public void checkCreateJobButton(){
-        onView(withId(R.id.name)).perform(typeText("employer@dal.ca"));
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"));
-        onView(withId(R.id.loginBtn)).perform(click());
+        testConstants.employerLogin();
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         onView(withId(R.id.createJobBtn)).check(matches(withText("CREATE NEW JOB")));
     }
 
     @Test
     public void checkCreateJobButtonRedirect(){
-        onView(withId(R.id.name)).perform(typeText("employer@dal.ca"));
-        onView(withId(R.id.password)).perform(typeText("Ab12345##"));
-        onView(withId(R.id.loginBtn)).perform(click());
+        testConstants.employerLogin();
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        testConstants.waitFirebase();
 
         onView(withId(R.id.createJobBtn)).perform(click());
         intended(hasComponent(JobActivity.class.getName()));
 
+        onView(withId(R.id.jobCreationLabel)).check(matches(withText("Job's Details:")));
     }
 
 }
