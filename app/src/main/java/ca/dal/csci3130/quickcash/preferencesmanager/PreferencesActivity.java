@@ -200,9 +200,10 @@ public class PreferencesActivity extends AppCompatActivity {
             preferences.setStartingHour(0);
         }
 
-        try {
-            preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[1]));
-        } catch (Exception e) {
+        try{
+            preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[0]));
+        }
+        catch (Exception e){
             preferences.setStartingMinute(0);
         }
 
