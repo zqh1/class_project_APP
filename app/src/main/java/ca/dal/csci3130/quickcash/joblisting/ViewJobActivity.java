@@ -141,7 +141,7 @@ public class ViewJobActivity extends AppCompatActivity {
                 mapFragment.getMapAsync(googleMap -> {
                    LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
                     MarkerOptions markerOptions = new MarkerOptions().position(latlng).title("You are here");
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 14));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10));
                     Objects.requireNonNull(googleMap.addMarker(markerOptions)).showInfoWindow();
                 });
             }
