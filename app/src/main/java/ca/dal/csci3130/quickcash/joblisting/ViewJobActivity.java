@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,6 +66,9 @@ public class ViewJobActivity extends AppCompatActivity {
 
         init();
         connectToFBDB();
+
+
+        //((FragmentContainerView) findViewById(R.id.map)).setVisibility(View.VISIBLE);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this::onMapReady);
         client = LocationServices.getFusedLocationProviderClient(this);
