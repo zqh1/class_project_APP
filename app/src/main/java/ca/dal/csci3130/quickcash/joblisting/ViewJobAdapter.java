@@ -26,6 +26,7 @@ import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -81,6 +82,16 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.salaryTV.setText(salaryText);
         holder.dateTV.setText(dateText);
         holder.urgentTV.setText(urgentText);
+
+        holder.mapBtn.setOnClickListener(view -> {
+
+            Intent mapIntent = new Intent(holder.context, JobMap.class);
+            mapIntent.putExtra("JOBNAME", job.getTitle());
+            mapIntent.putExtra("LONGITUDE", job.getLongitude());
+            mapIntent.putExtra("LATITUDE", job.getLatitude());
+
+            holder.context.startActivity(mapIntent);
+        });
 
         //Hide or not the urgent field
         if (!job.isUrgent()) {
@@ -228,6 +239,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final Button deleteBtn;
         public final Button applicantBtn;
         public final Button applyBtn;
+        public final Button mapBtn;
 
         /**
          * JobViewHolder constructor, link all item on screen
@@ -250,6 +262,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             applicantBtn = itemView.findViewById(R.id.applicantBtn);
             applyBtn = itemView.findViewById(R.id.applyBtn);
+            mapBtn = itemView.findViewById(R.id.mapBtn);
         }
     }
 }
