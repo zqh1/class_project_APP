@@ -17,9 +17,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
@@ -79,8 +81,8 @@ public class JobMap extends AppCompatActivity {
 
     private void onMapReady(GoogleMap map) {
 
-        getCurrentLocation(map);
         setJobMarker(map);
+        getCurrentLocation(map);
     }
 
     /**
@@ -99,10 +101,12 @@ public class JobMap extends AppCompatActivity {
             if (location != null) {
                 userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions().position(userLatLng).title("You are here");
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 14));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 14));
                 Objects.requireNonNull(map.addMarker(markerOptions)).showInfoWindow();
 
                 setMapLabels();
+
+                zoomPins(map);
             }
         });
     }
@@ -116,7 +120,16 @@ public class JobMap extends AppCompatActivity {
         float[] distanceToJob = new float[1];
         Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, jobLatLng.latitude, jobLatLng.longitude, distanceToJob);
 
-        String jobDistance = "Distance: " + (distanceToJob[0] / 1000.0) + " KM";
+        String jobDistance = "Distance: " + String.format(Locale.CANADA, "%.2f", distanceToJob[0] / 1000.0) + " KM";
         ((TextView) findViewById(R.id.distanceLocationLabel)).setText(jobDistance);
+    }
+
+    private void zoomPins(GoogleMap map) {
+
+        LatLngBounds.Builder zoomBuilder = new LatLngBounds.Builder();
+        zoomBuilder.include(userLatLng);
+        zoomBuilder.include(jobLatLng);
+
+        map.animateCamera(CameraUpdateFactory.newLatLngBounds(zoomBuilder.build(), 75));
     }
 }
