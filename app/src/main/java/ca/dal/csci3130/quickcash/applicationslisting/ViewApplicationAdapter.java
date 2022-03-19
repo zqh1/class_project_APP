@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.applicationslisting;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
+import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 /**
@@ -113,6 +115,16 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                 holder.salaryTV.setText(salary);
                 holder.dateTV.setText(date);
                 holder.statusTV.setText(statusLabel);
+
+                holder.mapBtn.setOnClickListener(view -> {
+
+                    Intent mapIntent = new Intent(holder.context, JobMap.class);
+                    mapIntent.putExtra("JOBNAME", job.getTitle());
+                    mapIntent.putExtra("LONGITUDE", job.getLongitude());
+                    mapIntent.putExtra("LATITUDE", job.getLatitude());
+
+                    holder.context.startActivity(mapIntent);
+                });
             }
 
             @Override
@@ -132,10 +144,10 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                                 String applicants = Objects.requireNonNull(snapshot.getValue()).toString();
 
                                 //Delete user id from list
-                                String newApplicants = applicants.replace(SessionManager.getUserID() + ",", "");
+                                applicants = applicants.replace(SessionManager.getUserID() + ",", "");
 
                                 //Set new applicant list
-                                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(newApplicants);
+                                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(applicants);
 
                                 //Message to user that deletion was successfully
                                 Toast.makeText(holder.context, "Application removed, exit to refresh", Toast.LENGTH_SHORT).show();

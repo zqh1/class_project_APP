@@ -85,6 +85,15 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/mapBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/view_job_location_label"
+            android:textColor="@color/black" />
+
+        <Button
             android:id="@+id/applyBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
