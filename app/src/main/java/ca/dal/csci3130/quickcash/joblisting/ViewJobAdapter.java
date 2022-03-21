@@ -93,6 +93,23 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             holder.context.startActivity(mapIntent);
         });
 
+        DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
+                String lastName = Objects.requireNonNull(snapshot.child("lastName").getValue()).toString();
+
+                String employerName = "Employer name: " + firstName + " " + lastName;
+                holder.employerName.setText(employerName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         //Hide or not the urgent field
         if (!job.isUrgent()) {
             holder.urgentTV.setVisibility(View.GONE);
@@ -236,6 +253,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final TextView urgentTV;
         public final TextView dateTV;
         public final TextView statusTV;
+        public final TextView employerName;
         public final Button deleteBtn;
         public final Button applicantBtn;
         public final Button applyBtn;
@@ -258,6 +276,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             urgentTV = itemView.findViewById(R.id.urgentTV);
             dateTV = itemView.findViewById(R.id.dateTV);
             statusTV = itemView.findViewById(R.id.statusTV);
+            employerName = itemView.findViewById(R.id.employerName);
 
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             applicantBtn = itemView.findViewById(R.id.applicantBtn);
