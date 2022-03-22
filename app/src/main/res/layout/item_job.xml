@@ -91,10 +91,11 @@
     <RatingBar
         android:id="@+id/employerRating"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_weight="1"
-        style="?android:attr/ratingBarStyleSmall"/>
+        style="?android:attr/ratingBarStyleSmall"
+        android:numStars="5" />
 
     <LinearLayout
         android:layout_width="match_parent"
