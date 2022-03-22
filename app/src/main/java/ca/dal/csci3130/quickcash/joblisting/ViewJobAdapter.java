@@ -25,8 +25,10 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
+import ca.dal.csci3130.quickcash.payment.PaymentActivity;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -112,6 +114,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         //Disable buttons not related to employee
         holder.deleteBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
+        holder.paymentBtn.setVisibility(View.GONE);
 
         //Set status label
         String label;
@@ -167,6 +170,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         //If an employee has not been accepted, set open status and set applicants button listener
         if (job.getAcceptedID().isEmpty()) {
 
+            //disable payment button if no applicant accepted
+            holder.paymentBtn.setVisibility(View.GONE);
+
             String statusText = "Status: Open position";
             holder.statusTV.setText(statusText);
 
@@ -211,6 +217,18 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                     Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            //todo remove commentS!!
+            /*setting listener to button, redirecting to payment page.
+            * passing accepted applicant's ID to the intent*/
+            holder.paymentBtn.setOnClickListener(view -> {
+
+                Intent paymentIntent = new Intent(holder.context, PaymentActivity.class);
+                /*paymentIntent.putExtra("ACCEPTED_EMPLOYEE", job.getAcceptedID());*/
+                holder.context.startActivity(new Intent(holder.context, PaymentActivity.class));
+
+            });
+
         }
 
         //Set delete button listeners
@@ -240,6 +258,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final Button applicantBtn;
         public final Button applyBtn;
         public final Button mapBtn;
+        public final Button paymentBtn;
 
         /**
          * JobViewHolder constructor, link all item on screen
@@ -263,6 +282,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             applicantBtn = itemView.findViewById(R.id.applicantBtn);
             applyBtn = itemView.findViewById(R.id.applyBtn);
             mapBtn = itemView.findViewById(R.id.mapBtn);
+
+            paymentBtn = itemView.findViewById(R.id.paymentBtn);
         }
     }
 }
