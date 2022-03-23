@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.feedback;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -17,8 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
+import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
+import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class GiveFeedbackActivity extends AppCompatActivity {
 
@@ -108,6 +113,11 @@ public class GiveFeedbackActivity extends AppCompatActivity {
                 Log.e("Error: feedback", error.getMessage());
             }
         });
+
+        if(SessionManager.getUser().getIsEmployee().equals("y"))
+            startActivity(new Intent(this, EmployeeHomeActivity.class));
+        else
+            startActivity(new Intent(this, EmployerHomeActivity.class));
     }
 
     private void pushFeedbackToFirebase(int score){
@@ -119,5 +129,4 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
         DAO.add(feedback);
     }
-
 }
