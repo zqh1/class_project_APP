@@ -2,31 +2,39 @@ package ca.dal.csci3130.quickcash.feedback;
 
 public class Feedback implements FeedbackInterface {
 
-    private String id;
-    private int rating;
-    private int count;
+    private String id = "";
+    private int rating = -1;
+    private int count = 0;
 
-    public void setID(String id){
-        this.id = id;
-    }
+    public Feedback(){ /* Require for firebase */ }
 
-    public String getID(){
+    @Override
+    public String getId() {
         return id;
     }
 
-    public void setRating(int rating){
-        this.rating = rating;
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public int getRating(){
+    @Override
+    public int getRating() {
         return rating;
     }
 
-    public void setNumberOfSubmit(int count){
-        this.count = count;
+    @Override
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
-    public int getNumberOfSubmit(){
+    @Override
+    public int getCount() {
         return count;
+    }
+
+    @Override
+    public void setCount(int count) {
+        this.count = count;
     }
 }

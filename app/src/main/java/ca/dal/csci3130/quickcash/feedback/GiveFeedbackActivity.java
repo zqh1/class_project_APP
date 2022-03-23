@@ -1,6 +1,5 @@
 package ca.dal.csci3130.quickcash.feedback;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -26,21 +25,15 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     private String id;
     private TextView name;
     private Spinner ratingNumSpinner;
-    private int rating;
 
     private Button submit;
-
-    private FeedbackInterface feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_feedback);
 
-        Intent intent = getIntent();
-        this.id = intent.getStringExtra("id");
-
-        feedback = new Feedback();
+        this.id = getIntent().getStringExtra("id");
 
         linkScreenItems();
         setNameOnScreen();
@@ -77,6 +70,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     private void collectInformation(){
+        int rating;
         if (ratingNumSpinner.getSelectedItem().toString().equals("1"))
             rating = 1;
         else if(ratingNumSpinner.getSelectedItem().toString().equals("2"))
@@ -88,40 +82,25 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         else
             rating = 5;
 
-        feedback.setID(id);
-        feedback.setRating(rating);
-        feedback.setNumberOfSubmit(1);
-
-        updateOrCreateFeedback();
+        updateOrCreateFeedback(rating);
     }
 
-    private void updateOrCreateFeedback() {
-        DatabaseReference db = DAO.getPreferenceReference();
-        db.orderByChild("id").equalTo(feedback.getID()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void updateOrCreateFeedback(int score) {
+        DatabaseReference db = DAO.getFeedbackDatabase();
+        db.orderByChild("id").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
 
-                    try {
-                        int getRatingFromDB = Integer.parseInt(Objects.requireNonNull(snapshot.child("rating").getValue()).toString());
-                        feedback.setRating(rating + getRatingFromDB);
-                    }
-                    catch (Exception e){
-                        feedback.setRating(feedback.getRating());
-                    }
+                    DataSnapshot data = snapshot.getChildren().iterator().next();
 
-                    try {
-                        int getCountFromDB = Integer.parseInt(Objects.requireNonNull(snapshot.child("count").getValue()).toString());
-                        feedback.setRating(1 + getCountFromDB);
-                    }
-                    catch (Exception e){
-                        feedback.setNumberOfSubmit(feedback.getNumberOfSubmit());
-                    }
+                    FeedbackInterface feedbackToPush = Objects.requireNonNull(data.getValue(Feedback.class));
 
-                    for (DataSnapshot data : snapshot.getChildren()) {
-                        db.child(Objects.requireNonNull(data.getKey())).getRef().setValue(feedback);
-                    }
-                } else pushFeedbackToFirebase();
+                    feedbackToPush.setRating(feedbackToPush.getRating() + score);
+                    feedbackToPush.setCount(feedbackToPush.getCount() + 1);
+
+                    db.child(Objects.requireNonNull(data.getKey())).getRef().setValue(feedbackToPush);
+                } else pushFeedbackToFirebase(score);
             }
 
             @Override
@@ -131,7 +110,13 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         });
     }
 
-    private void pushFeedbackToFirebase(){
+    private void pushFeedbackToFirebase(int score){
+        FeedbackInterface feedback = new Feedback();
+
+        feedback.setId(id);
+        feedback.setRating(score);
+        feedback.setCount(1);
+
         DAO.add(feedback);
     }
 

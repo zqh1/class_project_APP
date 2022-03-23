@@ -2,16 +2,15 @@ package ca.dal.csci3130.quickcash.feedback;
 
 public interface FeedbackInterface {
 
-    void setID(String id);
+    void setId(String id);
 
-    String getID();
+    String getId();
 
     void setRating(int rating);
 
     int getRating();
 
-    void setNumberOfSubmit(int count);
+    int getCount();
 
-    int getNumberOfSubmit();
-
+    void setCount(int count);
 }
