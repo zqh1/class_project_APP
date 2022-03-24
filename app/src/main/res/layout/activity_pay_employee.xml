@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".payment.PaymentActivity">
+    tools:context=".payment.PayActivity">
 
     <EditText
         android:id="@+id/enterAmount"
@@ -14,7 +14,7 @@
         android:layout_marginEnd="20dp"
         android:hint="@string/enter_amount"
         android:inputType="numberDecimal"
-        tools:ignore="Autofill"/>
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/makePaymentBtn"
@@ -24,6 +24,20 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
         android:text="@string/confirm" />
+
+    <TextView
+        android:id="@+id/idTVStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/makePaymentBtn"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textColor="@color/purple_200"
+        android:textSize="20sp" />
+
 
 
 
