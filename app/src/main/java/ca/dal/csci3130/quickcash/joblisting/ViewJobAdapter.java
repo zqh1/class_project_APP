@@ -25,10 +25,9 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
-import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
-import ca.dal.csci3130.quickcash.payment.PaymentActivity;
+import ca.dal.csci3130.quickcash.payment.PayActivity;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -223,9 +222,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             * passing accepted applicant's ID to the intent*/
             holder.paymentBtn.setOnClickListener(view -> {
 
-                Intent paymentIntent = new Intent(holder.context, PaymentActivity.class);
+                Intent paymentIntent = new Intent(holder.context, PayActivity.class);
                 /*paymentIntent.putExtra("ACCEPTED_EMPLOYEE", job.getAcceptedID());*/
-                holder.context.startActivity(new Intent(holder.context, PaymentActivity.class));
+                holder.context.startActivity(new Intent(holder.context, PayActivity.class));
 
             });
 
