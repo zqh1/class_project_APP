@@ -29,6 +29,7 @@ import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
@@ -96,6 +97,23 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             holder.context.startActivity(mapIntent);
         });
 
+        setEmployerName(holder, job);
+        setFeedback(holder, job);
+
+        //Hide or not the urgent field
+        if (!job.isUrgent()) {
+            holder.urgentTV.setVisibility(View.GONE);
+        }
+
+        //Check if user is employee or employer and bind the view
+        if (SessionManager.getUser().getIsEmployee().equals("y")) {
+            bindEmployee(holder, position, job);
+        } else {
+            bindEmployer(holder, position, job);
+        }
+    }
+
+    private void setEmployerName(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
         DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -111,7 +129,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                 Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
         //Connect to firebase
         DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee
@@ -130,24 +150,12 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                 } else holder.ratingBar.setVisibility(View.GONE);
             }
 
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(holder.context, "Error reading rating information", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        //Hide or not the urgent field
-        if (!job.isUrgent()) {
-            holder.urgentTV.setVisibility(View.GONE);
-        }
-
-        //Check if user is employee or employer and bind the view
-        if (SessionManager.getUser().getIsEmployee().equals("y")) {
-            bindEmployee(holder, position, job);
-        } else {
-            bindEmployer(holder, position, job);
-        }
     }
 
     //Bind an employee view
