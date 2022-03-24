@@ -4,6 +4,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
@@ -27,6 +29,7 @@ public class DAO {
     private static final DatabaseReference USER_DATABASE = FIREBASE_DATABASE.getReference(User.class.getSimpleName());
     private static final DatabaseReference JOB_DATABASE = FIREBASE_DATABASE.getReference(Job.class.getSimpleName());
     private static final DatabaseReference PREFERENCE_DATABASE = FIREBASE_DATABASE.getReference(Preferences.class.getSimpleName());
+    private static final DatabaseReference FEEDBACK_DATABASE = FIREBASE_DATABASE.getReference(Feedback.class.getSimpleName());
 
     /**
      * Method return the reference to the user table
@@ -53,6 +56,15 @@ public class DAO {
      */
     public static DatabaseReference getPreferenceReference() {
         return PREFERENCE_DATABASE;
+    }
+
+    /**
+     * Method return the reference to the feedback table
+     *
+     * @return DatabaseReference: Feedback table in Firebase
+     */
+    public static DatabaseReference getFeedbackDatabase(){
+        return FEEDBACK_DATABASE;
     }
 
     /**
@@ -83,5 +95,15 @@ public class DAO {
      */
     public static Task<Void> add(PreferencesInterface preferences) {
         return PREFERENCE_DATABASE.push().setValue(preferences);
+    }
+
+    /**
+     * Method add an Feedback into the feedback table in Firebase
+     *
+     * @param feedback: Feedback to be added into firebase
+     * @return task: For firebase
+     */
+    public static Task<Void> add(FeedbackInterface feedback){
+        return FEEDBACK_DATABASE.push().setValue(feedback);
     }
 }

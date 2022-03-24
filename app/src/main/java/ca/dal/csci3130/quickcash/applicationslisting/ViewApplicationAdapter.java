@@ -18,6 +18,8 @@ import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
@@ -125,6 +127,24 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
                     holder.context.startActivity(mapIntent);
                 });
+
+                DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
+                        String lastName = Objects.requireNonNull(snapshot.child("lastName").getValue()).toString();
+
+                        String employerName = "Employer name: " + firstName + " " + lastName;
+                        holder.employerName.setText(employerName);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                setFeedback(holder, job);
             }
 
             @Override
@@ -132,6 +152,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                 Toast.makeText(holder.context, "Error reading job details", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         //Set delete button listener
         holder.deleteBtn.setOnClickListener(view ->
@@ -161,6 +182,33 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                                 Toast.makeText(holder.context, "Error deleting application", Toast.LENGTH_SHORT).show();
                             }
                         }));
+    }
+
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+        //Connect to firebase
+        DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            //Get rating from each employee
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
+
+                    DataSnapshot data = snapshot.getChildren().iterator().next();
+
+                    FeedbackInterface feedback = Objects.requireNonNull(data.getValue(Feedback.class));
+
+                    float starNum = ((float) feedback.getRating()) / ((float) feedback.getCount());
+
+                    holder.ratingBar.setRating(starNum);
+
+                } else holder.ratingBar.setVisibility(View.GONE);
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(holder.context, "Error reading rating information", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
