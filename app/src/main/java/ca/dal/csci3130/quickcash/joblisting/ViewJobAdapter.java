@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
@@ -106,6 +109,30 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Connect to firebase
+        DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            //Get rating from each employee
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
+
+                    DataSnapshot data = snapshot.getChildren().iterator().next();
+
+                    FeedbackInterface feedback = Objects.requireNonNull(data.getValue(Feedback.class));
+
+                    float starNum = ((float) feedback.getRating()) / ((float) feedback.getCount());
+
+                    holder.ratingBar.setRating(starNum);
+
+                } else holder.ratingBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(holder.context, "Error reading rating information", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -254,6 +281,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final TextView dateTV;
         public final TextView statusTV;
         public final TextView employerName;
+        public final RatingBar ratingBar;
         public final Button deleteBtn;
         public final Button applicantBtn;
         public final Button applyBtn;
@@ -277,6 +305,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             dateTV = itemView.findViewById(R.id.dateTV);
             statusTV = itemView.findViewById(R.id.statusTV);
             employerName = itemView.findViewById(R.id.employerName);
+
+            ratingBar = itemView.findViewById(R.id.employerRating);
 
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             applicantBtn = itemView.findViewById(R.id.applicantBtn);

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 
 public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdapter.ApplicantViewHolder> {
 
@@ -84,6 +87,30 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
             }
         });
 
+        //Connect to firebase
+        DAO.getFeedbackDatabase().orderByChild("id").equalTo(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
+            //Get rating from each employee
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
+
+                    DataSnapshot data = snapshot.getChildren().iterator().next();
+
+                    FeedbackInterface feedback = Objects.requireNonNull(data.getValue(Feedback.class));
+
+                    float starNum = ((float) feedback.getRating()) / ((float) feedback.getCount());
+
+                    holder.ratingBar.setRating(starNum);
+
+                } else holder.ratingBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(holder.context, "Error reading rating information", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         //Connect to firebase
         DatabaseReference jobDatabase = DAO.getJobReference().child(jobKey);
@@ -129,6 +156,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
         private final TextView applicantName;
         private final Button accept;
         private final Context context;
+        private final RatingBar ratingBar;
 
         /**
          * ApplicantViewHolder constructor, link all item on screen
@@ -143,6 +171,8 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
             applicantName = itemView.findViewById(R.id.applicantNameTV);
 
             accept = itemView.findViewById(R.id.acceptBtn);
+
+            ratingBar = itemView.findViewById(R.id.employeeRating);
         }
     }
 }
