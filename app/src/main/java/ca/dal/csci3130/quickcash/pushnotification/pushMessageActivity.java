@@ -74,7 +74,7 @@ public class pushMessageActivity extends AppCompatActivity {
 
 
                     //TODO
-                    headers.put("authorization", "key=" + BuildConfig.);
+                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
                     return headers;
                 }
             };
