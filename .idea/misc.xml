@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/abc.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_employee_home.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_employer_home.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_give_feedback.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_job.xml" value="0.31145833333333334" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_job_map.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_preferences_filling.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_signup.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_view_applicants.xml" value="0.3302083333333333" />
+        <entry key="..\:/Users/h/git/zu/csci-3130-client-ta-project-group-17/app/src/main/res/layout/activity_view_job.xml" value="0.31145833333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
