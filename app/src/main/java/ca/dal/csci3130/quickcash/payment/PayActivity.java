@@ -28,13 +28,16 @@ import java.math.BigDecimal;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
 
 public class PayActivity extends AppCompatActivity {
 
+    private boolean isPaid;
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private PayPalConfiguration payPConfig;
     EditText enterAmount;
     Button makePaymentBtn;
+    Button backBtn;
     TextView paymentTV;
 
     @Override
@@ -53,15 +56,8 @@ public class PayActivity extends AppCompatActivity {
         enterAmount = findViewById(R.id.enterAmount);
         makePaymentBtn = findViewById(R.id.makePaymentBtn);
         paymentTV = findViewById(R.id.idTVStatus);
+        backBtn = findViewById(R.id.backBtn);
     }
-
-    /*
-     *
-     * IMPORTANT!
-     * You will only be able to retrieve PAYPAL_CLIENT_ID from BuildConfig if you add the client id
-     * to your 'local.properties' file. Do not manually add it to BuildConfig.
-     *
-     * */
 
     private void configPP() {
         payPConfig = new PayPalConfiguration()
@@ -70,20 +66,30 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        makePaymentBtn.setOnClickListener(v -> processPayment());
+        makePaymentBtn.setOnClickListener(v ->
+                processPayment());
+
+        backBtn.setOnClickListener(view ->
+                redirectViewJobs());
     }
 
     private void processPayment() {
         final String amount = enterAmount.getText().toString();
-        final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(amount)
-                , "CAD", "Compensate Employee", PayPalPayment.PAYMENT_INTENT_SALE);
-        final Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPConfig);
-        intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
-        activityResultLauncher.launch(intent);
+
+        if (validAmount(Integer.parseInt(amount))) {
+            final PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(amount)
+                    , "CAD", "Compensate Employee", PayPalPayment.PAYMENT_INTENT_SALE);
+            final Intent intent = new Intent(this, PaymentActivity.class);
+            intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, payPConfig);
+            intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+            activityResultLauncher.launch(intent);
+        } else {
+            Toast.makeText(PayActivity.this, "Invalid amount, try again", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initActivityLauncher() {
+        isPaid = false;
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -97,6 +103,7 @@ public class PayActivity extends AppCompatActivity {
                         String state = payObj.getJSONObject("response").getString("state");
                         paymentTV.setText("Payment " + state + "\n  Your payment id is " + payID);
                         Toast.makeText(PayActivity.this, "Payment Successful", Toast.LENGTH_SHORT).show();
+                        isPaid = true;
                     } catch (JSONException e) {
 
                         Log.e("Error", "an extremely unlikely failure occurred: ", e);
@@ -109,6 +116,15 @@ public class PayActivity extends AppCompatActivity {
                 Log.d(TAG, "Launcher Result Cancelled");
             }
         });
+    }
 
+    private void redirectViewJobs() {
+        Intent viewJobIntent = new Intent(this, ViewJobActivity.class);
+        viewJobIntent.putExtra("PAYMENT_STATUS", isPaid);
+        this.startActivity(viewJobIntent);
+    }
+    private boolean validAmount(int amount) {
+        return amount > 13.35 && (amount <= (getIntent().getIntExtra("JOBSALARY", 0)
+                * getIntent().getIntExtra("JOBDURATION", 0)));
     }
 }

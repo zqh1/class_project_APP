@@ -223,8 +223,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             holder.paymentBtn.setOnClickListener(view -> {
 
                 Intent paymentIntent = new Intent(holder.context, PayActivity.class);
-                /*paymentIntent.putExtra("ACCEPTED_EMPLOYEE", job.getAcceptedID());*/
-                holder.context.startActivity(new Intent(holder.context, PayActivity.class));
+                paymentIntent.putExtra("JOBSALARY", job.getSalary());
+                paymentIntent.putExtra("JOBDURATION", job.getDuration());
+                holder.context.startActivity(paymentIntent);
 
             });
 
