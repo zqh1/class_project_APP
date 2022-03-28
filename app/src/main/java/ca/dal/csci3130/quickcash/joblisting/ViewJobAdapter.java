@@ -166,6 +166,10 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         //Disable buttons not related to employer
         holder.applyBtn.setVisibility(View.GONE);
 
+        if(job.isPaid()){
+            holder.paymentBtn.setVisibility(View.GONE);
+        }
+
         //If an employee has not been accepted, set open status and set applicants button listener
         if (job.getAcceptedID().isEmpty()) {
 
@@ -222,7 +226,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                 Intent paymentIntent = new Intent(holder.context, PayActivity.class);
                 paymentIntent.putExtra("JOBSALARY", job.getSalary());
                 paymentIntent.putExtra("JOBDURATION", job.getDuration());
-
+                paymentIntent.putExtra("KEY", Objects.requireNonNull(getRef(position).getKey()));
 
 
                 holder.context.startActivity(paymentIntent);

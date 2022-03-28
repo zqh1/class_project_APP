@@ -15,6 +15,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import com.google.firebase.database.DatabaseReference;
+
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -28,11 +31,13 @@ import java.math.BigDecimal;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
+
 
 public class PayActivity extends AppCompatActivity {
 
-    private boolean isPaid;
+
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private PayPalConfiguration payPConfig;
     EditText enterAmount;
@@ -89,7 +94,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void initActivityLauncher() {
-        isPaid = false;
+
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
@@ -102,7 +107,7 @@ public class PayActivity extends AppCompatActivity {
                         String state = payObj.getJSONObject("response").getString("state");
                         paymentTV.setText("Payment " + state + "\n  Your payment id is " + payID);
                         Toast.makeText(PayActivity.this, "Payment Successful", Toast.LENGTH_SHORT).show();
-                        isPaid = true;
+                        updateJob();
                     } catch (JSONException e) {
 
                         Log.e("Error", "an extremely unlikely failure occurred: ", e);
@@ -116,18 +121,23 @@ public class PayActivity extends AppCompatActivity {
             }
         });
     }
-    //todo disable phone back button
+
     private void redirectViewJobs() {
         Intent viewJobIntent = new Intent(this, ViewJobActivity.class);
-        viewJobIntent.putExtra("PAYMENT_STATUS", isPaid);
         this.startActivity(viewJobIntent);
+    }
+
+    private void updateJob() {
+        String key = getIntent().getStringExtra("KEY");
+        DatabaseReference dbref = DAO.getJobReference();
+        dbref.child(key).child("isPaid").setValue(true);
     }
 
     private boolean validAmount(int amount) {
 
         double salary = getIntent().getDoubleExtra("JOBSALARY", 0);
         int duration = getIntent().getIntExtra("JOBDURATION", 0);
-        double minimum = salary*duration;
+        double minimum = salary * duration;
 
         return amount >= minimum;
     }
