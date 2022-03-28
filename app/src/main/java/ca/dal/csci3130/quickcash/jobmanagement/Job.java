@@ -9,6 +9,7 @@ public class Job implements JobInterface {
     private int duration;
     private double salary;
     private boolean urgent;
+    private boolean isPaid;
 
     private int year;
     private int month;
@@ -326,4 +327,8 @@ public class Job implements JobInterface {
     public void setAcceptedID(String acceptedID) {
         this.acceptedID = acceptedID;
     }
+
+    public void setIsPaid(boolean paid){this.isPaid = paid;}
+
+    public boolean getIsPaid(){return this.isPaid;}
 }

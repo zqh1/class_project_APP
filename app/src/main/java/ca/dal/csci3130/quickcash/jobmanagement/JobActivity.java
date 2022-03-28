@@ -299,6 +299,9 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             job.setSalary(0);
         }
 
+        //todo hereee setting job payment status to false upon creation
+        job.setIsPaid(false);
+
         return job;
     }
 

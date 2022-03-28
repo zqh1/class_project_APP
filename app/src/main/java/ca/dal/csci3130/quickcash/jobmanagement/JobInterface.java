@@ -236,4 +236,7 @@ public interface JobInterface {
      * @param acceptedID: an employee ID who got accepted.
      */
     void setAcceptedID(String acceptedID);
+
+    void setIsPaid(boolean isPaid);
+    boolean getIsPaid();
 }

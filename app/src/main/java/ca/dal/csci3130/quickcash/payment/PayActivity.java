@@ -96,7 +96,6 @@ public class PayActivity extends AppCompatActivity {
                 PaymentConfirmation confirmation = result.getData().getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
                 if (confirmation != null) {
                     try {
-
                         String paymentDetails = confirmation.toJSONObject().toString(4);
                         JSONObject payObj = new JSONObject(paymentDetails);
                         String payID = payObj.getJSONObject("response").getString("id");
@@ -117,14 +116,20 @@ public class PayActivity extends AppCompatActivity {
             }
         });
     }
-
+    //todo disable phone back button
     private void redirectViewJobs() {
         Intent viewJobIntent = new Intent(this, ViewJobActivity.class);
         viewJobIntent.putExtra("PAYMENT_STATUS", isPaid);
         this.startActivity(viewJobIntent);
     }
+
     private boolean validAmount(int amount) {
-        return amount > 13.35 && (amount <= (getIntent().getIntExtra("JOBSALARY", 0)
-                * getIntent().getIntExtra("JOBDURATION", 0)));
+
+        double salary = getIntent().getDoubleExtra("JOBSALARY", 0);
+        int duration = getIntent().getIntExtra("JOBDURATION", 0);
+        double minimum = salary*duration;
+
+        return amount >= minimum;
     }
+
 }
