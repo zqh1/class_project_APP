@@ -9,8 +9,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
@@ -21,6 +25,8 @@ import java.util.Map;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
+import ca.dal.csci3130.quickcash.usermanagement.LoginActivity;
 
 public class pushMessageActivity extends AppCompatActivity {
     private static final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
@@ -42,7 +48,19 @@ public class pushMessageActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        submit.setOnClickListener(view -> sendNotification());
+
+        DAO.getUserReference().orderByChild("isEmployee").equalTo("y").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                submit.setOnClickListener(view -> sendNotification());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(pushMessageActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void sendNotification() {
