@@ -41,18 +41,25 @@ public class pushMessageActivity extends AppCompatActivity {
         setListeners();
     }
 
+    //initialize variables and call methods;
     private void init() {
         submit = findViewById(R.id.postBtn);
         requestQueue = Volley.newRequestQueue(this);
         FirebaseMessaging.getInstance().subscribeToTopic("Job");
     }
 
-
+    /***
+     * setListeners method
+     * This method will get user who is employee and send notifications to their phone once a job is created
+     */
     private void setListeners() {
         submit.setOnClickListener(view -> sendNotification());
     }
 
-
+    /***
+     * sendNotification method
+     * This method will create the structure of a notification and then send a notifications to the
+     */
     private void sendNotification() {
         try {
             final JSONObject notificationJSONBody = new JSONObject();
