@@ -73,6 +73,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         //Disable buttons not related to employee or search
         if (!search) holder.applyBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
+        holder.paymentBtn.setVisibility(View.GONE);
 
         //Query job details
         DAO.getJobReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {

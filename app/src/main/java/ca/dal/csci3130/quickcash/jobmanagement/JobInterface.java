@@ -236,4 +236,18 @@ public interface JobInterface {
      * @param acceptedID: an employee ID who got accepted.
      */
     void setAcceptedID(String acceptedID);
+
+    boolean isPaid();
+
+    void setPaid(boolean paid);
+
+    boolean isEmployeeFeedback();
+
+    void setEmployeeFeedback(boolean employeeFeedback);
+
+    boolean isEmployerFeedback();
+
+    void setEmployerFeedback(boolean employerFeedback);
+
+
 }
