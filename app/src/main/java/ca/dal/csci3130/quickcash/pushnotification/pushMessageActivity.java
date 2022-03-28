@@ -47,21 +47,11 @@ public class pushMessageActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("Job");
     }
 
+
     private void setListeners() {
-
-        DAO.getUserReference().orderByChild("isEmployee").equalTo("y").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                submit.setOnClickListener(view -> sendNotification());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(pushMessageActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        submit.setOnClickListener(view -> sendNotification());
     }
+
 
     private void sendNotification() {
         try {
@@ -76,29 +66,36 @@ public class pushMessageActivity extends AppCompatActivity {
             pushNotificationJSONBody.put("to", "/topics/User");
             pushNotificationJSONBody.put("notification", notificationJSONBody);
             pushNotificationJSONBody.put("data", dataJSONBody);
-
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                    PUSH_NOTIFICATION_ENDPOINT,
-                    pushNotificationJSONBody,
-                    response ->
-                            Toast.makeText(pushMessageActivity.this,
-                                    "Push notification sent.",
-                                    Toast.LENGTH_SHORT).show(),
-                    Throwable::printStackTrace) {
+            DAO.getUserReference().orderByChild("isEmployee").equalTo("y").addValueEventListener(new ValueEventListener() {
                 @Override
-                public Map<String, String> getHeaders() {
-                    final Map<String, String> headers = new HashMap<>();
-                    headers.put("content-type", "application/json");
-
-
-                    //TODO
-                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
-                    return headers;
-                }
-            };
-
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                            PUSH_NOTIFICATION_ENDPOINT,
+                            pushNotificationJSONBody,
+                            response ->
+                                    Toast.makeText(pushMessageActivity.this,
+                                            "Push notification sent.",
+                                            Toast.LENGTH_SHORT).show(),
+                            Throwable::printStackTrace) {
+                        @Override
+                        public Map<String, String> getHeaders() {
+                            final Map<String, String> headers = new HashMap<>();
+                            headers.put("content-type", "application/json");
+                            headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                            return headers;
+                        }
+                    };
                     requestQueue.add(request);
-        } catch (JSONException e) {
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(pushMessageActivity.this, "Database connection error", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        }
+        catch (JSONException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
