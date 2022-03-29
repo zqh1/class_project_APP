@@ -130,7 +130,7 @@ public class PayActivity extends AppCompatActivity {
     private void updateJob() {
         String key = getIntent().getStringExtra("KEY");
         DatabaseReference dbref = DAO.getJobReference();
-        dbref.child(key).child("isPaid").setValue(true);
+        dbref.child(key).child("paid").setValue(true);
     }
 
     private boolean validAmount(int amount) {

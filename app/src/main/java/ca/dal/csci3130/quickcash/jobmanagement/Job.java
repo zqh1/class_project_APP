@@ -9,7 +9,7 @@ public class Job implements JobInterface {
     private int duration;
     private double salary;
     private boolean urgent;
-    private boolean isPaid = false;
+    private boolean paid = false;
     private boolean employeeFeedback = false;
     private boolean employerFeedback = false;
 
@@ -332,11 +332,11 @@ public class Job implements JobInterface {
 
 
     public boolean isPaid() {
-        return isPaid;
+        return paid;
     }
 
     public void setPaid(boolean paid) {
-        isPaid = paid;
+        this.paid = paid;
     }
 
     public boolean isEmployeeFeedback() {
