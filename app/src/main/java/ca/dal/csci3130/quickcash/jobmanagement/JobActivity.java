@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,9 +30,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.android.volley.toolbox.Volley;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
@@ -52,7 +62,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     Button mapBtn;
 
     SwitchCompat urgentSwitch;
-
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     static final Integer MAP_REQUEST_CODE = 4254;
@@ -63,6 +72,10 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     LatLng latlng;
 
     JobVerification verification;
+
+    private static final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
+    private RequestQueue requestQueue;
+
 
     /**
      * OnCreate method, Initialize activity call multiple method
@@ -82,6 +95,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         linkScreenItems();
         setButtonsListeners();
 
+        requestQueue = Volley.newRequestQueue(this);
         calendar = Calendar.getInstance();
         userCalendar = Calendar.getInstance();
         verification = new JobVerification();
@@ -140,6 +154,8 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     private void postButtonListener() {
 
         postBtn.setEnabled(false);
+
+        sendNotification();
         verification.setJob(readJobInformation());
         verifyFields();
     }
@@ -299,7 +315,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             job.setSalary(0);
         }
 
-
         return job;
     }
 
@@ -342,5 +357,41 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     //Return user UI to employer homepage
     private void redirectEmployerHome() {
         startActivity(new Intent(this, EmployerHomeActivity.class));
+    }
+
+
+
+
+    public void sendNotification() {
+        try {
+            final JSONObject notificationJSONBody = new JSONObject();
+            notificationJSONBody.put("title", "New Job Created!");
+            notificationJSONBody.put("body", "A new job is created in your city.");
+
+            final JSONObject pushNotificationJSONBody = new JSONObject();
+            pushNotificationJSONBody.put("to", "/topics/Employee");
+            pushNotificationJSONBody.put("notification", notificationJSONBody);
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                    PUSH_NOTIFICATION_ENDPOINT,
+                    pushNotificationJSONBody,
+                    response ->
+                            Toast.makeText(JobActivity.this,
+                                    "Push notification sent.",
+                                    Toast.LENGTH_SHORT).show(),
+                    Throwable::printStackTrace) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    final Map<String, String> headers = new HashMap<>();
+                    headers.put("content-type", "application/json");
+                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                    return headers;
+                }
+            };
+            requestQueue.add(request);
+        }
+        catch (JSONException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
 }

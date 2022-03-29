@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
@@ -140,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         String hashPassword = Signup.getSHA256SecurePassword(password, salt);
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
-
+                            FirebaseMessaging.getInstance().subscribeToTopic("Employees");
                             SessionManagerInterface session = new SessionManager(LoginActivity.this);
                             session.createLoginSession(data.getKey());
 
