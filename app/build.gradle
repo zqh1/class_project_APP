@@ -13,7 +13,7 @@ credentialsProperties.load(new FileInputStream(credentialsPropertiesFile))
 
 android {
     compileSdk 31
-    compileSdkVersion 27
+    compileSdkVersion 31
     defaultConfig {
         applicationId "ca.dal.csci3130.quickcash"
         minSdk 23
