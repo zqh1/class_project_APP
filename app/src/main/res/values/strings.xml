@@ -91,6 +91,7 @@
     <string name="personname">PersonName</string>
     <string name="you_are_giving">You are giving</string>
     <string name="point_s">Point(s)</string>
+    <string name="give_feedback">Give feedback</string>
     <string-array name="ratingNum">
         <item>1</item>
         <item>2</item>

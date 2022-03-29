@@ -150,6 +150,15 @@
             android:textColor="@color/black" />
 
         <Button
+            android:id="@+id/feedbackBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/give_feedback"
+            android:textColor="@color/black" />
+
+        <Button
             android:id="@+id/deleteBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
