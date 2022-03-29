@@ -171,10 +171,10 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.feedbackBtn.setVisibility(View.GONE);
 
 
-        if (job.isPaid()) {
+        if (job.getPaid()) {
             holder.feedbackBtn.setVisibility(View.VISIBLE);
 
-            if (job.isEmployeeFeedback()) {
+            if (job.getEmployeeFeedback()) {
                 holder.feedbackBtn.setVisibility(View.GONE);
             }
         }
@@ -241,10 +241,10 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.feedbackBtn.setVisibility(View.GONE);
 
 
-        if (job.isPaid()) {
+        if (job.getPaid()) {
             holder.feedbackBtn.setVisibility(View.VISIBLE);
 
-            if (job.isEmployerFeedback()) {
+            if (job.getEmployerFeedback()) {
                 holder.feedbackBtn.setVisibility(View.GONE);
             }
         }

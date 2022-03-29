@@ -114,9 +114,14 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     statusLabel = "Status: Rejected";
                 }
 
-                if (job.isPaid()) {
+                if (job.getPaid()) {
                     holder.feedbackBtn.setVisibility(View.VISIBLE);
+
+                    if (job.getEmployeeFeedback()) {
+                        holder.feedbackBtn.setVisibility(View.GONE);
+                    }
                 }
+
 
                 //Set screen labels
                 holder.jobTitleTV.setText(job.getTitle());
