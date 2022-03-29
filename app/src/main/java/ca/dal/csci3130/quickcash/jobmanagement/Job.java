@@ -331,7 +331,7 @@ public class Job implements JobInterface {
     }
 
 
-    public boolean isPaid() {
+    public boolean getPaid() {
         return paid;
     }
 
@@ -339,7 +339,7 @@ public class Job implements JobInterface {
         this.paid = paid;
     }
 
-    public boolean isEmployeeFeedback() {
+    public boolean getEmployeeFeedback() {
         return employeeFeedback;
     }
 
@@ -347,7 +347,7 @@ public class Job implements JobInterface {
         this.employeeFeedback = employeeFeedback;
     }
 
-    public boolean isEmployerFeedback() {
+    public boolean getEmployerFeedback() {
         return employerFeedback;
     }
 

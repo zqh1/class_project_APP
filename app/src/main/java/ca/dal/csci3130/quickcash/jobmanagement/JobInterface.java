@@ -237,15 +237,15 @@ public interface JobInterface {
      */
     void setAcceptedID(String acceptedID);
 
-    boolean isPaid();
+    boolean getPaid();
 
     void setPaid(boolean paid);
 
-    boolean isEmployeeFeedback();
+    boolean getEmployeeFeedback();
 
     void setEmployeeFeedback(boolean employeeFeedback);
 
-    boolean isEmployerFeedback();
+    boolean getEmployerFeedback();
 
     void setEmployerFeedback(boolean employerFeedback);
 
