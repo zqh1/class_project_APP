@@ -5,7 +5,7 @@ plugins {
 
 
 
-def credentialsPropertiesFile = rootProject.file("local.properties")
+def credentialsPropertiesFile = rootProject.file("key.properties")
 def credentialsProperties = new Properties()
 credentialsProperties.load(new FileInputStream(credentialsPropertiesFile))
 credentialsProperties.load(new FileInputStream(credentialsPropertiesFile))
