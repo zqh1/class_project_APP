@@ -20,6 +20,7 @@ import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
+import ca.dal.csci3130.quickcash.feedback.GiveFeedbackActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
@@ -73,6 +74,9 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         //Disable buttons not related to employee or search
         if (!search) holder.applyBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
+        holder.paymentBtn.setVisibility(View.GONE);
+        holder.feedbackBtn.setVisibility(View.GONE);
+
 
         //Query job details
         DAO.getJobReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -110,6 +114,15 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     statusLabel = "Status: Rejected";
                 }
 
+                if (job.getPaid()) {
+                    holder.feedbackBtn.setVisibility(View.VISIBLE);
+
+                    if (job.getEmployeeFeedback()) {
+                        holder.feedbackBtn.setVisibility(View.GONE);
+                    }
+                }
+
+
                 //Set screen labels
                 holder.jobTitleTV.setText(job.getTitle());
                 holder.descriptionTV.setText(job.getDescription());
@@ -126,6 +139,12 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     mapIntent.putExtra("LATITUDE", job.getLatitude());
 
                     holder.context.startActivity(mapIntent);
+                });
+
+                holder.feedbackBtn.setOnClickListener(view -> {
+                    Intent feedbackIntent = new Intent(holder.context, GiveFeedbackActivity.class);
+                    feedbackIntent.putExtra("id", job.getEmployerID());
+                    holder.context.startActivity(feedbackIntent);
                 });
 
                 DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -184,7 +203,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                         }));
     }
 
-    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
         //Connect to firebase
         DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee

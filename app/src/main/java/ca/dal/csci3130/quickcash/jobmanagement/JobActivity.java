@@ -299,6 +299,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             job.setSalary(0);
         }
 
+
         return job;
     }
 

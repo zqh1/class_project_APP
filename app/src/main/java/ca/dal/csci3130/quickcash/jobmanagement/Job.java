@@ -9,6 +9,9 @@ public class Job implements JobInterface {
     private int duration;
     private double salary;
     private boolean urgent;
+    private boolean paid = false;
+    private boolean employeeFeedback = false;
+    private boolean employerFeedback = false;
 
     private int year;
     private int month;
@@ -325,5 +328,30 @@ public class Job implements JobInterface {
      */
     public void setAcceptedID(String acceptedID) {
         this.acceptedID = acceptedID;
+    }
+
+
+    public boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public boolean getEmployeeFeedback() {
+        return employeeFeedback;
+    }
+
+    public void setEmployeeFeedback(boolean employeeFeedback) {
+        this.employeeFeedback = employeeFeedback;
+    }
+
+    public boolean getEmployerFeedback() {
+        return employerFeedback;
+    }
+
+    public void setEmployerFeedback(boolean employerFeedback) {
+        this.employerFeedback = employerFeedback;
     }
 }

@@ -18,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -28,9 +29,11 @@ import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
+import ca.dal.csci3130.quickcash.feedback.GiveFeedbackActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
+import ca.dal.csci3130.quickcash.payment.PayActivity;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -113,7 +116,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         }
     }
 
-    private void setEmployerName(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+    private void setEmployerName(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
         DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -131,7 +134,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         });
     }
 
-    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
         //Connect to firebase
         DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee
@@ -164,6 +167,17 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         //Disable buttons not related to employee
         holder.deleteBtn.setVisibility(View.GONE);
         holder.applicantBtn.setVisibility(View.GONE);
+        holder.paymentBtn.setVisibility(View.GONE);
+        holder.feedbackBtn.setVisibility(View.GONE);
+
+
+        if (job.getPaid()) {
+            holder.feedbackBtn.setVisibility(View.VISIBLE);
+
+            if (job.getEmployeeFeedback()) {
+                holder.feedbackBtn.setVisibility(View.GONE);
+            }
+        }
 
         //Set status label
         String label;
@@ -208,6 +222,15 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                             }
                         })
         );
+
+        holder.feedbackBtn.setOnClickListener(view -> {
+            Intent feedbackIntent = new Intent(holder.context, GiveFeedbackActivity.class);
+            feedbackIntent.putExtra("id", job.getEmployerID());
+            holder.context.startActivity(feedbackIntent);
+            DatabaseReference dbref = DAO.getJobReference();
+            dbref.child(Objects.requireNonNull(getRef(position).getKey())).child("employeeFeedback").setValue(true);
+        });
+
     }
 
     //Bind the employer view
@@ -215,9 +238,23 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         //Disable buttons not related to employer
         holder.applyBtn.setVisibility(View.GONE);
+        holder.feedbackBtn.setVisibility(View.GONE);
+
+
+        if (job.getPaid()) {
+            holder.feedbackBtn.setVisibility(View.VISIBLE);
+
+            if (job.getEmployerFeedback()) {
+                holder.feedbackBtn.setVisibility(View.GONE);
+            }
+        }
+
 
         //If an employee has not been accepted, set open status and set applicants button listener
         if (job.getAcceptedID().isEmpty()) {
+
+            //disable payment button if no applicant accepted
+            holder.paymentBtn.setVisibility(View.GONE);
 
             String statusText = "Status: Open position";
             holder.statusTV.setText(statusText);
@@ -263,7 +300,28 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                     Toast.makeText(holder.context, "Error while retrieving employee name", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            holder.paymentBtn.setOnClickListener(view -> {
+
+                Intent paymentIntent = new Intent(holder.context, PayActivity.class);
+                paymentIntent.putExtra("JOBSALARY", job.getSalary());
+                paymentIntent.putExtra("JOBDURATION", job.getDuration());
+                paymentIntent.putExtra("KEY", Objects.requireNonNull(getRef(position).getKey()));
+                holder.context.startActivity(paymentIntent);
+
+
+            });
+
+            holder.feedbackBtn.setOnClickListener(view -> {
+                Intent feedbackIntent = new Intent(holder.context, GiveFeedbackActivity.class);
+                feedbackIntent.putExtra("id", job.getAcceptedID());
+                holder.context.startActivity(feedbackIntent);
+                DatabaseReference dbref = DAO.getJobReference();
+                dbref.child(Objects.requireNonNull(getRef(position).getKey())).child("employerFeedback").setValue(true);
+            });
+
         }
+
 
         //Set delete button listeners
         holder.deleteBtn.setOnClickListener(view ->
@@ -294,6 +352,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final Button applicantBtn;
         public final Button applyBtn;
         public final Button mapBtn;
+        public final Button paymentBtn;
+        public final Button feedbackBtn;
 
         /**
          * JobViewHolder constructor, link all item on screen
@@ -320,6 +380,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             applicantBtn = itemView.findViewById(R.id.applicantBtn);
             applyBtn = itemView.findViewById(R.id.applyBtn);
             mapBtn = itemView.findViewById(R.id.mapBtn);
+            feedbackBtn = itemView.findViewById(R.id.feedbackBtn);
+            paymentBtn = itemView.findViewById(R.id.paymentBtn);
         }
     }
 }

@@ -95,6 +95,15 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         tools:text="Status: -----" />
+    <TextView
+        android:id="@+id/paymentStatusTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="Payment Status: -----" />
 
 
     <LinearLayout
@@ -129,6 +138,24 @@
             android:layout_weight="1"
             android:backgroundTint="@android:color/background_light"
             android:text="@string/view_applicant_Label"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/paymentBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/pay_employee_Label"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/feedbackBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_light"
+            android:text="@string/give_feedback"
             android:textColor="@color/black" />
 
         <Button
