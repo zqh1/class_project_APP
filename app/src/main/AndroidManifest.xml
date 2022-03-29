@@ -18,7 +18,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.QuickCash" >
+        android:theme="@style/Theme.QuickCash">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -67,6 +67,9 @@
             android:exported="false" />
         <activity
             android:name=".payment.PayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feedback.GiveFeedbackActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

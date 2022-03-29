@@ -10,8 +10,8 @@ public class Job implements JobInterface {
     private double salary;
     private boolean urgent;
     private boolean isPaid = false;
-    private boolean employeeFeedback;
-    private boolean employerFeedback;
+    private boolean employeeFeedback = false;
+    private boolean employerFeedback = false;
 
     private int year;
     private int month;

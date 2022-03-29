@@ -84,4 +84,19 @@
     <string name="confirm">Confirm</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="back">Back</string>
+
+    <string name="ratingTitle">Please rate this person</string>
+    <string name="ratingPoints">Rating Points</string>
+    <string name="submit">submit</string>
+    <string name="personname">PersonName</string>
+    <string name="you_are_giving">You are giving</string>
+    <string name="point_s">Point(s)</string>
+    <string-array name="ratingNum">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
 </resources>
