@@ -42,6 +42,7 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
+import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class JobActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -72,6 +73,8 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     LatLng latlng;
 
     JobVerification verification;
+
+    JobInterface job;
 
     private static final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
     private RequestQueue requestQueue;
@@ -288,7 +291,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      */
     private JobInterface readJobInformation() {
 
-        JobInterface job = new Job();
+        job = new Job();
 
         job.setEmployerID(SessionManager.getUserID());
         job.setTitle(jobTitle.getText().toString().trim());
@@ -361,7 +364,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
 
 
-
     public void sendNotification() {
         try {
             final JSONObject notificationJSONBody = new JSONObject();
@@ -371,27 +373,40 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             final JSONObject pushNotificationJSONBody = new JSONObject();
             pushNotificationJSONBody.put("to", "/topics/Employee");
             pushNotificationJSONBody.put("notification", notificationJSONBody);
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                    PUSH_NOTIFICATION_ENDPOINT,
-                    pushNotificationJSONBody,
-                    response ->
-                            Toast.makeText(JobActivity.this,
-                                    "Push notification sent.",
-                                    Toast.LENGTH_SHORT).show(),
-                    Throwable::printStackTrace) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    final Map<String, String> headers = new HashMap<>();
-                    headers.put("content-type", "application/json");
-                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
-                    return headers;
-                }
-            };
-            requestQueue.add(request);
+            /**
+            Preferences employeePre = new Preferences();
+            int distance = employeePre.getMaxDistance();
+            double salary = employeePre.getSalary();
+            int duration = employeePre.getDuration();
+            double jobLatitude = job.getLatitude();
+            double jobLongitude = job.getLongitude();
+            float[] distanceToJob = new float[1];
+            */
+            //Location.distanceBetween(jobLatitude, jobLongitude, latlng.latitude, latlng.longitude, distanceToJob);
+           // if(job.getDuration() <= duration || job.getSalary() >= salary || distance * 1000 >= distanceToJob[0]) {
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                        PUSH_NOTIFICATION_ENDPOINT,
+                        pushNotificationJSONBody,
+                        response ->
+                                Toast.makeText(JobActivity.this,
+                                        "Push notification sent.",
+                                        Toast.LENGTH_SHORT).show(),
+                        Throwable::printStackTrace) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        final Map<String, String> headers = new HashMap<>();
+                        headers.put("content-type", "application/json");
+                        headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                        return headers;
+                    }
+                };
+                requestQueue.add(request);
+            //}
         }
         catch (JSONException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
+
 }
