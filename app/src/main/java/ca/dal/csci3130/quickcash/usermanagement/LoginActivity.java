@@ -141,7 +141,9 @@ public class LoginActivity extends AppCompatActivity {
                         String hashPassword = Signup.getSHA256SecurePassword(password, salt);
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
-                            FirebaseMessaging.getInstance().subscribeToTopic("Employees");
+                            if(Objects.equals(data.child("isEmployee").getValue(), "y")) {
+                                FirebaseMessaging.getInstance().subscribeToTopic("Employees");
+                            }
                             SessionManagerInterface session = new SessionManager(LoginActivity.this);
                             session.createLoginSession(data.getKey());
 

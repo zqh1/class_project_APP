@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
@@ -33,6 +34,9 @@ import com.google.android.gms.tasks.Task;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -41,8 +45,11 @@ import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class JobActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -371,37 +378,44 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             notificationJSONBody.put("body", "A new job is created in your city.");
 
             final JSONObject pushNotificationJSONBody = new JSONObject();
-            pushNotificationJSONBody.put("to", "/topics/Employee");
+            pushNotificationJSONBody.put("to", "/topics/jobs");
             pushNotificationJSONBody.put("notification", notificationJSONBody);
-            /**
-            Preferences employeePre = new Preferences();
-            int distance = employeePre.getMaxDistance();
-            double salary = employeePre.getSalary();
-            int duration = employeePre.getDuration();
-            double jobLatitude = job.getLatitude();
-            double jobLongitude = job.getLongitude();
-            float[] distanceToJob = new float[1];
-            */
-            //Location.distanceBetween(jobLatitude, jobLongitude, latlng.latitude, latlng.longitude, distanceToJob);
-           // if(job.getDuration() <= duration || job.getSalary() >= salary || distance * 1000 >= distanceToJob[0]) {
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                        PUSH_NOTIFICATION_ENDPOINT,
-                        pushNotificationJSONBody,
-                        response ->
-                                Toast.makeText(JobActivity.this,
-                                        "Push notification sent.",
-                                        Toast.LENGTH_SHORT).show(),
-                        Throwable::printStackTrace) {
-                    @Override
-                    public Map<String, String> getHeaders() {
-                        final Map<String, String> headers = new HashMap<>();
-                        headers.put("content-type", "application/json");
-                        headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
-                        return headers;
-                    }
-                };
-                requestQueue.add(request);
-            //}
+            DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
+                                for (DataSnapshot data : snapshot.getChildren()) {
+
+                                    PreferencesInterface preferences = data.getValue(Preferences.class);
+                                    if (Objects.requireNonNull(preferences).getDuration() == job.getDuration() || preferences.getSalary() == job.getSalary()) {
+                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                                                PUSH_NOTIFICATION_ENDPOINT,
+                                                pushNotificationJSONBody,
+                                                response ->
+                                                        Toast.makeText(JobActivity.this,
+                                                                "Push notification sent.",
+                                                                Toast.LENGTH_SHORT).show(),
+                                                Throwable::printStackTrace) {
+                                            @Override
+                                            public Map<String, String> getHeaders() {
+                                                final Map<String, String> headers = new HashMap<>();
+                                                headers.put("content-type", "application/json");
+                                                headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                                                return headers;
+                                            }
+                                        };
+                                        requestQueue.add(request);
+                                    }
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(JobActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
         catch (JSONException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

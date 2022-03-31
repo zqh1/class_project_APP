@@ -37,15 +37,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         final String body = message.getNotification().getBody();
 
         final Map<String, String> data = message.getData();
-        final String detail = data.get("detail");
+        final String jobId = data.get("jobId");
+        final String jobLocation = data.get("jobLocation");
 
         // Create an intent to start activity when the notification is clicked.
         Intent intent = new Intent(this, EmployeeHomeActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
-        intent.putExtra("detail", detail);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 10, intent,  PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 10, intent,  PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create a notification that will be displayed in the notification tray.
         NotificationCompat.Builder notificationBuilder =
