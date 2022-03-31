@@ -12,7 +12,6 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Objects;
 
-import ca.dal.csci3130.quickcash.common.DAO;
 
 /**
  * Signup class, this class contains implementation of signup activity
@@ -22,6 +21,7 @@ public class Signup {
     private final SignupActivity activity;
     private boolean userDataCorrect;
     private UserInterface user;
+
 
     /**
      * Constructor of signup class without a connected activity
@@ -158,7 +158,7 @@ public class Signup {
     private void verifyUniqueEmail(String email) {
 
         //Check if email already on database
-        DAO.getUserReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        new UserDAOAdapter(new UserDAO()).getDatabaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
@@ -245,7 +245,7 @@ public class Signup {
 
     //Private method that push user into user manager to being push onto the database
     private void pushUserToFirebase() {
-        DAO.add(user);
+        new UserDAOAdapter(new UserDAO()).add(user);
     }
 
     //Private method that will encrypt current user password and save the salt used

@@ -12,7 +12,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-import ca.dal.csci3130.quickcash.common.DAO;
 
 public class PreferencesVerification {
     private PreferencesInterface preferences;
@@ -122,7 +121,7 @@ public class PreferencesVerification {
      * if the ID does not exist in DB, it will create new query inside DB.
      */
     private void updateOrCreatePreferences() {
-        DatabaseReference db = DAO.getPreferenceReference();
+        DatabaseReference db = new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference();
         db.orderByChild("employeeID").equalTo(preferences.getEmployeeID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -143,7 +142,7 @@ public class PreferencesVerification {
 
     //Private method that push job into job manager to being push onto the database
     private void pushPreferencesToFirebase() {
-        DAO.add(preferences);
+        new PreferenceDAOAdapter(new PreferenceDAO()).add(preferences);
     }
 
 }

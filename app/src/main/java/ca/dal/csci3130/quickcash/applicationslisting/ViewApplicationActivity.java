@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 /**
@@ -54,7 +55,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
     //Connect and retrieve jobs where applicant have applied
     private void connectToFBDB() {
 
-        DAO.getJobReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        new JobDAOAdapter(new JobDAO()).getDatabaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

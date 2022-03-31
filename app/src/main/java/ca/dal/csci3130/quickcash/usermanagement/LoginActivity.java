@@ -128,8 +128,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param password: String password that required to be checked
      */
     protected void isCorrectInformation(String email, String password) {
-
-        DAO.getUserReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO dao = new UserDAOAdapter(new UserDAO());
+        dao.getDatabaseReference().orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
 
-                            SessionManagerInterface session = new SessionManager(LoginActivity.this);
+                            SessionManagerInterface session = SessionManager.getInstance(LoginActivity.this);
                             session.createLoginSession(data.getKey());
 
                             return;

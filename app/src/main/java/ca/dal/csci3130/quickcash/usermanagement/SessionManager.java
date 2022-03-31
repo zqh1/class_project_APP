@@ -32,16 +32,25 @@ public class SessionManager implements SessionManagerInterface {
     private static UserInterface user;
     private static String userID;
 
+    private static SessionManager instance = null;
+
     /**
      * Session Manager constructor, it will set the context (screen that initialize manager)
      * and initialize the shared preferences with the user key string and editor
      *
      * @param context: activity that is calling the manager and the one used for manager interaction
      */
-    public SessionManager(Context context) {
+    private SessionManager(Context context) {
         this.context = context;
         this.sharePref = context.getSharedPreferences("PREF", Context.MODE_PRIVATE);
         this.editor = sharePref.edit();
+    }
+
+    public static SessionManager getInstance(Context context){
+        if(instance == null){
+            instance = new SessionManager(context);
+        }
+        return instance;
     }
 
     private static void setUser(UserInterface user) {
@@ -123,7 +132,8 @@ public class SessionManager implements SessionManagerInterface {
 
     //Private method used by manager to query user data from database
     private void getUserInformation(String userID) {
-        DAO.getUserReference().addValueEventListener(new ValueEventListener() {
+        DAO dao = new UserDAOAdapter(new UserDAO());
+        dao.getDatabaseReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

@@ -116,6 +116,6 @@ public class JobVerification {
 
     //Private method that push job into job manager to being push onto the database
     private void pushJobToFirebase() {
-        DAO.add(job);
+        new JobDAOAdapter(new JobDAO()).add(job);
     }
 }
