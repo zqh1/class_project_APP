@@ -15,8 +15,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
+
 import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 
 public class ViewApplicantActivity extends AppCompatActivity {
 
@@ -52,7 +54,7 @@ public class ViewApplicantActivity extends AppCompatActivity {
     //Query and pass job table in firebase
     private void connectToFBDB() {
         //get applicantsID from each job
-        DAO.getJobReference().child(jobKey).child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
+        new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(jobKey).child("applicantsID").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //If job has value inside child. turn String into String array

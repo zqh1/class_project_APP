@@ -22,6 +22,7 @@ public class Signup {
     private final SignupActivity activity;
     private boolean userDataCorrect;
     private UserInterface user;
+    private DAO dao = new UserDAOAdapter(new UserDAO());
 
     /**
      * Constructor of signup class without a connected activity
@@ -158,7 +159,7 @@ public class Signup {
     private void verifyUniqueEmail(String email) {
 
         //Check if email already on database
-        DAO.getUserReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        dao.getDatabaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
@@ -245,7 +246,7 @@ public class Signup {
 
     //Private method that push user into user manager to being push onto the database
     private void pushUserToFirebase() {
-        DAO.add(user);
+        dao.add(user);
     }
 
     //Private method that will encrypt current user password and save the salt used

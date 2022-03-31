@@ -23,7 +23,13 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAO;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAOAdapter;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
 public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdapter.ApplicantViewHolder> {
 
@@ -70,7 +76,8 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
         int jobPosition = holder.getBindingAdapterPosition();
 
         //Connect to firebase
-        DAO.getUserReference().child(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO dao = new UserDAOAdapter(new UserDAO());
+        dao.getDatabaseReference().child(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
 
             //Get data from each applicantsID
             @Override
@@ -88,7 +95,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
         });
 
         //Connect to firebase
-        DAO.getFeedbackDatabase().orderByChild("id").equalTo(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
+        new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference().orderByChild("id").equalTo(applicantsID[jobPosition]).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -113,7 +120,7 @@ public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdap
 
 
         //Connect to firebase
-        DatabaseReference jobDatabase = DAO.getJobReference().child(jobKey);
+        DatabaseReference jobDatabase = new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(jobKey);
         //Choosing which applicant will be apply to the position
         holder.accept.setOnClickListener(view ->
                 jobDatabase.child("acceptedID").addListenerForSingleValueEvent(new ValueEventListener() {
