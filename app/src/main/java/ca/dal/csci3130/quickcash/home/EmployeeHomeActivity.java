@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.applicationslisting.ViewApplicationActivity;
@@ -34,6 +36,8 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_home);
 
+        //let employee subscribe to Employees Topic
+        FirebaseMessaging.getInstance().subscribeToTopic("Employees");
         //Load current user, if user not loaded correctly, restart application from main
         UserInterface user = SessionManager.getUser();
         if (user == null) {

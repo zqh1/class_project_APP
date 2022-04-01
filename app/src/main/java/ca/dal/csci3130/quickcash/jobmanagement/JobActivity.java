@@ -378,7 +378,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             notificationJSONBody.put("body", "A new job is created in your city.");
 
             final JSONObject pushNotificationJSONBody = new JSONObject();
-            pushNotificationJSONBody.put("to","/topics/Employee");
+            pushNotificationJSONBody.put("to","/topics/Employees");
             pushNotificationJSONBody.put("notification", notificationJSONBody);
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
                     PUSH_NOTIFICATION_ENDPOINT,

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -90,6 +91,7 @@ public class SessionManager implements SessionManagerInterface {
      */
     @Override
     public void logoutUser() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("Employees");
         editor.clear();
         editor.apply();
         SessionManager.setUser(null);

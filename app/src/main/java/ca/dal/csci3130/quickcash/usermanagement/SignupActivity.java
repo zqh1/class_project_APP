@@ -167,7 +167,6 @@ public class SignupActivity extends AppCompatActivity {
         user.setConfirmPassword(confirmPasswordField.getText().toString().trim());
         user.setPhone(phoneField.getText().toString().trim());
         if (userTypeSpinner.getSelectedItem().toString().equals("Employee")) {
-            FirebaseMessaging.getInstance().subscribeToTopic("Employees");
             user.setIsEmployee("y");
         }
         else user.setIsEmployee("n");
