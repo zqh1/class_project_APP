@@ -80,11 +80,10 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
     JobInterface job;
 
-    private static final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
-    private RequestQueue requestQueue;
+    private RequestQueue requestQueue
 
 
-    /**
+;    /**
      * OnCreate method, Initialize activity call multiple method
      * and apply instances to local variable
      * Methods: startMap(), linkScreenItem(), setButtonListeners()
@@ -101,7 +100,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
         linkScreenItems();
         setButtonsListeners();
-
         requestQueue = Volley.newRequestQueue(this);
         calendar = Calendar.getInstance();
         userCalendar = Calendar.getInstance();
@@ -161,8 +159,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     private void postButtonListener() {
 
         postBtn.setEnabled(false);
-
-        sendNotification();
         verification.setJob(readJobInformation());
         verifyFields();
     }
@@ -332,7 +328,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      */
     private void verifyFields() {
 
-        boolean[] fieldsStatus = verification.verifyFields();
+        boolean[] fieldsStatus = verification.verifyFields(requestQueue);
 
         if (fieldsStatus[0]) jobTitle.setTextColor(getResources().getColor(R.color.grey, null));
         else jobTitle.setTextColor(getResources().getColor(R.color.red, null));
@@ -366,40 +362,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         startActivity(new Intent(this, EmployerHomeActivity.class));
     }
 
-    /**
-     * This method will allow send a notification to employees when there is a new job created.
-     * it will push a toast to employer to mention notification send to employee
-     * meanwhile employees will receive a notification on their phone
-     */
-    public void sendNotification() {
-        try {
-            final JSONObject notificationJSONBody = new JSONObject();
-            notificationJSONBody.put("title", "New Job Created!");
-            notificationJSONBody.put("body", "A new job is created in your city.");
 
-            final JSONObject pushNotificationJSONBody = new JSONObject();
-            pushNotificationJSONBody.put("to","/topics/Employees");
-            pushNotificationJSONBody.put("notification", notificationJSONBody);
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                    PUSH_NOTIFICATION_ENDPOINT,
-                    pushNotificationJSONBody,
-                    response -> Toast.makeText(JobActivity.this, "Push notification sent.",
-                            Toast.LENGTH_SHORT).show(),
-                    Throwable::printStackTrace) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    final Map<String, String> headers = new HashMap<>();
-                    headers.put("content-type", "application/json");
-                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
-                    return headers;
-                }
-            };
-            requestQueue.add(request);
-        }
-        catch (JSONException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
 
 }
