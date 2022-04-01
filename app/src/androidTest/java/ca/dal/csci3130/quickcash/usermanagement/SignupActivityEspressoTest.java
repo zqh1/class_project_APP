@@ -146,12 +146,13 @@ public class SignupActivityEspressoTest {
     public void checkIfValidInformationUserCreate() {
 
         //Delete user if exits on database
-        DAO.getUserReference().orderByChild("email").equalTo("test2@dal.ca").addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO dao = new UserDAOAdapter(new UserDAO());
+        dao.getDatabaseReference().orderByChild("email").equalTo("test2@dal.ca").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.exists() && snapshot.hasChildren())
-                    DAO.getUserReference().child(Objects.requireNonNull(snapshot.getValue()).toString().substring(1, 21)).removeValue();
+                    dao.getDatabaseReference().child(Objects.requireNonNull(snapshot.getValue()).toString().substring(1, 21)).removeValue();
             }
 
             @Override
