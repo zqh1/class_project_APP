@@ -139,14 +139,15 @@ public class LoginActivity extends AppCompatActivity {
                     for (DataSnapshot data : snapshot.getChildren()) {
                         String salt = Objects.requireNonNull(data.child("confirmPassword").getValue()).toString();
                         String hashPassword = Signup.getSHA256SecurePassword(password, salt);
+                        String isEmployee = "y";
 
+                        if(isEmployee.equals(Objects.requireNonNull(data.child("isEmployee").getValue()).toString())) {
+                            FirebaseMessaging.getInstance().subscribeToTopic("Employees");
+                        }
                         if (hashPassword.equals(Objects.requireNonNull(data.child("password").getValue()).toString())) {
-                            if(Objects.equals(data.child("isEmployee").getValue(), "y")) {
-                                FirebaseMessaging.getInstance().subscribeToTopic("Employees");
-                            }
+
                             SessionManagerInterface session = new SessionManager(LoginActivity.this);
                             session.createLoginSession(data.getKey());
-
                             return;
                         }
                     }

@@ -47,9 +47,6 @@ import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
-import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
-import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesActivity;
-import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class JobActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -219,7 +216,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      *
      * @param view:      TimePicker
      * @param hourOfDay: starting hour of the job
-     * @param minute:    starting minut of the job
+     * @param minute:    starting minute of the job
      */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -369,8 +366,11 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         startActivity(new Intent(this, EmployerHomeActivity.class));
     }
 
-
-
+    /**
+     * This method will allow send a notification to employees when there is a new job created.
+     * it will push a toast to employer to mention notification send to employee
+     * meanwhile employees will receive a notification on their phone
+     */
     public void sendNotification() {
         try {
             final JSONObject notificationJSONBody = new JSONObject();
@@ -378,44 +378,23 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             notificationJSONBody.put("body", "A new job is created in your city.");
 
             final JSONObject pushNotificationJSONBody = new JSONObject();
-            pushNotificationJSONBody.put("to", "/topics/jobs");
+            pushNotificationJSONBody.put("to","/topics/Employee");
             pushNotificationJSONBody.put("notification", notificationJSONBody);
-            DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                            if (snapshot.exists() && snapshot.getChildrenCount() == 1) {
-                                for (DataSnapshot data : snapshot.getChildren()) {
-
-                                    PreferencesInterface preferences = data.getValue(Preferences.class);
-                                    if (Objects.requireNonNull(preferences).getDuration() == job.getDuration() || preferences.getSalary() == job.getSalary()) {
-                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                                                PUSH_NOTIFICATION_ENDPOINT,
-                                                pushNotificationJSONBody,
-                                                response ->
-                                                        Toast.makeText(JobActivity.this,
-                                                                "Push notification sent.",
-                                                                Toast.LENGTH_SHORT).show(),
-                                                Throwable::printStackTrace) {
-                                            @Override
-                                            public Map<String, String> getHeaders() {
-                                                final Map<String, String> headers = new HashMap<>();
-                                                headers.put("content-type", "application/json");
-                                                headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
-                                                return headers;
-                                            }
-                                        };
-                                        requestQueue.add(request);
-                                    }
-                                }
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(JobActivity.this, "Unable to read preferences", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                    PUSH_NOTIFICATION_ENDPOINT,
+                    pushNotificationJSONBody,
+                    response -> Toast.makeText(JobActivity.this, "Push notification sent.",
+                            Toast.LENGTH_SHORT).show(),
+                    Throwable::printStackTrace) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    final Map<String, String> headers = new HashMap<>();
+                    headers.put("content-type", "application/json");
+                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                    return headers;
+                }
+            };
+            requestQueue.add(request);
         }
         catch (JSONException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

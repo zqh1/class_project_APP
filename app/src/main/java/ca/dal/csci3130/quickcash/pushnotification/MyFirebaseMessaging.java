@@ -23,6 +23,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         super.onNewToken(token);
     }
 
+
+    /**
+     * This method will control the the notification
+     * when we use this message it will receive a message and then push to the phone
+     * @param message receive from firebase data base cloud message
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
