@@ -5,21 +5,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ca.dal.csci3130.quickcash.common.Constants;
-import ca.dal.csci3130.quickcash.common.DAO;
 
 public class UserDAO {
 
     //Firebase database reference
-    private final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
+    private static final FirebaseDatabase FIREBASEDATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference USER_DATABASE = FIREBASE_DATABASE.getReference(User.class.getSimpleName());
+    private static final DatabaseReference USERDATABASE = FIREBASEDATABASE.getReference(User.class.getSimpleName());
 
     public DatabaseReference getUserDatabaseReference(){
-        return USER_DATABASE;
+        return USERDATABASE;
     }
 
     public Task<Void> addUser(UserInterface user) {
-        return USER_DATABASE.push().setValue(user);
+        return USERDATABASE.push().setValue(user);
     }
 
 }

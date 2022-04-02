@@ -10,9 +10,9 @@ import ca.dal.csci3130.quickcash.common.Constants;
 public class JobDAO {
 
     //Firebase database reference
-    private final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
+    private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference Job_DATABASE = FIREBASE_DATABASE.getReference(Job.class.getSimpleName());
+    private static final DatabaseReference Job_DATABASE = FIREBASE_DATABASE.getReference(Job.class.getSimpleName());
 
     public DatabaseReference getJobDatabaseReference(){
         return Job_DATABASE;

@@ -4,9 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -18,10 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.android.gms.maps.model.LatLng;
 
-
-import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAO;
@@ -31,12 +26,6 @@ import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
-
-    @Override
-    public void onNewToken(@NonNull String token) {
-        super.onNewToken(token);
-    }
-
 
     /**
      * This method will control the the notification
@@ -60,7 +49,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         Gson gson = new GsonBuilder().create();
         Job job = gson.fromJson(body, Job.class);
-        System.out.println(job.getDuration());
 
         // Create an intent to start activity when the notification is clicked.
         Intent intent = new Intent(this, EmployeeHomeActivity.class);
@@ -109,7 +97,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        //Not possible to catch background errors
                     }
                 });
     }
