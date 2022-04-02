@@ -95,7 +95,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                                                    int duration = preferences.getDuration();
                                                    double salary = preferences.getSalary();
                                                    String title = preferences.getJob();
-                                                   if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle())  ) {
+                                                   String startTime = preferences.getStartingTime();
+                                                   String jobStartTime = job.getHour()+":"+job.getMinute();
+                                                   if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle())||startTime.equals(jobStartTime)) {
                                                        notificationManager.notify(id, notificationBuilder.build());
                                                    }
                                                }
