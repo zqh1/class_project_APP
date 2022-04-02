@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import ca.dal.csci3130.quickcash.R;
 
 /**
@@ -164,8 +166,9 @@ public class SignupActivity extends AppCompatActivity {
         user.setPassword(passwordField.getText().toString().trim());
         user.setConfirmPassword(confirmPasswordField.getText().toString().trim());
         user.setPhone(phoneField.getText().toString().trim());
-        if (userTypeSpinner.getSelectedItem().toString().equals("Employee"))
+        if (userTypeSpinner.getSelectedItem().toString().equals("Employee")) {
             user.setIsEmployee("y");
+        }
         else user.setIsEmployee("n");
 
         return user;

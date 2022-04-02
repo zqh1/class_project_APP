@@ -1,10 +1,28 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.common.DAO;
 
 public class JobVerification {
 
     private JobInterface job;
+    private final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
+
 
     /**
      * Set job variable to param
@@ -21,7 +39,7 @@ public class JobVerification {
      *
      * @return array of boolean for each field test
      */
-    public boolean[] verifyFields() {
+    public boolean[] verifyFields(RequestQueue requestQueue) {
 
         boolean[] fieldStatus = new boolean[]{true, true, true, true, true};
         boolean allFieldCorrect = true;
@@ -53,6 +71,7 @@ public class JobVerification {
 
         if (allFieldCorrect) {
             pushJobToFirebase();
+            sendNotification(requestQueue);
         }
 
         return fieldStatus;
@@ -117,5 +136,42 @@ public class JobVerification {
     //Private method that push job into job manager to being push onto the database
     private void pushJobToFirebase() {
         new JobDAOAdapter(new JobDAO()).add(job);
+    }
+
+    /**
+     * This method will allow send a notification to employees when there is a new job created.
+     * it will push a toast to employer to mention notification send to employee
+     * meanwhile employees will receive a notification on their phone
+     */
+    private void sendNotification(RequestQueue requestQueue) {
+        try {
+
+            final JSONObject notificationJSONBody = new JSONObject();
+            notificationJSONBody.put("title", "New Job Created!");
+            Gson gson = new Gson();
+            String json = gson.toJson(job);
+            notificationJSONBody.put("body", json);
+
+            final JSONObject pushNotificationJSONBody = new JSONObject();
+            pushNotificationJSONBody.put("to","/topics/Employees");
+            pushNotificationJSONBody.put("notification", notificationJSONBody);
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                    PUSH_NOTIFICATION_ENDPOINT,
+                    pushNotificationJSONBody,
+                    response -> {},
+                    Throwable::printStackTrace) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    final Map<String, String> headers = new HashMap<>();
+                    headers.put("content-type", "application/json");
+                    headers.put("authorization", "key=" + BuildConfig.FIREBASE_SERVER_KEY);
+                    return headers;
+                }
+            };
+            requestQueue.add(request);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

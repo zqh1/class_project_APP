@@ -143,7 +143,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             SessionManagerInterface session = SessionManager.getInstance(LoginActivity.this);
                             session.createLoginSession(data.getKey());
-
                             return;
                         }
                     }
