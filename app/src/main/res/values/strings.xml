@@ -66,6 +66,40 @@
     <string name="load_preference_label">Load Preference</string>
     <string name="search_job_label">search job</string>
     <string name="default_distance_label">Default distance - 15 KM</string>
+    <string name="view_job_location_label">View job location</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="job_location_label">Job1 location</string>
+    <string name="distance_map_label">Distance: 5KM</string>
+    <string name="return_button_label">Return</string>
+    <string name="pay_employee_Label">Pay</string>
+    <string name="title_activity_payment">PaymentActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="confirm">Confirm</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="back">Back</string>
+
+    <string name="ratingTitle">Please rate this person</string>
+    <string name="ratingPoints">Rating Points</string>
+    <string name="submit">submit</string>
+    <string name="personname">PersonName</string>
+    <string name="you_are_giving">You are giving</string>
+    <string name="point_s">Point(s)</string>
+    <string name="give_feedback">Give feedback</string>
+    <string-array name="ratingNum">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string name="view_jobs_map_label">View Jobs Map</string>
     <string name="job_search_radius">Search Job within Radius:</string>
     <string name="search_distance_in_km">Distance(in Km)</string>
