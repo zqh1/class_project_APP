@@ -66,4 +66,8 @@
     <string name="load_preference_label">Load Preference</string>
     <string name="search_job_label">search job</string>
     <string name="default_distance_label">Default distance - 15 KM</string>
+    <string name="view_jobs_map_label">View Jobs Map</string>
+    <string name="job_search_radius">Search Job within Radius:</string>
+    <string name="search_distance_in_km">Distance(in Km)</string>
+    <string name="go_Button">Go</string>
 </resources>
