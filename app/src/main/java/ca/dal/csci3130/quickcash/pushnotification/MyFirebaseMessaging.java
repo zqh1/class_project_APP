@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAO;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAOAdapter;
 import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
@@ -38,6 +40,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     /**
      * This method will control the the notification
      * when we use this message it will receive a message and then push to the phone
+     *
      * @param message receive from firebase data base cloud message
      */
     @Override
@@ -55,14 +58,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
 
         Gson gson = new GsonBuilder().create();
-        Job job = gson.fromJson(body,Job.class);
+        Job job = gson.fromJson(body, Job.class);
         System.out.println(job.getDuration());
 
         // Create an intent to start activity when the notification is clicked.
         Intent intent = new Intent(this, EmployeeHomeActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("body", body);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 10, intent,  PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 10, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create a notification that will be displayed in the notification tray.
         NotificationCompat.Builder notificationBuilder =
@@ -86,27 +89,27 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         //Connect to firebase so that it will compare and send notification to employee with same preference
 
-        DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
+        new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
                 .addValueEventListener(new ValueEventListener() {
-                                           @Override
-                                           public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                               for (DataSnapshot data : snapshot.getChildren()) {
-                                                   PreferencesInterface preferences = data.getValue(Preferences.class);
-                                                   int duration = preferences.getDuration();
-                                                   double salary = preferences.getSalary();
-                                                   String title = preferences.getJob();
-                                                   String startTime = preferences.getStartingTime();
-                                                   String jobStartTime = job.getHour()+":"+job.getMinute();
-                                                   if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle())||startTime.equals(jobStartTime)) {
-                                                       notificationManager.notify(id, notificationBuilder.build());
-                                                   }
-                                               }
-                                           }
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            PreferencesInterface preferences = data.getValue(Preferences.class);
+                            int duration = preferences.getDuration();
+                            double salary = preferences.getSalary();
+                            String title = preferences.getJob();
+                            String startTime = preferences.getStartingTime();
+                            String jobStartTime = job.getHour() + ":" + job.getMinute();
+                            if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle()) || startTime.equals(jobStartTime)) {
+                                notificationManager.notify(id, notificationBuilder.build());
+                            }
+                        }
+                    }
 
-                                           @Override
-                                           public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                           }
-                                       });
+                    }
+                });
     }
 }
