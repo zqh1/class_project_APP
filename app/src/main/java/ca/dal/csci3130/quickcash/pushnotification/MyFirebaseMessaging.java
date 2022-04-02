@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -100,7 +101,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                             String title = preferences.getJob();
                             String startTime = preferences.getStartingTime();
                             String jobStartTime = job.getHour() + ":" + job.getMinute();
-                            if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle()) || startTime.equals(jobStartTime)) {
+                            if (duration >= job.getDuration() || salary <= job.getSalary() || title.equalsIgnoreCase(job.getTitle()) || startTime.equals(jobStartTime)) {
                                 notificationManager.notify(id, notificationBuilder.build());
                             }
                         }
