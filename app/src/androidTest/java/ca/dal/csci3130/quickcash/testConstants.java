@@ -47,5 +47,9 @@ public class testConstants {
         onView(withId(R.id.postingsBtn)).perform(click());
     }
 
+    public static void employeeViewJob() {
+        onView(withId(R.id.viewJobsBtn)).perform(click());
+    }
+
 
 }
