@@ -181,7 +181,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             userCalendar.set(year, month, day);
         }
 
-        String date = userCalendar.get(Calendar.DAY_OF_MONTH) + "/" + userCalendar.get(Calendar.MONTH) + "/" + userCalendar.get(Calendar.YEAR);
+        String date = userCalendar.get(Calendar.DAY_OF_MONTH) + "/" + (userCalendar.get(Calendar.MONTH)+1) + "/" + userCalendar.get(Calendar.YEAR);
         dateLabel.setText(date);
     }
 
