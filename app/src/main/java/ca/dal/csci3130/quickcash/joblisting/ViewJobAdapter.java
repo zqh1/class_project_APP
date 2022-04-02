@@ -183,6 +183,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.applicantBtn.setVisibility(View.GONE);
         holder.paymentBtn.setVisibility(View.GONE);
         holder.feedbackBtn.setVisibility(View.GONE);
+        holder.paymentStatusTV.setVisibility(View.GONE);
 
 
         if (job.getPaid()) {
@@ -200,6 +201,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             label = "Status: Open position";
         } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
             label = "Status: Accepted";
+            holder.paymentStatusTV.setVisibility(View.VISIBLE);
         } else {
             label = "Status: Rejected";
         }
