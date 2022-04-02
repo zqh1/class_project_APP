@@ -58,7 +58,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     /**
-     * This method will
+     * This method will set the name of the people who are being reviewed on the screen
      */
     private void setNameOnScreen(){
         DAO dao = new UserDAOAdapter(new UserDAO());
@@ -87,7 +87,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     /**
-     * this method will let the rating of the employer
+     * this method will set the rating of the user 1 to 5
      */
     private void collectInformation(){
         int rating;
@@ -105,6 +105,12 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         updateOrCreateFeedback(rating);
     }
 
+    /**
+     * This method will create score for the user if they are first time to have a feedback
+     * Or update existing user overall rating by adding score to the current and take average
+     * Then back to the employer or employee home page
+     * @param score : rating of the user
+     */
     private void updateOrCreateFeedback(int score) {
         DatabaseReference db = new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference();
         db.orderByChild("id").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
