@@ -1,16 +1,23 @@
 package ca.dal.csci3130.quickcash.pushnotification;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
-import android.util.Log;
+
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -21,7 +28,6 @@ import com.google.gson.GsonBuilder;
 import com.google.android.gms.maps.model.LatLng;
 
 
-import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAO;
@@ -31,6 +37,8 @@ import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
+
+    private LatLng latlng;
 
     @Override
     public void onNewToken(@NonNull String token) {
@@ -44,6 +52,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
      *
      * @param message receive from firebase data base cloud message
      */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
@@ -89,6 +98,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
 
         //Connect to firebase so that it will compare and send notification to employee with same preference
+        getCurrentLocation();
 
         new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
                 .addValueEventListener(new ValueEventListener() {
@@ -101,7 +111,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                             String title = preferences.getJob();
                             String startTime = preferences.getStartingTime();
                             String jobStartTime = job.getHour() + ":" + job.getMinute();
-                            if (duration >= job.getDuration() || salary <= job.getSalary() || title.equalsIgnoreCase(job.getTitle()) || startTime.equals(jobStartTime)) {
+                            int maxDistance = preferences.getMaxDistance() * 1000;
+                            double jobLatitude = job.getLatitude();
+                            double jobLongitude = job.getLongitude();
+                            float[] distanceToJob = new float[1];
+                            Location.distanceBetween(jobLatitude, jobLongitude, latlng.latitude, latlng.longitude, distanceToJob);
+                            if (duration >= job.getDuration() || salary <= job.getSalary() || title.equalsIgnoreCase(job.getTitle()) || startTime.equals(jobStartTime)|| maxDistance>= distanceToJob[0]) {
                                 notificationManager.notify(id, notificationBuilder.build());
                             }
                         }
@@ -113,4 +128,24 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                     }
                 });
     }
+    /**
+     * This method will ask for permission for location.
+     * once the permission is allowed, it will assign location to latLng latlng variable
+    */
+     @RequiresApi(api = Build.VERSION_CODES.Q)
+     private void getCurrentLocation() {
+
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_DENIED) {
+           ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
+
+        Task<Location> task = client.getLastLocation();
+
+        task.addOnSuccessListener(location -> {
+            if (location != null) { latlng = new LatLng(location.getLatitude(), location.getLongitude()); }
+        });
+
+     }
 }
