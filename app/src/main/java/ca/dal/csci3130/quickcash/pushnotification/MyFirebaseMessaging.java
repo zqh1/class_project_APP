@@ -4,17 +4,28 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Map;
 
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
+import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
+import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
+import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
@@ -42,9 +53,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         final String title = message.getNotification().getTitle();
         final String body = message.getNotification().getBody();
 
-        final Map<String, String> data = message.getData();
-        final String jobId = data.get("jobId");
-        final String jobLocation = data.get("jobLocation");
+
+        Gson gson = new GsonBuilder().create();
+        Job job = gson.fromJson(body,Job.class);
+        System.out.println(job.getDuration());
 
         // Create an intent to start activity when the notification is clicked.
         Intent intent = new Intent(this, EmployeeHomeActivity.class);
@@ -56,7 +68,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, "JOBS")
                         .setContentTitle(title)
-                        .setContentText(body)
+                        .setContentText("A new job is created in your city.")
                         .setSmallIcon(com.google.firebase.messaging.R.drawable.gcm_icon);
 
         // Add the intent to the notification.
@@ -72,7 +84,27 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        // Display the push notification.
-        notificationManager.notify(id, notificationBuilder.build());
+        //Connect to firebase so that it will compare and send notification to employee with same preference
+
+        DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
+                .addValueEventListener(new ValueEventListener() {
+                                           @Override
+                                           public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                               for (DataSnapshot data : snapshot.getChildren()) {
+                                                   PreferencesInterface preferences = data.getValue(Preferences.class);
+                                                   int duration = preferences.getDuration();
+                                                   double salary = preferences.getSalary();
+                                                   String title = preferences.getJob();
+                                                   if (duration >= job.getDuration() || salary >= job.getSalary() || title.equalsIgnoreCase(job.getTitle())  ) {
+                                                       notificationManager.notify(id, notificationBuilder.build());
+                                                   }
+                                               }
+                                           }
+
+                                           @Override
+                                           public void onCancelled(@NonNull DatabaseError error) {
+
+                                           }
+                                       });
     }
 }

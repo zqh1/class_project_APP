@@ -6,6 +6,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -146,7 +148,9 @@ public class JobVerification {
 
             final JSONObject notificationJSONBody = new JSONObject();
             notificationJSONBody.put("title", "New Job Created!");
-            notificationJSONBody.put("body", "A new job is created in your city.");
+            Gson gson = new Gson();
+            String json = gson.toJson(job);
+            notificationJSONBody.put("body", json);
 
             final JSONObject pushNotificationJSONBody = new JSONObject();
             pushNotificationJSONBody.put("to","/topics/Employees");
