@@ -19,13 +19,19 @@ import java.util.Objects;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAO;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAOAdapter;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.feedback.GiveFeedbackActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
 /**
  * Adapter that create and populate Jobs in applications list
@@ -79,7 +85,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
 
         //Query job details
-        DAO.getJobReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {
+        new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(jobList.get(jobPosition)).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -147,7 +153,8 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     holder.context.startActivity(feedbackIntent);
                 });
 
-                DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                DAO dao = new UserDAOAdapter(new UserDAO());
+                dao.getDatabaseReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
@@ -175,7 +182,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
         //Set delete button listener
         holder.deleteBtn.setOnClickListener(view ->
-                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID")
+                new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(jobList.get(jobPosition)).child("applicantsID")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -187,7 +194,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                                 applicants = applicants.replace(SessionManager.getUserID() + ",", "");
 
                                 //Set new applicant list
-                                DAO.getJobReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(applicants);
+                                new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(jobList.get(jobPosition)).child("applicantsID").setValue(applicants);
 
                                 //Message to user that deletion was successfully
                                 Toast.makeText(holder.context, "Application removed, exit to refresh", Toast.LENGTH_SHORT).show();
@@ -203,9 +210,9 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                         }));
     }
 
-    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
         //Connect to firebase
-        DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+        new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

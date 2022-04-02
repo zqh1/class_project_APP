@@ -31,8 +31,10 @@ import java.math.BigDecimal;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
+
 import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 
 
 public class PayActivity extends AppCompatActivity {
@@ -129,7 +131,7 @@ public class PayActivity extends AppCompatActivity {
 
     private void updateJob() {
         String key = getIntent().getStringExtra("KEY");
-        DatabaseReference dbref = DAO.getJobReference();
+        DatabaseReference dbref = new JobDAOAdapter(new JobDAO()).getDatabaseReference();
         dbref.child(key).child("paid").setValue(true);
     }
 

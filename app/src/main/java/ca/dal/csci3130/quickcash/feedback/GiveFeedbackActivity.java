@@ -24,6 +24,8 @@ import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
 public class GiveFeedbackActivity extends AppCompatActivity {
 
@@ -53,7 +55,8 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     private void setNameOnScreen(){
-        DAO.getUserReference().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+        DAO dao = new UserDAOAdapter(new UserDAO());
+        dao.getDatabaseReference().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
@@ -91,7 +94,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     private void updateOrCreateFeedback(int score) {
-        DatabaseReference db = DAO.getFeedbackDatabase();
+        DatabaseReference db = new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference();
         db.orderByChild("id").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -106,6 +109,8 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
                     db.child(Objects.requireNonNull(data.getKey())).getRef().setValue(feedbackToPush);
                 } else pushFeedbackToFirebase(score);
+
+                Toast.makeText(GiveFeedbackActivity.this, "Feedback has been updated", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -127,6 +132,6 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         feedback.setRating(score);
         feedback.setCount(1);
 
-        DAO.add(feedback);
+        new FeedbackDAOAdapter(new FeedbackDAO()).add(feedback);
     }
 }

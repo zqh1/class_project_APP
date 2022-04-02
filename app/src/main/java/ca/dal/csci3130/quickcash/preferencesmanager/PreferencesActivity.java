@@ -27,10 +27,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
+
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
 import ca.dal.csci3130.quickcash.joblisting.ViewJobSearchWithPreferences;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -139,7 +141,7 @@ public class PreferencesActivity extends AppCompatActivity {
      */
     private void loadPreferences() {
 
-        DAO.getPreferenceReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
+        new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -319,7 +321,7 @@ public class PreferencesActivity extends AppCompatActivity {
      * Else start new activity to show jobs on the phone
      */
     private void retrieveJobs() {
-        DAO.getJobReference().addListenerForSingleValueEvent(new ValueEventListener() {
+        new JobDAOAdapter(new JobDAO()).getDatabaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

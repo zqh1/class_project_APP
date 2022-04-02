@@ -70,7 +70,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        new SessionManager(this).logoutUser();
+        SessionManager.getInstance(this).logoutUser();
         startActivity(new Intent(this, LoginActivity.class));
     }
 

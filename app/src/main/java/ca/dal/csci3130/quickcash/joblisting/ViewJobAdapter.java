@@ -28,14 +28,20 @@ import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.Constants;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.feedback.Feedback;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAO;
+import ca.dal.csci3130.quickcash.feedback.FeedbackDAOAdapter;
 import ca.dal.csci3130.quickcash.feedback.FeedbackInterface;
 import ca.dal.csci3130.quickcash.feedback.GiveFeedbackActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.Job;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
+import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.jobmanagement.JobMap;
 import ca.dal.csci3130.quickcash.payment.PayActivity;
 import ca.dal.csci3130.quickcash.userlisting.ViewApplicantActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
+import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
 /**
  * Adapter to view all jobs using job firebase recycler
@@ -43,7 +49,7 @@ import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.JobViewHolder> {
 
     private static final String APPLICANT_ID = "applicantsID";
-
+    private DAO dao = new UserDAOAdapter(new UserDAO());
     /**
      * Constructor of adapter, call super constructor of firebase
      *
@@ -116,8 +122,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         }
     }
 
-    private void setEmployerName(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
-        DAO.getUserReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void setEmployerName(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+        dao.getDatabaseReference().child(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
@@ -134,9 +140,9 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         });
     }
 
-    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
         //Connect to firebase
-        DAO.getFeedbackDatabase().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
+        new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -194,7 +200,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         //Set Apply listener
         holder.applyBtn.setOnClickListener(view ->
-                DAO.getJobReference().child(Objects.requireNonNull(getRef(position).getKey()))
+                new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(Objects.requireNonNull(getRef(position).getKey()))
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -227,7 +233,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             Intent feedbackIntent = new Intent(holder.context, GiveFeedbackActivity.class);
             feedbackIntent.putExtra("id", job.getEmployerID());
             holder.context.startActivity(feedbackIntent);
-            DatabaseReference dbref = DAO.getJobReference();
+            DatabaseReference dbref = new JobDAOAdapter(new JobDAO()).getDatabaseReference();
             dbref.child(Objects.requireNonNull(getRef(position).getKey())).child("employeeFeedback").setValue(true);
         });
 
@@ -261,7 +267,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
             //Set applicants button listener
             holder.applicantBtn.setOnClickListener(view ->
-                    DAO.getJobReference().child(Objects.requireNonNull(getRef(position).getKey()))
+                    new JobDAOAdapter(new JobDAO()).getDatabaseReference().child(Objects.requireNonNull(getRef(position).getKey()))
                             .child(APPLICANT_ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -285,7 +291,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             holder.applicantBtn.setVisibility(View.GONE);
 
             //Query and load employee name
-            DAO.getUserReference().child(job.getAcceptedID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            dao.getDatabaseReference().child(job.getAcceptedID()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
@@ -316,7 +322,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
                 Intent feedbackIntent = new Intent(holder.context, GiveFeedbackActivity.class);
                 feedbackIntent.putExtra("id", job.getAcceptedID());
                 holder.context.startActivity(feedbackIntent);
-                DatabaseReference dbref = DAO.getJobReference();
+                DatabaseReference dbref = new JobDAOAdapter(new JobDAO()).getDatabaseReference();
                 dbref.child(Objects.requireNonNull(getRef(position).getKey())).child("employerFeedback").setValue(true);
             });
 
