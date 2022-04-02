@@ -47,6 +47,13 @@ public class PayActivity extends AppCompatActivity {
     Button backBtn;
     TextView paymentTV;
 
+    /**
+     * onCreate method, initializes buttons and textviews.
+     * Then configures paypal, sets environment, then initializes activity launcher.
+     * Also sets listeners for payment and back buttons
+     *
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
