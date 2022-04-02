@@ -15,9 +15,22 @@ public class PreferenceDAO {
 
     private final DatabaseReference Preference_DATABASE = FIREBASE_DATABASE.getReference(Preferences.class.getSimpleName());
 
-    public DatabaseReference getPreferenceDatabaseReference(){
+    /**
+     * getPreferenceDatabaseReference retrieves preference database reference
+     *
+     * @return: returns preference database reference
+     */
+
+    public DatabaseReference getPreferenceDatabaseReference() {
         return Preference_DATABASE;
     }
+
+    /**
+     * addPreference method adds preference to the database
+     *
+     * @param preference: preference to be added to the database
+     * @return
+     */
 
     public Task<Void> addPreference(PreferencesInterface preference) {
         return Preference_DATABASE.push().setValue(preference);
