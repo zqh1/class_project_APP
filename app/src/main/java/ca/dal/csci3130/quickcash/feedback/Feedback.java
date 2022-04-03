@@ -21,7 +21,6 @@ public class Feedback implements FeedbackInterface {
      * Set parameter to User ID
      * @param id: user ID
      */
-
     @Override
     public void setId(String id) {
         this.id = id;
