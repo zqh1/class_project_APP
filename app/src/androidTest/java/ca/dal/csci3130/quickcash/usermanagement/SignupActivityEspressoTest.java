@@ -28,7 +28,6 @@ import org.junit.Test;
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.testConstants;
 
 public class SignupActivityEspressoTest {

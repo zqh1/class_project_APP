@@ -109,6 +109,8 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
                     db.child(Objects.requireNonNull(data.getKey())).getRef().setValue(feedbackToPush);
                 } else pushFeedbackToFirebase(score);
+
+                Toast.makeText(GiveFeedbackActivity.this, "Feedback has been updated", Toast.LENGTH_LONG).show();
             }
 
             @Override

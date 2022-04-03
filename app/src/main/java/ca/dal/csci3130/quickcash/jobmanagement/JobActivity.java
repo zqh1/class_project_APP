@@ -1,5 +1,6 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
@@ -19,6 +20,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,10 +31,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import ca.dal.csci3130.quickcash.BuildConfig;
 import ca.dal.csci3130.quickcash.R;
+import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
@@ -52,7 +67,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     Button mapBtn;
 
     SwitchCompat urgentSwitch;
-
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     static final Integer MAP_REQUEST_CODE = 4254;
@@ -64,7 +78,12 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
     JobVerification verification;
 
-    /**
+    JobInterface job;
+
+    private RequestQueue requestQueue
+
+
+;    /**
      * OnCreate method, Initialize activity call multiple method
      * and apply instances to local variable
      * Methods: startMap(), linkScreenItem(), setButtonListeners()
@@ -81,7 +100,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
 
         linkScreenItems();
         setButtonsListeners();
-
+        requestQueue = Volley.newRequestQueue(this);
         calendar = Calendar.getInstance();
         userCalendar = Calendar.getInstance();
         verification = new JobVerification();
@@ -193,7 +212,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      *
      * @param view:      TimePicker
      * @param hourOfDay: starting hour of the job
-     * @param minute:    starting minut of the job
+     * @param minute:    starting minute of the job
      */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -272,7 +291,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      */
     private JobInterface readJobInformation() {
 
-        JobInterface job = new Job();
+        job = new Job();
 
         job.setEmployerID(SessionManager.getUserID());
         job.setTitle(jobTitle.getText().toString().trim());
@@ -299,7 +318,6 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
             job.setSalary(0);
         }
 
-
         return job;
     }
 
@@ -310,7 +328,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
      */
     private void verifyFields() {
 
-        boolean[] fieldsStatus = verification.verifyFields();
+        boolean[] fieldsStatus = verification.verifyFields(requestQueue);
 
         if (fieldsStatus[0]) jobTitle.setTextColor(getResources().getColor(R.color.grey, null));
         else jobTitle.setTextColor(getResources().getColor(R.color.red, null));
@@ -343,4 +361,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
     private void redirectEmployerHome() {
         startActivity(new Intent(this, EmployerHomeActivity.class));
     }
+
+
+
 }
