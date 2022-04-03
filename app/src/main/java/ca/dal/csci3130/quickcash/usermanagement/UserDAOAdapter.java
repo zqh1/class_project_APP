@@ -5,6 +5,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import ca.dal.csci3130.quickcash.common.DAO;
 
+/**
+ * UserDAOAdapter class which adapts getDatabaseReference and add methods based on instance
+ * of a User
+ */
+
 public class UserDAOAdapter extends DAO {
 
     private UserDAO userDAO = null;
