@@ -26,6 +26,9 @@ import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
 import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
+/**
+ * Actual activity for give feedback to employer or employee
+ */
 public class GiveFeedbackActivity extends AppCompatActivity {
 
     private String id;

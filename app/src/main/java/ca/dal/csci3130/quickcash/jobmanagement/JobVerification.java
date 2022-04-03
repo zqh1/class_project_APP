@@ -13,6 +13,9 @@ import java.util.Map;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
 
+/**
+ * This class is for verify if each element that user enter is valid
+ */
 public class JobVerification {
 
     private JobInterface job;

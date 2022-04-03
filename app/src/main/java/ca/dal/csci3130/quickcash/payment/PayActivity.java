@@ -36,7 +36,9 @@ import ca.dal.csci3130.quickcash.joblisting.ViewJobActivity;
 import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
 import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 
-
+/**
+ * This class is activity for employer pay salary to employee by paypal
+ */
 public class PayActivity extends AppCompatActivity {
 
 

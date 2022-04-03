@@ -6,6 +6,9 @@ import android.util.Log;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Layout manager that control the layout for recycler view
+ */
 public class WrapLinearLayoutManager extends LinearLayoutManager {
 
     /**

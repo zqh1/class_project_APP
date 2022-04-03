@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.feedback;
 
+/**
+ * Create basic feedback get and set variable method
+ */
 public class Feedback implements FeedbackInterface {
 
     private String id = "";
