@@ -31,6 +31,9 @@ import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.usermanagement.UserDAO;
 import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 
+/**
+ * This class is to create an adapter so that we can add each applicant to the recycler view
+ */
 public class ViewApplicantAdapter extends RecyclerView.Adapter<ViewApplicantAdapter.ApplicantViewHolder> {
 
     private final String[] applicantsID;
