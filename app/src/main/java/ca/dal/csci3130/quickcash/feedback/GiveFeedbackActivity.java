@@ -33,6 +33,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     private Spinner ratingNumSpinner;
 
     private Button submit;
+    private Button ignore;
 
     /**
      * OnCreate method, Initialize activity to give feedback to users.
@@ -61,6 +62,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         ratingNumSpinner = findViewById(R.id.ratingInput);
 
         submit = findViewById(R.id.submitButton);
+        ignore = findViewById(R.id.noRatingButton);
     }
 
     /**
@@ -99,6 +101,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
      */
     private void setButtonListeners(){
         submit.setOnClickListener(view -> collectInformation());
+        ignore.setOnClickListener(view -> redirectToHome());
     }
 
     /**
@@ -152,6 +155,11 @@ public class GiveFeedbackActivity extends AppCompatActivity {
             }
         });
 
+        redirectToHome();
+
+    }
+
+    private void redirectToHome(){
         if(SessionManager.getUser().getIsEmployee().equals("y"))
             startActivity(new Intent(this, EmployeeHomeActivity.class));
         else
