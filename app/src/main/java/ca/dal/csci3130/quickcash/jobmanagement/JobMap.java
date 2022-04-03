@@ -56,6 +56,10 @@ public class JobMap extends AppCompatActivity {
         ((Button) findViewById(R.id.returnBtn)).setOnClickListener(view -> onBackPressed());
     }
 
+    /**
+     * loadJobInfo method. This method will get job latitude and longitude
+     * Then set one field on the screen to the location of the job
+     */
     private void loadJobInfo() {
 
         jobName = getIntent().getStringExtra("JOBNAME");
@@ -79,6 +83,12 @@ public class JobMap extends AppCompatActivity {
         client = LocationServices.getFusedLocationProviderClient(this);
     }
 
+    /**
+     * onMapReady method. This method will set up the google map in create job page
+     * Then display it on the screen
+     *
+     * @param map
+     */
     private void onMapReady(GoogleMap map) {
 
         setJobMarker(map);
@@ -87,6 +97,8 @@ public class JobMap extends AppCompatActivity {
 
     /**
      * After permission is allowed, it will show map with marker on current location of the user
+     *
+     * @param map : request to get google map
      */
     private void getCurrentLocation(GoogleMap map) {
 
@@ -111,10 +123,19 @@ public class JobMap extends AppCompatActivity {
         });
     }
 
+    /**
+     * setJobMarker method. This method will add a pin market on the location where the user is
+     *
+     * @param map : request to get google map
+     */
     private void setJobMarker(GoogleMap map) {
         map.addMarker(new MarkerOptions().position(jobLatLng).title(jobName));
     }
 
+    /**
+     * setMapLabels method. This method will allow the application to compare user location and job location
+     * Then it will set one of the field on screen to the distance between user and job
+     */
     private void setMapLabels() {
 
         float[] distanceToJob = new float[1];
@@ -124,6 +145,11 @@ public class JobMap extends AppCompatActivity {
         ((TextView) findViewById(R.id.distanceLocationLabel)).setText(jobDistance);
     }
 
+    /**
+     * zoomPins method. This method will make us see the animation of zooming map to user location
+     *
+     * @param map: request google map
+     */
     private void zoomPins(GoogleMap map) {
 
         LatLngBounds.Builder zoomBuilder = new LatLngBounds.Builder();
