@@ -95,7 +95,7 @@ public class EmployerJobListTest {
 
         //scroll to the position of the item can click the view applicant button
         onView(withId(R.id.jobsRecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(2, MyViewAction.clickChildViewWithId(R.id.applicantBtn)));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(3, MyViewAction.clickChildViewWithId(R.id.applicantBtn)));
 
         testConstants.waitFirebase();
 

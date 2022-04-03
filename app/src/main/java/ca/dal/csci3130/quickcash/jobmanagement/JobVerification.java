@@ -1,13 +1,9 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,12 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.dal.csci3130.quickcash.BuildConfig;
-import ca.dal.csci3130.quickcash.common.DAO;
 
 public class JobVerification {
 
     private JobInterface job;
-    private final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
+    private static final String PUSH_NOTIFICATION_ENDPOINT = "https://fcm.googleapis.com/fcm/send";
 
 
     /**

@@ -28,7 +28,6 @@ import org.junit.Test;
 import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
-import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.testConstants;
 
 public class SignupActivityEspressoTest {
@@ -146,12 +145,12 @@ public class SignupActivityEspressoTest {
     public void checkIfValidInformationUserCreate() {
 
         //Delete user if exits on database
-        DAO.getUserReference().orderByChild("email").equalTo("test2@dal.ca").addListenerForSingleValueEvent(new ValueEventListener() {
+        new UserDAOAdapter(new UserDAO()).getDatabaseReference().orderByChild("email").equalTo("test2@dal.ca").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.exists() && snapshot.hasChildren())
-                    DAO.getUserReference().child(Objects.requireNonNull(snapshot.getValue()).toString().substring(1, 21)).removeValue();
+                    new UserDAOAdapter(new UserDAO()).getDatabaseReference().child(Objects.requireNonNull(snapshot.getValue()).toString().substring(1, 21)).removeValue();
             }
 
             @Override

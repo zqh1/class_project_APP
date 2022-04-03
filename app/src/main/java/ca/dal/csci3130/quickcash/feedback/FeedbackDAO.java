@@ -10,9 +10,9 @@ import ca.dal.csci3130.quickcash.common.Constants;
 public class FeedbackDAO {
 
     //Firebase database reference
-    private final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
+    private static final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference FEEDBACK_DATABASE = FIREBASE_DATABASE.getReference(Feedback.class.getSimpleName());
+    private static final DatabaseReference FEEDBACK_DATABASE = FIREBASE_DATABASE.getReference(Feedback.class.getSimpleName());
 
     public DatabaseReference getFeedbackDatabaseReference(){
         return FEEDBACK_DATABASE;
