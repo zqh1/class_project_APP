@@ -47,6 +47,9 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         setButtonListeners();
     }
 
+    /**
+     * This method will assign elements that present on the screen to each parameter
+     */
     private void linkScreenItems(){
         name = findViewById(R.id.personNameForGivingRating);
         ratingNumSpinner = findViewById(R.id.ratingInput);
@@ -54,6 +57,9 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         submit = findViewById(R.id.submitButton);
     }
 
+    /**
+     * This method will set the name of the people who are being reviewed on the screen
+     */
     private void setNameOnScreen(){
         DAO dao = new UserDAOAdapter(new UserDAO());
         dao.getDatabaseReference().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -73,10 +79,16 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Link the button from activity_give_feedback to local variable of this class
+     */
     private void setButtonListeners(){
         submit.setOnClickListener(view -> collectInformation());
     }
 
+    /**
+     * this method will set the rating of the user 1 to 5
+     */
     private void collectInformation(){
         int rating;
         if (ratingNumSpinner.getSelectedItem().toString().equals("1"))
@@ -93,6 +105,12 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         updateOrCreateFeedback(rating);
     }
 
+    /**
+     * This method will create score for the user if they are first time to have a feedback
+     * Or update existing user overall rating by adding score to the current and take average
+     * Then back to the employer or employee home page
+     * @param score : rating of the user
+     */
     private void updateOrCreateFeedback(int score) {
         DatabaseReference db = new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference();
         db.orderByChild("id").equalTo(id).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -125,6 +143,10 @@ public class GiveFeedbackActivity extends AppCompatActivity {
             startActivity(new Intent(this, EmployerHomeActivity.class));
     }
 
+    /**
+     * This method will allow application to push feedback result back to firebase database
+     * @param score: general score of an employer
+     */
     private void pushFeedbackToFirebase(int score){
         FeedbackInterface feedback = new Feedback();
 
