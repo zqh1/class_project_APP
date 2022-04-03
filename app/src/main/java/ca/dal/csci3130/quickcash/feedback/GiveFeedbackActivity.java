@@ -159,6 +159,10 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Once this method called, it will check if user is employee or employer
+     * and return to homepage accordingly
+     */
     private void redirectToHome(){
         if(SessionManager.getUser().getIsEmployee().equals("y"))
             startActivity(new Intent(this, EmployeeHomeActivity.class));
