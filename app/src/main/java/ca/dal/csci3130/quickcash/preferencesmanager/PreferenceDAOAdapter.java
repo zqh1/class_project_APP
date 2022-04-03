@@ -5,6 +5,11 @@ import com.google.firebase.database.DatabaseReference;
 
 import ca.dal.csci3130.quickcash.common.DAO;
 
+/**
+ * PreferenceDAOAdapter class which adapts getDatabaseReference and add methods based on instance
+ * of a Preference
+ */
+
 public class PreferenceDAOAdapter extends DAO {
 
     private PreferenceDAO preferenceDAO = null;

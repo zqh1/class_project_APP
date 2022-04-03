@@ -5,7 +5,10 @@ import com.google.firebase.database.DatabaseReference;
 
 import ca.dal.csci3130.quickcash.common.DAO;
 
-
+/**
+ * JobDAOAdapter class which adapts getDatabaseReference and add methods based on instance
+ * of a Job
+ */
 public class JobDAOAdapter extends DAO {
 
     private JobDAO jobDAO = null;

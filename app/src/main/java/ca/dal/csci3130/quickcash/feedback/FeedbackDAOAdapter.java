@@ -5,6 +5,10 @@ import com.google.firebase.database.DatabaseReference;
 
 import ca.dal.csci3130.quickcash.common.DAO;
 
+/**
+ * FeedbackDAOAdapter class which adapts getDatabaseReference and add methods based on instance
+ * of Feedback
+ */
 
 public class FeedbackDAOAdapter extends DAO {
 

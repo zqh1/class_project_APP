@@ -6,7 +6,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ca.dal.csci3130.quickcash.common.Constants;
 
-
+/**
+ * DAO class contains and manage feedback references
+ */
 public class FeedbackDAO {
 
     //Firebase database reference
