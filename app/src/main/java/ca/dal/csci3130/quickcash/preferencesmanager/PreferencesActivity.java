@@ -206,7 +206,7 @@ public class PreferencesActivity extends AppCompatActivity {
         }
 
         try{
-            preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[0]));
+            preferences.setStartingMinute(Integer.parseInt(extractStartingTimeArray[1]));
         }
         catch (Exception e){
             preferences.setStartingMinute(0);

@@ -316,7 +316,7 @@ public class JobActivity extends AppCompatActivity implements DatePickerDialog.O
         }
 
         try {
-            job.setSalary(Integer.parseInt(jobSalary.getText().toString()));
+            job.setSalary(Double.parseDouble(jobSalary.getText().toString()));
         } catch (NumberFormatException e) {
             job.setSalary(0);
         }
