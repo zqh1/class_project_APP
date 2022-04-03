@@ -114,6 +114,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
                     if (job.getApplicantsID().contains(SessionManager.getUserID())) {
                         statusLabel = "Status: Waiting for employer answer";
+                        holder.applyBtn.setVisibility(View.GONE);
                     } else statusLabel = "Status: Open position";
 
                 } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
@@ -121,9 +122,11 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                     statusLabel = "Status: Accepted";
                     holder.deleteBtn.setVisibility(View.GONE);
                     holder.paymentStatusTV.setVisibility(View.VISIBLE);
+                    holder.applyBtn.setVisibility(View.GONE);
 
                 } else {
                     statusLabel = "Status: Rejected";
+                    holder.applyBtn.setVisibility(View.GONE);
                 }
 
                 //setting job payment status, showing feeback button if applicable
