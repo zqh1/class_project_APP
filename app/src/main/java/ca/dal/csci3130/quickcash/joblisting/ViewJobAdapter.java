@@ -49,7 +49,7 @@ import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.JobViewHolder> {
 
     private static final String APPLICANT_ID = "applicantsID";
-    private DAO dao = new UserDAOAdapter(new UserDAO());
+    private final DAO dao = new UserDAOAdapter(new UserDAO());
     /**
      * Constructor of adapter, call super constructor of firebase
      *
