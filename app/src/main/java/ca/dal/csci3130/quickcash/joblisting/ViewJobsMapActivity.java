@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,12 +42,12 @@ import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
  */
 public class ViewJobsMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public GoogleMap mMap;
+    protected GoogleMap mMap;
     ArrayList<Job> pins = new ArrayList<>();
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
-    public LatLng currentLocation;
-    Button go_btn;
+    protected LatLng currentLocation;
+    Button goButton;
     EditText searchDistance;
     /**
      * onCreateViewHolder of Screen, links layout in screen with job and return the view
@@ -61,7 +59,7 @@ public class ViewJobsMapActivity extends FragmentActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_jobs_map);
-        init();
+        initin();
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
@@ -69,31 +67,28 @@ public class ViewJobsMapActivity extends FragmentActivity implements OnMapReadyC
 
     /**
      *
-     * init method catches all the data required to view the screen
+     * initin method catches all the data required to view the screen
      */
 
-    private void init() {
+    private void initin() {
         recieveJobs();
-        go_btn = findViewById(R.id.searchDistancesubmit);
+        goButton = findViewById(R.id.searchDistancesubmit);
         searchDistance = findViewById(R.id.searchDistanceFilling);
-        searchDistance.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView view, int actionId, KeyEvent event){
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    getFilteredJobs(view);
-                    return true;
-                }
-                return false;
+        searchDistance.setOnEditorActionListener((view, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                getFilteredJobs(view);
+                return true;
             }
+            return false;
         });
-        go_btn.setOnClickListener(this::getFilteredJobs);
+        goButton.setOnClickListener(this::getFilteredJobs);
 
 
     }
 
     /**
      * getFilteredJobs displays the job as selected distance from the editText field.
-     * Would dispplay all jobs pins by default.
+     * Would display all jobs pins by default.
      *
      * @param view: Pass the view to the activity
      */
@@ -141,7 +136,7 @@ public class ViewJobsMapActivity extends FragmentActivity implements OnMapReadyC
     }
 
     /**
-     * receiveJobs method recieves the jobs from Databse
+     * receiveJobs method receives the jobs from Database
      */
     private void recieveJobs() {
         new JobDAOAdapter(new JobDAO()).getDatabaseReference().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -160,7 +155,7 @@ public class ViewJobsMapActivity extends FragmentActivity implements OnMapReadyC
     }
 
     /**
-     * getCurrentLocation gets the last accessed locaiton of the user.
+     * getCurrentLocation gets the last accessed location of the user.
      */
     protected void getCurrentLocation() {
 
