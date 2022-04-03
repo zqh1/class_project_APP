@@ -103,5 +103,6 @@
     <string name="job_search_radius">Search Job within Radius:</string>
     <string name="search_distance_in_km">Distance(in Km)</string>
     <string name="go_Button">Go</string>
+    <string name="no_rating">no rating</string>
 
 </resources>
