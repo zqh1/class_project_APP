@@ -27,6 +27,7 @@ import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAO;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAOAdapter;
 import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
+import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
 /**
  * This class is responsible for send notifications to user.
@@ -71,7 +72,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         // Add the intent to the notification.
         notificationBuilder.setContentIntent(pendingIntent);
         //Connect to firebase so that it will compare and send notification to employee with same preference
-        new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference().orderByChild("employeeID")
+        new PreferenceDAOAdapter(new PreferenceDAO()).getDatabaseReference().orderByChild("employeeID").equalTo(SessionManager.getUserID())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
