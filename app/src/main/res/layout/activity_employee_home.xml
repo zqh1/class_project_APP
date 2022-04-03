@@ -20,11 +20,22 @@
         android:id="@+id/viewJobsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
         android:text="@string/view_jobs_label"
+        app:layout_constraintBottom_toTopOf="@+id/viewJobsMapBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/employeeLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/NameLabel" />
+
+    <Button
+        android:id="@+id/viewJobsMapBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/view_jobs_map_label"
+        app:layout_constraintBottom_toTopOf="@+id/searchJobButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />
 
     <Button
         android:id="@+id/logoutBtn"
@@ -40,7 +51,7 @@
         android:id="@+id/employeeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="75dp"
         android:text="@string/employee_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,5 +86,5 @@
         android:text="@string/search_job_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewJobsBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/viewJobsMapBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
