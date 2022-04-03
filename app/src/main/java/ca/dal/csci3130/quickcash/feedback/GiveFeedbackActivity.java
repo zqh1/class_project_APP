@@ -33,6 +33,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     private Spinner ratingNumSpinner;
 
     private Button submit;
+    private Button ignore;
 
     /**
      * OnCreate method, Initialize activity to give feedback to users.
@@ -61,6 +62,16 @@ public class GiveFeedbackActivity extends AppCompatActivity {
         ratingNumSpinner = findViewById(R.id.ratingInput);
 
         submit = findViewById(R.id.submitButton);
+        ignore = findViewById(R.id.noRatingButton);
+    }
+
+    /**
+     * OnBackPressed method, This method will block user from pressing back button,
+     * Avoid the user to access homepage once they already logout
+     */
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "[Back Button] is disabled", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -90,6 +101,7 @@ public class GiveFeedbackActivity extends AppCompatActivity {
      */
     private void setButtonListeners(){
         submit.setOnClickListener(view -> collectInformation());
+        ignore.setOnClickListener(view -> redirectToHome());
     }
 
     /**
@@ -143,6 +155,15 @@ public class GiveFeedbackActivity extends AppCompatActivity {
             }
         });
 
+        redirectToHome();
+
+    }
+
+    /**
+     * Once this method called, it will check if user is employee or employer
+     * and return to homepage accordingly
+     */
+    private void redirectToHome(){
         if(SessionManager.getUser().getIsEmployee().equals("y"))
             startActivity(new Intent(this, EmployeeHomeActivity.class));
         else

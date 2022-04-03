@@ -49,7 +49,7 @@ import ca.dal.csci3130.quickcash.usermanagement.UserDAOAdapter;
 public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.JobViewHolder> {
 
     private static final String APPLICANT_ID = "applicantsID";
-    private DAO dao = new UserDAOAdapter(new UserDAO());
+    private final DAO dao = new UserDAOAdapter(new UserDAO());
     /**
      * Constructor of adapter, call super constructor of firebase
      *
@@ -199,11 +199,19 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         if (job.getAcceptedID().isEmpty()) {
             label = "Status: Open position";
+
+            if (job.getApplicantsID().contains(SessionManager.getUserID())) {
+                label = "Status: Waiting for employer answer";
+                holder.applyBtn.setVisibility(View.GONE);
+            }
+
         } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
             label = "Status: Accepted";
             holder.paymentStatusTV.setVisibility(View.VISIBLE);
+            holder.applyBtn.setVisibility(View.GONE);
         } else {
             label = "Status: Rejected";
+            holder.applyBtn.setVisibility(View.GONE);
         }
 
         holder.statusTV.setText(label);
