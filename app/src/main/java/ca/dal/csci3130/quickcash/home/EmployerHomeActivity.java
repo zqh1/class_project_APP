@@ -47,6 +47,9 @@ public class EmployerHomeActivity extends AppCompatActivity {
         setButtonListeners();
     }
 
+    /**
+     * setButtonListeners method: Link all of the field from activity_employer_home to local variable of this class
+     */
     private void setButtonListeners() {
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
         findViewById(R.id.createJobBtn).setOnClickListener(view -> redirectJobCreation());
@@ -62,15 +65,25 @@ public class EmployerHomeActivity extends AppCompatActivity {
         Toast.makeText(this, "[Back Button] is disabled", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * logoutUser method, This method will allow user to logout from the current account
+     * Then redirect back to login page
+     */
     private void logoutUser() {
         SessionManager.getInstance(this).logoutUser();
         startActivity(new Intent(this, LoginActivity.class));
     }
 
+    /**
+     * Redirect user to job posting pages
+     */
     private void redirectJobCreation() {
         startActivity(new Intent(this, JobActivity.class));
     }
 
+    /**
+     * Redirect user to the page user can review applicant who applied for its job
+     */
     private void viewApplicants() {
         startActivity(new Intent(this, ViewJobActivity.class));
     }

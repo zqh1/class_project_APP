@@ -52,6 +52,7 @@ public class EmployeeHomeActivity extends AppCompatActivity {
         setButtonListeners();
     }
 
+    //set all field to variable
     private void setButtonListeners() {
         findViewById(R.id.logoutBtn).setOnClickListener(view -> logoutUser());
         findViewById(R.id.preferenceButton).setOnClickListener(view -> gotoSetPreferencePage());

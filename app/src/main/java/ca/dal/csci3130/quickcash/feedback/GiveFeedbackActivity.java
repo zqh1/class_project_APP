@@ -18,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-import ca.dal.csci3130.quickcash.MainActivity;
 import ca.dal.csci3130.quickcash.R;
 import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployeeHomeActivity;
@@ -35,6 +34,13 @@ public class GiveFeedbackActivity extends AppCompatActivity {
 
     private Button submit;
 
+    /**
+     * OnCreate method, Initialize activity to give feedback to users.
+     * Then set textView and buttons to what they should be.
+     * Also apply algorithm for give feedback to users and update user's overall rating
+     *
+     * @param savedInstanceState: Instances status, required to start activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
