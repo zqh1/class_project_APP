@@ -82,6 +82,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
         holder.applicantBtn.setVisibility(View.GONE);
         holder.paymentBtn.setVisibility(View.GONE);
         holder.feedbackBtn.setVisibility(View.GONE);
+        holder.paymentStatusTV.setVisibility(View.GONE);
 
 
         //Query job details
@@ -104,6 +105,10 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                 String salary = "Salary: $" + job.getSalary() + "/hour";
                 String date = "Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear();
                 String statusLabel;
+                String paymentComplete = "Payment status: Complete";
+                String paymentIncomplete = "Payment status: Incomplete";
+                String urgentText = "Urgent!";
+
 
                 if (job.getAcceptedID().isEmpty()) {
 
@@ -115,17 +120,23 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
 
                     statusLabel = "Status: Accepted";
                     holder.deleteBtn.setVisibility(View.GONE);
+                    holder.paymentStatusTV.setVisibility(View.VISIBLE);
 
                 } else {
                     statusLabel = "Status: Rejected";
                 }
 
+                //setting job payment status, showing feeback button if applicable
                 if (job.getPaid()) {
-                    holder.feedbackBtn.setVisibility(View.VISIBLE);
+
+                    holder.paymentStatusTV.setText(paymentComplete);
 
                     if (job.getEmployeeFeedback()) {
                         holder.feedbackBtn.setVisibility(View.GONE);
                     }
+
+                } else if (!job.getPaid()) {
+                    holder.paymentStatusTV.setText(paymentIncomplete);
                 }
 
 
@@ -136,6 +147,12 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                 holder.salaryTV.setText(salary);
                 holder.dateTV.setText(date);
                 holder.statusTV.setText(statusLabel);
+                holder.urgentTV.setText(urgentText);
+
+                //Hide or not the urgent field
+                if (!job.isUrgent()) {
+                    holder.urgentTV.setVisibility(View.GONE);
+                }
 
                 holder.mapBtn.setOnClickListener(view -> {
 
@@ -210,7 +227,7 @@ public class ViewApplicationAdapter extends RecyclerView.Adapter<ViewJobAdapter.
                         }));
     }
 
-    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job){
+    private void setFeedback(@NonNull ViewJobAdapter.JobViewHolder holder, JobInterface job) {
         //Connect to firebase
         new FeedbackDAOAdapter(new FeedbackDAO()).getDatabaseReference().orderByChild("id").equalTo(job.getEmployerID()).addListenerForSingleValueEvent(new ValueEventListener() {
             //Get rating from each employee

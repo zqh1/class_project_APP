@@ -98,6 +98,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        //Not possible to catch background errors
                     }
                 });
     }

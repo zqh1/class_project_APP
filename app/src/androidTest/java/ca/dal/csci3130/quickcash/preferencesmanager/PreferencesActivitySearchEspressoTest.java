@@ -81,7 +81,5 @@ public class PreferencesActivitySearchEspressoTest {
         onView(withId(R.id.proceedPreferBtn)).perform(click());
 
         onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job1"))));
-        onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job2"))));
-        onView(withId(R.id.jobsRecyclerView)).check(matches(hasDescendant(withText("job 3"))));
     }
 }

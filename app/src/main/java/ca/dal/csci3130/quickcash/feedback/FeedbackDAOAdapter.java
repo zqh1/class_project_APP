@@ -10,15 +10,32 @@ public class FeedbackDAOAdapter extends DAO {
 
     private FeedbackDAO feedbackDAO = null;
 
+    /**
+     * FeedbackDAOAdapter constructor
+     *
+     * @param feedbackDAO: DAO for feedback
+     */
     public FeedbackDAOAdapter(FeedbackDAO feedbackDAO) {
         this.feedbackDAO = feedbackDAO;
     }
 
+
+    /**
+     * getDatabaseReference method that adapts to return feedback database reference
+     *
+     * @return
+     */
     @Override
     public DatabaseReference getDatabaseReference() {
         return feedbackDAO.getFeedbackDatabaseReference();
     }
 
+    /**
+     * add method that adapts to adds feedback to database when given a Feedback object
+     *
+     * @param object: object to be added to database : User, Feedback, Preference, Job
+     * @return
+     */
     @Override
     public Task<Void> add(Object object) {
         if (object instanceof Feedback) {
