@@ -64,6 +64,15 @@ public class GiveFeedbackActivity extends AppCompatActivity {
     }
 
     /**
+     * OnBackPressed method, This method will block user from pressing back button,
+     * Avoid the user to access homepage once they already logout
+     */
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "[Back Button] is disabled", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
      * This method will set the name of the people who are being reviewed on the screen
      */
     private void setNameOnScreen(){
