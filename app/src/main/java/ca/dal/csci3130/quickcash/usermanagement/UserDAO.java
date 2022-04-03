@@ -11,7 +11,7 @@ public class UserDAO {
     //Firebase database reference
     private static final FirebaseDatabase FIREBASEDATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference USERDATABASE = FIREBASE_DATABASE.getReference(User.class.getSimpleName());
+    private static final DatabaseReference USERDATABASE = FIREBASEDATABASE.getReference(User.class.getSimpleName());
 
 
     /**

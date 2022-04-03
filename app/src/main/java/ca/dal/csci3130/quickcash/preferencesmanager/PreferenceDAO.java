@@ -11,7 +11,7 @@ public class PreferenceDAO {
     //Firebase database reference
     private static final FirebaseDatabase FIREBASEDATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference PREFERENCEDATABASE = FIREBASE_DATABASE.getReference(Preferences.class.getSimpleName());
+    private final DatabaseReference PREFERENCEDATABASE = FIREBASEDATABASE.getReference(Preferences.class.getSimpleName());
 
     /**
      * getPreferenceDatabaseReference retrieves preference database reference
