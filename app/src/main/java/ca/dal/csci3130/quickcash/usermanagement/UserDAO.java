@@ -13,10 +13,23 @@ public class UserDAO {
 
     private static final DatabaseReference USERDATABASE = FIREBASEDATABASE.getReference(User.class.getSimpleName());
 
-    public DatabaseReference getUserDatabaseReference(){
+
+    /**
+     * getUserDatabaseReference retrieves user database reference
+     *
+     * @return: returns user database reference
+     */
+    public DatabaseReference getUserDatabaseReference() {
         return USERDATABASE;
     }
 
+
+    /**
+     * addUser method adds user to the database
+     *
+     * @param user: user to be added to the database
+     * @return
+     */
     public Task<Void> addUser(UserInterface user) {
         return USERDATABASE.push().setValue(user);
     }

@@ -87,6 +87,8 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         String salaryText = "Salary: $" + job.getSalary() + "/hour";
         String dateText = "Date: " + job.getDay() + "/" + job.getMonth() + "/" + job.getYear();
         String urgentText = "Urgent!";
+        String paymentComplete = "Payment status: Complete";
+        String paymentIncomplete = "Payment status: Incomplete";
 
         //Populate job fields
         holder.jobTitleTV.setText(job.getTitle());
@@ -95,6 +97,12 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.salaryTV.setText(salaryText);
         holder.dateTV.setText(dateText);
         holder.urgentTV.setText(urgentText);
+
+        if(job.getPaid()){
+            holder.paymentStatusTV.setText(paymentComplete);
+        }else{
+            holder.paymentStatusTV.setText(paymentIncomplete);
+        }
 
         holder.mapBtn.setOnClickListener(view -> {
 
@@ -175,6 +183,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         holder.applicantBtn.setVisibility(View.GONE);
         holder.paymentBtn.setVisibility(View.GONE);
         holder.feedbackBtn.setVisibility(View.GONE);
+        holder.paymentStatusTV.setVisibility(View.GONE);
 
 
         if (job.getPaid()) {
@@ -192,6 +201,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             label = "Status: Open position";
         } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
             label = "Status: Accepted";
+            holder.paymentStatusTV.setVisibility(View.VISIBLE);
         } else {
             label = "Status: Rejected";
         }
@@ -249,7 +259,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         if (job.getPaid()) {
             holder.feedbackBtn.setVisibility(View.VISIBLE);
-
+            holder.paymentBtn.setVisibility(View.GONE);
             if (job.getEmployerFeedback()) {
                 holder.feedbackBtn.setVisibility(View.GONE);
             }
@@ -360,6 +370,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
         public final Button mapBtn;
         public final Button paymentBtn;
         public final Button feedbackBtn;
+        public final TextView paymentStatusTV;
 
         /**
          * JobViewHolder constructor, link all item on screen
@@ -388,6 +399,7 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
             mapBtn = itemView.findViewById(R.id.mapBtn);
             feedbackBtn = itemView.findViewById(R.id.feedbackBtn);
             paymentBtn = itemView.findViewById(R.id.paymentBtn);
+            paymentStatusTV = itemView.findViewById(R.id.paymentStatusTV);
         }
     }
 }

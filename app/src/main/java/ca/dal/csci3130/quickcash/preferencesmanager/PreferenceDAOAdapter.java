@@ -9,19 +9,38 @@ public class PreferenceDAOAdapter extends DAO {
 
     private PreferenceDAO preferenceDAO = null;
 
-    public PreferenceDAOAdapter(PreferenceDAO preferenceDAO){
+    /**
+     * PreferenceDAOAdapter constructor
+     *
+     * @param preferenceDAO: DAO for preference
+     */
+
+    public PreferenceDAOAdapter(PreferenceDAO preferenceDAO) {
         this.preferenceDAO = preferenceDAO;
     }
 
+    /**
+     * getDatabaseReference method that adapts to return preference database reference
+     *
+     * @return
+     */
+
     @Override
-    public DatabaseReference getDatabaseReference(){
+    public DatabaseReference getDatabaseReference() {
         return preferenceDAO.getPreferenceDatabaseReference();
     }
 
+    /**
+     * add method that adapts to adds preference to database when given a Preference object
+     *
+     * @param object: object to be added to database : User, Feedback, Preference, Job
+     * @return
+     */
+
     @Override
-    public Task<Void> add(Object object){
-        if(object instanceof Preferences){
-            Preferences preferences = (Preferences)object;
+    public Task<Void> add(Object object) {
+        if (object instanceof Preferences) {
+            Preferences preferences = (Preferences) object;
             return preferenceDAO.addPreference(preferences);
         }
 
