@@ -199,12 +199,15 @@ public class ViewJobAdapter extends FirebaseRecyclerAdapter<Job, ViewJobAdapter.
 
         if (job.getAcceptedID().isEmpty()) {
             label = "Status: Open position";
+
+            if (job.getApplicantsID().contains(SessionManager.getUserID())) {
+                label = "Status: Waiting for employer answer";
+                holder.applyBtn.setVisibility(View.GONE);
+            }
+
         } else if (job.getAcceptedID().equals(SessionManager.getUserID())) {
             label = "Status: Accepted";
             holder.paymentStatusTV.setVisibility(View.VISIBLE);
-            holder.applyBtn.setVisibility(View.GONE);
-        } else if (job.getApplicantsID().contains(SessionManager.getUserID())) {
-            label = "Status: Waiting for employer answer";
             holder.applyBtn.setVisibility(View.GONE);
         } else {
             label = "Status: Rejected";
