@@ -1,5 +1,9 @@
 package ca.dal.csci3130.quickcash.preferencesmanager;
 
+/**
+ * This call is contain all the methods the preference need to have, created in case
+ * Getter and Setter method
+ */
 public interface PreferencesInterface {
 
     /**

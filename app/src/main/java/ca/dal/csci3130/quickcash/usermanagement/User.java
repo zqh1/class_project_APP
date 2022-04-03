@@ -1,7 +1,7 @@
 package ca.dal.csci3130.quickcash.usermanagement;
 
 /**
- *
+ * This class will create basic get and set method for user activity
  */
 public class User implements UserInterface {
 

@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.feedback;
 
+/**
+ * Interface for feedback function
+ */
 public interface FeedbackInterface {
 
     /**

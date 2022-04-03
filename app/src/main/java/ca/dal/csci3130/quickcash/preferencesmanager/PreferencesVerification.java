@@ -12,7 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-
+/**
+ * This class will verify if the preference that user enter is valid
+ */
 public class PreferencesVerification {
     private PreferencesInterface preferences;
 

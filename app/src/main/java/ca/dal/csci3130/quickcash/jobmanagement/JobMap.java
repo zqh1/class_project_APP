@@ -26,6 +26,9 @@ import java.util.Objects;
 
 import ca.dal.csci3130.quickcash.R;
 
+/**
+ * This class will is to set the map on create job page
+ */
 public class JobMap extends AppCompatActivity {
 
     SupportMapFragment supportMapFragment;
@@ -87,7 +90,7 @@ public class JobMap extends AppCompatActivity {
      * onMapReady method. This method will set up the google map in create job page
      * Then display it on the screen
      *
-     * @param map
+     * @param map: set google map
      */
     private void onMapReady(GoogleMap map) {
 

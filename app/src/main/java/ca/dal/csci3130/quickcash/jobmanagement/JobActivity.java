@@ -49,6 +49,9 @@ import ca.dal.csci3130.quickcash.common.DAO;
 import ca.dal.csci3130.quickcash.home.EmployerHomeActivity;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
+/**
+ * Actual activity for employer to create a job and then redirect back to home page
+ */
 public class JobActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     TextView dateLabel;

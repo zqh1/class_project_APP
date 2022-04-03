@@ -20,6 +20,10 @@ import ca.dal.csci3130.quickcash.common.WrapLinearLayoutManager;
 import ca.dal.csci3130.quickcash.jobmanagement.JobDAO;
 import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 
+/**
+ * This class is the class that implement when employer can choose an applicant to become their employee
+ * Employer can see applicants name and they can press a button to choose people
+ */
 public class ViewApplicantActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;

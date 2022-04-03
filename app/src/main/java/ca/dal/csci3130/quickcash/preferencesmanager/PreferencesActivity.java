@@ -36,6 +36,9 @@ import ca.dal.csci3130.quickcash.jobmanagement.JobDAOAdapter;
 import ca.dal.csci3130.quickcash.jobmanagement.JobInterface;
 import ca.dal.csci3130.quickcash.usermanagement.SessionManager;
 
+/**
+ * This class will allow employer to create their job preference.
+ */
 public class PreferencesActivity extends AppCompatActivity {
 
     private EditText extractedJob;

@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+/**
+ * Interface for job activity
+ */
 public interface JobInterface {
 
     /**
@@ -237,16 +240,46 @@ public interface JobInterface {
      */
     void setAcceptedID(String acceptedID);
 
+    /**
+     * getPaid method. This method should return if employer get paid
+     *
+     * @return true if employer paid to employee false otherwise
+     */
     boolean getPaid();
 
+    /**
+     * setPaid method. This method should set true if employer paid to employee
+     *
+     * @param paid : true if employer paid, false otherwise
+     */
     void setPaid(boolean paid);
 
+    /**
+     * getEmployeeFeedback method. This method will return true if employee write feedback to employer
+     *
+     * @return true if employee give feedback to employer
+     */
     boolean getEmployeeFeedback();
 
+    /**
+     * setEmployeeFeedback method. This method will set true to variable if employee give feedback to employer
+     *
+     * @param employeeFeedback : True if employee give feedback to employer
+     */
     void setEmployeeFeedback(boolean employeeFeedback);
 
+    /**
+     * getEmployerFeedback method. This method will return true if employer write feedback to employee
+     *
+     * @return true if employee give feedback to employee
+     */
     boolean getEmployerFeedback();
 
+    /**
+     * setEmployerFeedback method. This method set variable true if employer write feedback to employee
+     *
+     * @param employerFeedback : True if employer give feedback to employee
+     */
     void setEmployerFeedback(boolean employerFeedback);
 
 

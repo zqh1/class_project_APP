@@ -6,6 +6,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ca.dal.csci3130.quickcash.common.Constants;
 
+/**
+ * DAO class contains and manages user references
+ */
+
 public class UserDAO {
 
     //Firebase database reference

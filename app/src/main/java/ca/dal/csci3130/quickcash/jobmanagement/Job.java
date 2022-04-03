@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.jobmanagement;
 
+/**
+ * Create basic get and set function for job activity and payment activity
+ */
 public class Job implements JobInterface {
 
     private String employerID = "";
@@ -330,27 +333,56 @@ public class Job implements JobInterface {
         this.acceptedID = acceptedID;
     }
 
-
+    /**
+     * getPaid method. This method should return if employer get paid
+     *
+     * @return true if employer paid to employee false otherwise
+     */
     public boolean getPaid() {
         return paid;
     }
 
+    /**
+     * setPaid method. This method should set true if employer paid to employee
+     *
+     * @param paid : true if employer paid, false otherwise
+     */
     public void setPaid(boolean paid) {
         this.paid = paid;
     }
 
+    /**
+     * getEmployeeFeedback method. This method will return true if employee write feedback to employer
+     *
+     * @return true if employee give feedback to employer
+     */
     public boolean getEmployeeFeedback() {
         return employeeFeedback;
     }
 
+    /**
+     * setEmployeeFeedback method. This method will set true to variable if employee give feedback to employer
+     *
+     * @param employeeFeedback : True if employee give feedback to employer
+     */
     public void setEmployeeFeedback(boolean employeeFeedback) {
         this.employeeFeedback = employeeFeedback;
     }
 
+    /**
+     * getEmployerFeedback method. This method will return true if employer write feedback to employee
+     *
+     * @return true if employee give feedback to employee
+     */
     public boolean getEmployerFeedback() {
         return employerFeedback;
     }
 
+    /**
+     * setEmployerFeedback method. This method set variable true if employer write feedback to employee
+     *
+     * @param employerFeedback : True if employer give feedback to employee
+     */
     public void setEmployerFeedback(boolean employerFeedback) {
         this.employerFeedback = employerFeedback;
     }

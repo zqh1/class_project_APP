@@ -1,5 +1,8 @@
 package ca.dal.csci3130.quickcash.preferencesmanager;
 
+/**
+ * This class will set basic get and set method to get preference variable
+ */
 public class Preferences implements PreferencesInterface {
 
     private String employeeID = "";
