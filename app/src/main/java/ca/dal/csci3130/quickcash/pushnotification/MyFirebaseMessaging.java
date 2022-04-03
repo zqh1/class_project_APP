@@ -27,6 +27,11 @@ import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAO;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferenceDAOAdapter;
 import ca.dal.csci3130.quickcash.preferencesmanager.Preferences;
 import ca.dal.csci3130.quickcash.preferencesmanager.PreferencesInterface;
+
+/**
+ * This class is responsible for send notifications to user.
+ * It will send if no preference or according to employee preference
+ */
 public class MyFirebaseMessaging extends FirebaseMessagingService {
     private LatLng latlng;
     @Override

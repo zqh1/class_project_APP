@@ -47,6 +47,12 @@ public class SessionManager implements SessionManagerInterface {
         this.editor = sharePref.edit();
     }
 
+    /**
+     * getInstance method this method will setup a sessionManager and return
+     *
+     * @param context: activity that is calling the manager and the one used for manager interaction
+     * @return : A sessionManage
+     */
     public static SessionManager getInstance(Context context){
         if(instance == null){
             instance = new SessionManager(context);
