@@ -12,7 +12,7 @@ public class UserDAO {
     //Firebase database reference
     private final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference USER_DATABASE = FIREBASE_DATABASE.getReference(User.class.getSimpleName());
+    private final DatabaseReference USERDATABASE = FIREBASE_DATABASE.getReference(User.class.getSimpleName());
 
 
     /**
@@ -21,7 +21,7 @@ public class UserDAO {
      * @return: returns user database reference
      */
     public DatabaseReference getUserDatabaseReference() {
-        return USER_DATABASE;
+        return USERDATABASE;
     }
 
 
@@ -32,7 +32,7 @@ public class UserDAO {
      * @return
      */
     public Task<Void> addUser(UserInterface user) {
-        return USER_DATABASE.push().setValue(user);
+        return USERDATABASE.push().setValue(user);
     }
 
 }

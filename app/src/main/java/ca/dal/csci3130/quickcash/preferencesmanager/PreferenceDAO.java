@@ -13,7 +13,7 @@ public class PreferenceDAO {
     //Firebase database reference
     private final FirebaseDatabase FIREBASE_DATABASE = FirebaseDatabase.getInstance(Constants.FIREBASE_URL);
 
-    private final DatabaseReference Preference_DATABASE = FIREBASE_DATABASE.getReference(Preferences.class.getSimpleName());
+    private final DatabaseReference PREFERENCEDATABASE = FIREBASE_DATABASE.getReference(Preferences.class.getSimpleName());
 
     /**
      * getPreferenceDatabaseReference retrieves preference database reference
@@ -22,7 +22,7 @@ public class PreferenceDAO {
      */
 
     public DatabaseReference getPreferenceDatabaseReference() {
-        return Preference_DATABASE;
+        return PREFERENCEDATABASE;
     }
 
     /**
@@ -33,7 +33,7 @@ public class PreferenceDAO {
      */
 
     public Task<Void> addPreference(PreferencesInterface preference) {
-        return Preference_DATABASE.push().setValue(preference);
+        return PREFERENCEDATABASE.push().setValue(preference);
     }
 
 }
